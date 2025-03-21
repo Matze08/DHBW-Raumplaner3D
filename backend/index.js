@@ -1,5 +1,6 @@
 const express = require('express')
 
+console.log("INFO | Starting Raumplaner-Backend...")
 const app = express()
 const port = 3187
 
@@ -8,5 +9,5 @@ app.get('/', (req, res) => {
 })
 
 app.listen(port, () => {
-  console.log(`Example app listening on port ${port}`)
+  console.log(`INFO | Raumplaner-Backend listening on port ${port}`)
 })
