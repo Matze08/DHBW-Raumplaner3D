@@ -1,5 +1,5 @@
 {
-  "name": "dhbw-raumplaner-frontend",
+  "name": "dhbw-raumplaner-backend",
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
@@ -8,7 +8,7 @@
   "author": "",
   "license": "ISC",
   "description": "",
-  "devDependencies": {
-    "jsdoc": "^4.0.4"
+  "dependencies": {
+    "express": "^4.21.2"
   }
 }
