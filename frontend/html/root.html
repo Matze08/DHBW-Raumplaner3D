@@ -1,13 +1,22 @@
 <!DOCTYPE html>
 <head>
     <title>DHBW Stuttgart Raumplaner | Fakultät Technik</title>
-    <link rel="icon" type="image/x-icon" href="../media/icon.ico">
+    <link rel="icon" type="image/x-icon" href="/frontend/media/icon.ico">
     <meta charset="UTF-8">
+    <script type="importmap">
+        {
+          "imports": {
+            "three": "https://cdn.jsdelivr.net/npm/three@0.165.0/build/three.module.js",
+            "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.165.0/examples/jsm/"
+          }
+        }
+      </script>
 </head>
 <body>
     <header>
-        <img src="../media/dhbw_logo.png" alt="dhbw_logo" style="height: 5rem">
+        <img src="/frontend/media/dhbw_logo.png" alt="dhbw_logo" style="height: 5rem">
         <h1>DHBW Stuttgart Raumplaner | Fakultät Technik</h1>
         <p>Finde deinen Raum</p>
     </header>
+    <script type="module" src="/frontend/js/sceneManager.js"></script>
 </body>
