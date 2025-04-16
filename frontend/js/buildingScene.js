@@ -1,6 +1,7 @@
 import * as THREE from 'three';
-import {GLTFLoader} from 'three/addons/loaders/GLTFLoader.js';
-import {PointerLockControls} from 'https://cdn.jsdelivr.net/npm/three@0.158.0/examples/jsm/controls/PointerLockControls.js';
+import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+import { PointerLockControls } from 'three/addons/controls/PointerLockControls.js';
+import { RGBELoader } from 'three/addons/loaders/RGBELoader.js';
 
 const velocity = new THREE.Vector3();
 const direction = new THREE.Vector3();
@@ -14,9 +15,6 @@ export class BuildingScene {
         this._clock = new THREE.Clock();
         this._camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
         this._scene = new THREE.Scene();
-        
-        //init enviroment
-        this.initEnv();
 
         //init clock
         this._clock.start();
@@ -26,6 +24,10 @@ export class BuildingScene {
     start(){
         this.controls = new PointerLockControls(this._camera, document.body);
         this._scene.add(this.controls.getObject());
+
+        //init enviroment
+        this.initEnv();
+
         // Event listener to request pointer lock on click
         document.body.addEventListener('click', () => {
             // Lock the pointer on first click
@@ -75,12 +77,24 @@ export class BuildingScene {
         }
     }
 
+    //function to init sky texture in scene
+    initSkybox() {
+        const loader = new RGBELoader();
+    
+        loader.load('/frontend/media/textures/skybox.hdr', (texture) => {
+            // Set the mapping to equirectangular
+            texture.mapping = THREE.EquirectangularReflectionMapping;
+            
+            // Set background and environment map for the scene
+            this._scene.background = texture;
+            this._scene.environment = texture;
+
+            texture.dispose();
+        });
+    }
+
     //function to init light in scene
     initLight() {
-        const amlight = new THREE.AmbientLight(0x404040, 50); // soft white background light
-        amlight.position.set(0, 50, 0);
-        this._scene.add(amlight);
-
         const dirlight = new THREE.DirectionalLight(0xFFFF9D, 2); //soft sun light
         dirlight.position.set(0, 100, 0);
         dirlight.castShadow = true;
@@ -120,12 +134,13 @@ export class BuildingScene {
 
     //function to init enviroment of scene
     initEnv() {
+        this.initSkybox();
         this.initLight();
 
         //add building to scene
-        this.initModel('frontend/media/models/dhbw_building.glb', (artGallery) => {
-            artGallery.rotation.y = Math.PI; //rotate obj
-            this._scene.add(artGallery);
+        this.initModel('frontend/media/models/dhbw_building.glb', (dhbw_building) => {
+            dhbw_building.rotation.y = Math.PI; //rotate obj
+            this._scene.add(dhbw_building);
         });
         this._camera.position.set(-36, 2, 4); //set camera position
         this._camera.rotation.set(0, 5, 0);
