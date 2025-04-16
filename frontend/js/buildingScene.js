@@ -1,7 +1,11 @@
 import * as THREE from 'three';
 import {GLTFLoader} from 'three/addons/loaders/GLTFLoader.js';
+import {PointerLockControls} from 'https://cdn.jsdelivr.net/npm/three@0.158.0/examples/jsm/controls/PointerLockControls.js';
 
-var mouseX = 0, mouseY = 0; //store value of mouse position on screen
+const velocity = new THREE.Vector3();
+const direction = new THREE.Vector3();
+const move = { forward: false, backward: false, left: false, right: false };
+
 
 //HallwayScene class is instantiating a scene
 export class BuildingScene {
@@ -20,19 +24,65 @@ export class BuildingScene {
 
     //function called everytime the scene is loaded
     start(){
+        this.controls = new PointerLockControls(this._camera, document.body);
+        this._scene.add(this.controls.getObject());
+        // Event listener to request pointer lock on click
+        document.body.addEventListener('click', () => {
+            // Lock the pointer on first click
+            document.body.requestPointerLock();
+        });
+
+        document.addEventListener('keydown', (event) => {
+            switch (event.code) {
+              case 'KeyW': move.forward = true; break;
+              case 'KeyS': move.backward = true; break;
+              case 'KeyA': move.left = true; break;
+              case 'KeyD': move.right = true; break;
+            }
+          });
+          document.addEventListener('keyup', (event) => {
+            switch (event.code) {
+              case 'KeyW': move.forward = false; break;
+              case 'KeyS': move.backward = false; break;
+              case 'KeyA': move.left = false; break;
+              case 'KeyD': move.right = false; break;
+            }
+          });
+    }
+
+    stop() {
+
     }
 
     //function called by sceneManager to update renderer (called every frame)
     updateRender() {
+        const delta = this._clock.getDelta();
+        velocity.set(0, 0, 0);
+
+        if (this.controls.isLocked === true) {
+            direction.z = Number(move.forward) - Number(move.backward);
+            direction.x = Number(move.right) - Number(move.left);
+            direction.normalize();
+
+            const speed = 5;
+            if (move.forward || move.backward) velocity.z -= direction.z * speed * delta;
+            if (move.left || move.right) velocity.x -= direction.x * speed * delta;
+
+            this.controls.moveRight(-velocity.x);
+            this.controls.moveForward(-velocity.z);
+
+            console.log(this._camera.position);
+        }
     }
 
     //function to init light in scene
     initLight() {
-        const amlight = new THREE.AmbientLight(0x404040, 30); // soft white background light
+        const amlight = new THREE.AmbientLight(0x404040, 50); // soft white background light
+        amlight.position.set(0, 50, 0);
         this._scene.add(amlight);
 
-        const dirlight = new THREE.DirectionalLight(0xFFFF9D, 5); //soft sun light
-        dirlight.position.set(-100, 100, 70);
+        const dirlight = new THREE.DirectionalLight(0xFFFF9D, 2); //soft sun light
+        dirlight.position.set(0, 100, 0);
         dirlight.castShadow = true;
         this._scene.add(dirlight);
 
@@ -77,8 +127,8 @@ export class BuildingScene {
             artGallery.rotation.y = Math.PI; //rotate obj
             this._scene.add(artGallery);
         });
-        this._camera.position.set(0, 10, 50); //set camera position
-        this._camera.rotation.set(0, 0, 0);
+        this._camera.position.set(-36, 2, 4); //set camera position
+        this._camera.rotation.set(0, 5, 0);
     }
 
     getScene() {
