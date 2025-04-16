@@ -41,8 +41,8 @@ function initRenderer(){
 function initScenes(){
     //init scenes
     const scene1 = new BuildingScene();
-    const scene2 = null;
-    scenes = [scene1, scene2];
+    //const scene2 = null;
+    scenes = [scene1];//, scene2];
 }
 
 /*=================*/
@@ -65,7 +65,7 @@ window.addEventListener('resize', () => {
     renderer.setSize(width, height);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
-    //update camera aspect of both scenes
+    //update camera aspect
     scenes.forEach((scene) => {
         scene.getCamera().aspect = width / height;
         scene.getCamera().updateProjectionMatrix();
