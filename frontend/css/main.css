@@ -1,8 +1,15 @@
 body{
+    position: absolute;
     margin: 0;
+    height: 100%;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 nav {
+    top: 0;
     position: absolute;
     display: flex;
     align-items: center;
@@ -16,4 +23,20 @@ nav {
 
 nav * {
     margin-left: 5%;
+}
+
+#info-overlay{
+    align-items: center;
+    display: flex;
+    text-align: center;
+    background-color: rgba(34, 34, 34, 0.7);
+    width: 30%;
+    height: 20%;
+    z-index: 1;
+}
+
+#info-overlay p{
+    width: 100%;
+    font-size: 3rem;
+    color: antiquewhite;
 }

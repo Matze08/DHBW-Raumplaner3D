@@ -34,6 +34,14 @@ export class BuildingScene {
             document.body.requestPointerLock();
         });
 
+        document.addEventListener('pointerlockchange', () => {
+            if (document.pointerLockElement) {
+                document.getElementById("info-overlay").style.display = "none";
+            } else {
+                document.getElementById("info-overlay").style.display = "flex";
+            }
+          });
+
         document.addEventListener('keydown', (event) => {
             switch (event.code) {
               case 'KeyW': move.forward = true; break;
