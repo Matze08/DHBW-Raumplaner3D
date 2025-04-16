@@ -1,0 +1,19 @@
+body{
+    margin: 0;
+}
+
+nav {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    background-color: beige;
+    padding-top: .25%;
+    padding-bottom: .25%;
+    position: absolute;
+    z-index: 1;
+    width: 100%;
+}
+
+nav * {
+    margin-left: 5%;
+}
