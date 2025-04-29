@@ -85,11 +85,36 @@ export class TopViewScene {
         //add building to scene
         this.initModel('frontend/media/models/dhbw_building.glb', (dhbw_building) => {
             this.dhbw_building = dhbw_building;
-            this.dhbw_building.rotation.y = Math.PI; //rotate obj
             this._scene.add(this.dhbw_building);
         });
-        this._camera.position.set(30, 70, 40); //set camera position
-        this._camera.lookAt(new THREE.Vector3(0,30,0));
+
+        //init waypoint
+        this.initModel('frontend/media/models/waypoint.glb', (waypoint) => {
+            this.waypoint = waypoint;
+
+            const material = new THREE.MeshStandardMaterial({ color: 0xff0000 });
+            this.waypoint.children[0].material = material;
+            this.waypoint.position.set(0, 10, 0);
+        });
+
+        //init startpoint
+        this.initModel('frontend/media/models/waypoint.glb', (startpoint) => {
+            this.startpoint = startpoint;
+
+            const material = new THREE.MeshStandardMaterial({ color: 0x0000ff });
+            this.startpoint.children[0].material = material;
+            this.startpoint.position.set(0, 10, 0);
+        });
+        
+        this._camera.position.y = 60;
+        this.updateCameraPos(0);
+    }
+
+    updateCameraPos(angle){
+        const radius = 80;
+        this._camera.position.x = radius * Math.cos(angle);
+        this._camera.position.z = radius * Math.sin(angle);
+        this._camera.lookAt(new THREE.Vector3(0,10,0));
     }
 
     showFloor(floor){
@@ -103,6 +128,20 @@ export class TopViewScene {
             this._scene.getObjectByName("OG" + i).visible = false;
         }
     }
+
+    setWaypoint(roomNr){
+        this._scene.remove(this.waypoint);
+        const floorNr = roomNr[1];
+        const waypointHolder = this._scene.getObjectByName("OG"+floorNr+"Waypoints");
+        waypointHolder.children.forEach(element => {
+            if (element.name == roomNr){
+                this.waypoint.position.copy(element.position);
+                this.waypoint.position.y += 5;
+                this._scene.add(this.waypoint);
+            }
+        });
+    }
+
 
     getScene() {
         return this._scene;
