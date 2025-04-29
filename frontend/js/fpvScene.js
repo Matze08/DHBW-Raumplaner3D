@@ -8,8 +8,8 @@ const direction = new THREE.Vector3();
 const move = { forward: false, backward: false, left: false, right: false };
 
 
-//HallwayScene class is instantiating a scene
-export class BuildingScene {
+//fpvScene class is instantiating a scene
+export class FpvScene {
     constructor() {//called once at the beginning
         //init main objecs
         this._clock = new THREE.Clock();
@@ -60,10 +60,6 @@ export class BuildingScene {
           });
     }
 
-    stop() {
-
-    }
-
     //function called by sceneManager to update renderer (called every frame)
     updateRender() {
         const delta = this._clock.getDelta();
@@ -80,8 +76,6 @@ export class BuildingScene {
 
             this.controls.moveRight(-velocity.x);
             this.controls.moveForward(-velocity.z);
-
-            console.log(this._camera.position);
         }
     }
 
@@ -160,5 +154,19 @@ export class BuildingScene {
 
     getCamera() {
         return this._camera;
+    }
+
+    //remove EventListeners
+    removeListeners(){
+        document.removeEventListener('keydown');
+        document.removeEventListener('keyup');
+        document.removeEventListener('pointerlockchange');
+        document.removeEventListener('click');
+        
+    }
+
+    //exit Scene
+    exit(){
+        this.removeListeners();
     }
 }

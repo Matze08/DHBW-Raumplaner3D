@@ -1,5 +1,6 @@
 import * as THREE from 'three';
-import {BuildingScene} from './buildingScene.js'
+import {FpvScene} from './fpvScene.js';
+import {TopViewScene} from './topViewScene.js';
 
 var scenes; //store scenes in array
 var activeScene; //stores active scene
@@ -27,7 +28,7 @@ function getActiveScene(){
 
 //function to init Renderer
 function initRenderer(){
-    renderer = new THREE.WebGLRenderer();
+    renderer = new THREE.WebGLRenderer( {antialias : true});
     renderer.shadowMap.enabled = true;
     renderer.shadowMap.type = THREE.PCFSoftShadowMap; // default THREE.PCFShadowMap
     renderer.setSize(window.innerWidth, window.innerHeight);
@@ -40,9 +41,9 @@ function initRenderer(){
 //function to initScenes (create scenes and add them to array)
 function initScenes(){
     //init scenes
-    const scene1 = new BuildingScene();
-    //const scene2 = null;
-    scenes = [scene1];//, scene2];
+    const scene1 = new TopViewScene(renderer);
+    const scene2 = new FpvScene();
+    scenes = [scene1, scene2];
 }
 
 /*=================*/
@@ -50,10 +51,26 @@ function initScenes(){
 
 initRenderer();
 initScenes();
-loadScene(0); //load buildingScene
+loadScene(0); //load topViewScene
 
 window.loadScene = loadScene;
 window.getActiveScene = getActiveScene;
+
+document.getElementById('submit-form').addEventListener('submit', function(event) {
+    event.preventDefault(); // prevents page reload
+    const regex = /^[ABC][0-5]\d{2}$/;
+    const form = event.target;
+    const roomNr = form.roomNr.value;
+    const entry = event.selectEntry;
+
+    if (!regex.test(roomNr)){
+        console.log("Error: Room Number <" + roomNr + "> is not valid (example: C305");
+        return;
+    }
+    const floorNr = roomNr[1];
+    activeScene.showFloor(floorNr);
+
+  });
 
 //add Resize-EventListener -> so renderer is responsive
 window.addEventListener('resize', () => {

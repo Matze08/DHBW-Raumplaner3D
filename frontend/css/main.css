@@ -26,17 +26,26 @@ nav * {
 }
 
 #info-overlay{
+    margin-left: 60%;
     align-items: center;
     display: flex;
-    text-align: center;
-    background-color: rgba(34, 34, 34, 0.7);
+    flex-direction: column;
+    background-color: rgba(34, 34, 34, 0.9);
+    border-radius: 2rem;
     width: 30%;
-    height: 20%;
+    height: 50%;
     z-index: 1;
+    font-size: 2rem;
+    color: antiquewhite;
 }
 
-#info-overlay p{
-    width: 100%;
-    font-size: 3rem;
-    color: antiquewhite;
+#info-overlay form > *{
+    display: block;
+    margin-top: 10%;
+    font-size: 1.5rem;
+}
+
+.submit-btn{
+    align-self: center;
+    width: 30%;
 }

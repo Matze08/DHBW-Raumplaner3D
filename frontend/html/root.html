@@ -21,7 +21,21 @@
     <p>Finde deinen Raum</p>
   </nav>
   <div id="info-overlay">
-    <p>Click to Move</p>
+    <h1>Wayfinder</h1>
+    <form id="submit-form">
+      <select required name="selectEntry">
+        <option disabled selected>Startpunkt</option>
+        <option value="Eingang Oben">Eingang Oben</option>
+        <option value="Eingang Unten">Eingang Unten</option>
+        <option value="Cafeteria">Cafeteria</option>
+      </select>
+      <input required type="text" name="roomNr" placeholder="Enter Room">
+      <div>
+        <input id="useLocationCB" type="checkbox">
+        <label for="useLocationCB">Live Standort nutzen</label>
+      </div>
+      <input type="submit" value="Go" class="submit-btn">
+    </form>
   </div>
     
 </body>
