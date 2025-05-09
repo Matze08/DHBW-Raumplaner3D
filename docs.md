@@ -81,7 +81,7 @@ Die Qualität wird durch Unit- und Integrationstests im Backend sowie manuelles 
 ## Implementierung
 
 ### 1. Welche Produkte und Komponenten (von welchen Herstellern) werden für das System benötigt?
-*Version hinzufügen!*
+*Version hinzufügen!*     
 Für die Umsetzung wird Node.js (OpenJS Foundation) als Webserver verwendet. Das Backend basiert auf Express.js. MongoDB dient als Datenbanklösung. Für die 3D-Darstellung kommt Three.js zum Einsatz. Die Benutzeroberfläche wird mit HTML, CSS und JavaScript umgesetzt. Optional werden Tools wie Docker (Docker Inc.), GitHub (Microsoft) für Versionskontrolle und Render oder Heroku für das Hosting genutzt.
 
 ### 2. Wie wird das System entwickelt und ausgerollt?
