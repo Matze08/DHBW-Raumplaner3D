@@ -1,12 +1,14 @@
+# Projektdokumentation
 ### Inhaltsverzeichnis
 
-1. [Projektbeschreibung](https://github.com/Matze08/DHBW-Raumplaner3D/blob/main/docs.md#Projektbeschreibung)
+1. [Business Case](https://github.com/Matze08/DHBW-Raumplaner3D/blob/main/docs.md#Business-Case)
 2. [Architektur](https://github.com/Matze08/DHBW-Raumplaner3D/blob/main/docs.md#Architektur)
 3. [Implementierung](https://github.com/Matze08/DHBW-Raumplaner3D/blob/main/docs.md#Implementierung)
 
-# Projektbeschreibung
 DHBW Wayfinder & Booking Solution GmbH
 Name der App: DHBW Wayfinder & Booking
+
+## Business Case
 
 ### Marktlage
 MazeMap ist eine ähnliche App, welche bereits auf dem Markt ist. Auch in Apple Maps ist solch eine Funktion bereits integriert, z.B. für Flughäfen.   
