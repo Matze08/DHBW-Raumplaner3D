@@ -4,6 +4,7 @@
 1. [Business Case](https://github.com/Matze08/DHBW-Raumplaner3D/blob/main/docs.md#Business-Case)
 2. [Architektur](https://github.com/Matze08/DHBW-Raumplaner3D/blob/main/docs.md#Architektur)
 3. [Implementierung](https://github.com/Matze08/DHBW-Raumplaner3D/blob/main/docs.md#Implementierung)
+4. [Testkonzept](https://github.com/Matze08/DHBW-Raumplaner3D/blob/main/docs.md#Testkonzept)
 
 DHBW Wayfinder & Booking Solution GmbH
 Name der App: DHBW Wayfinder & Booking
@@ -119,7 +120,7 @@ Die Tests werden iterativ in jeder Entwicklungsphase durchgeführt:
 
 ---
 
-## Funktionaler Testfall: Raum-Suche
+## 1. Funktionaler Testfall: Raum-Suche
 
 ### Testziel  
 Es soll überprüft werden, ob die Raum-Suche korrekt funktioniert und der richtige Navigationspfad angezeigt wird.
@@ -140,4 +141,34 @@ Es soll überprüft werden, ob die Raum-Suche korrekt funktioniert und der richt
 - Eine animierte Kamerafahrt zeigt den direkten Weg vom Standort zum Raum B3.12.  
 - Der Zielraum wird grün (frei) oder rot (belegt) eingefärbt angezeigt.  
 - Raumdaten wie Kurs, Dozent und Uhrzeit werden eingeblendet.
+
+## 2. Funktionaler Testfall: Raumplanung (Admin-Zugang)
+
+### Testziel  
+Überprüfung, ob ein Admin erfolgreich einen neuen Raum erstellen, bearbeiten und löschen kann.
+
+### Testschritte  
+1. Aufruf der Login-Seite.  
+2. Eingabe gültiger Admin-Zugangsdaten (z. B. *admin@dhbw.de*, *passwort123*).  
+3. Klick auf „Login“.  
+4. Navigation zum Raumplanungspanel.  
+5. Klick auf „Raum erstellen“.  
+6. Eingabe der Raumdaten (Raumname, Etage, Kapazität).  
+7. Speichern des Raums.  
+8. Auswahl des neu erstellten Raums.  
+9. Änderung der Kapazität.  
+10. Speichern der Änderungen.  
+11. Löschen des Raums.  
+
+### Eingabedaten  
+- Admin-Login: `admin@dhbw.de`, `passwort123`  
+- Neuer Raum: `B4.10`, Etage: `4`, Kapazität: `30`  
+- Neue Kapazität: `40`  
+
+### Erwartete Ausgabe  
+- Admin wird erfolgreich eingeloggt.  
+- Raum `B4.10` wird erstellt und in der Übersicht angezeigt.  
+- Nach Bearbeitung zeigt der Raum `B4.10` die Kapazität `40`.  
+- Nach dem Löschen ist der Raum nicht mehr in der Liste sichtbar.
+
 
