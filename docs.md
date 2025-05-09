@@ -1,7 +1,14 @@
-# Dokumentation
-## First tasks
+# Projektdokumentation
+### Inhaltsverzeichnis
+
+1. [Business Case](https://github.com/Matze08/DHBW-Raumplaner3D/blob/main/docs.md#Business-Case)
+2. [Architektur](https://github.com/Matze08/DHBW-Raumplaner3D/blob/main/docs.md#Architektur)
+3. [Implementierung](https://github.com/Matze08/DHBW-Raumplaner3D/blob/main/docs.md#Implementierung)
+
 DHBW Wayfinder & Booking Solution GmbH
 Name der App: DHBW Wayfinder & Booking
+
+## Business Case
 
 ### Marktlage
 MazeMap ist eine ähnliche App, welche bereits auf dem Markt ist. Auch in Apple Maps ist solch eine Funktion bereits integriert, z.B. für Flughäfen.   
@@ -45,9 +52,47 @@ Der Erfolg wird daran gemessen, ob die Webanwendung effizienter und übersichtli
     - 3D/2D Ansicht des Gebäudes
     - Kameraführung durch 3D Gebäude zu gesuchtem Raum
     - Räume sich eingefärbt, passend zum Buchungsstatus (frei = grün, rot = belegt)
-### Optinale Anforderungen
+### Optionale Anforderungen
     - Optimierung für mobile Endgeräte
     - Filtermöglichkeiten bei Raum-Suche (Weg nur über Treppe, etc.)
     - Vorlesungsplan für Kurse auf Sub-Seite
     - automatische Standorterfassung
     - Virtuelle Quests
+
+## Architektur
+
+### 1. Wie ist das System strukturiert und aufgebaut?
+Das System ist als Webanwendung mit einem Express.js-Backend und einer Three.js-basierten 3D-Visualisierung im Frontend aufgebaut. Die Architektur folgt dem Client-Server-Modell. Das Frontend übernimmt die Benutzerinteraktion, Visualisierung der Räume und Navigation, während das Backend die Geschäftslogik, Datenhaltung und Authentifizierung verwaltet. Die Kommunikation zwischen Frontend und Backend erfolgt über REST-APIs.
+
+### 2. Welche Schnittstellen und Rahmenbedingungen gibt es?
+Es existiert eine REST-API, über die das Frontend Raumdaten, Buchungen und Benutzerinformationen vom Server abruft oder sendet. Die Authentifizierung der Admins erfolgt über ein Login-Panel mit abgesicherter Sitzungsverwaltung. Die Datenbank-Schnittstelle verwaltet digitale Räume und Zugriffsrechte. Die Anwendung muss DSGVO-konform sein, insbesondere im Umgang mit Benutzer- und Standortdaten.
+
+### 3. Welche Anwendungen und Daten werden benötigt?
+Benötigt werden eine Webanwendung für die Nutzer (z. B. Studierende) und eine Verwaltungsoberfläche für Admins. Daten, die verwaltet werden, umfassen Raumobjekte, Buchungsinformationen (Dozent, Zeit, Kurs), Benutzerrollen, Zugriffsrechte sowie Standortdaten. Optional können Kurspläne und Quest-Daten gespeichert werden.
+
+### 4. Wie wird die Infrastruktur aussehen?
+Das Backend wird über einen Node.js-Webserver gehostet. Das System kann lokal oder cloudbasiert (z. B. AWS) betrieben werden. Die Datenbank läuft parallel (MongoDB).
+
+### 5. Welche Standards werden gesetzt?
+Es gelten Codekonventionen nach ESLint/Prettier im JavaScript-Code. Für die API gelten REST-Prinzipien mit konsistenter Namensgebung und Fehlerbehandlung. Sicherheitsstandards umfassen HTTPS, gesicherte Login-Sessions und Schutz gegen gängige Angriffe (z. B. XSS, CSRF). Für die 3D-Visualisierung wird einheitliches Objekt-Handling mit Three.js durchgesetzt.
+
+### 6. Wie werden die Qualitätsanforderungen erreicht?
+Die Qualität wird durch Unit- und Integrationstests im Backend sowie manuelles Testing der 3D-Oberfläche sichergestellt. Code-Reviews und strukturierte Entwicklungsprozesse gewährleisten sauberen und wartbaren Code. Die Anwendung wird auf Performance und Usability getestet, besonders im Hinblick auf die 3D-Darstellung und mobile Optimierung. Bei Bedarf kann Monitoring über einfache Logging-Lösungen implementiert werden.
+
+## Implementierung
+
+### 1. Welche Produkte und Komponenten (von welchen Herstellern) werden für das System benötigt?
+*Version hinzufügen!*     
+Für die Umsetzung wird Node.js (OpenJS Foundation) als Webserver verwendet. Das Backend basiert auf Express.js. MongoDB dient als Datenbanklösung. Für die 3D-Darstellung kommt Three.js zum Einsatz. Die Benutzeroberfläche wird mit HTML, CSS und JavaScript umgesetzt. Optional werden Tools wie Docker (Docker Inc.), GitHub (Microsoft) für Versionskontrolle und Render oder Heroku für das Hosting genutzt.
+
+### 2. Wie wird das System entwickelt und ausgerollt?
+Die Entwicklung erfolgt iterativ in kleinen Sprints. GitHub wird zur Quellcodeverwaltung und Kollaboration genutzt. Lokale Entwicklung erfolgt mit Node.js-Umgebung, während Tests und Deployment über eine CI/CD-Pipeline automatisiert werden. Das finale System wird auf einer Cloud-Plattform ausgerollt durch eine andere Abteilung (wer?) und dort öffentlich zugänglich gemacht.
+
+### 3. Welche Verifikationsmethoden werden verwendet?
+Die Funktionalität wird durch Unit- und Integrationstests im Backend überprüft. Zusätzlich erfolgen manuelle Tests im Frontend zur Prüfung der 3D-Visualisierung und Benutzerinteraktionen. Einfache Testnutzer-Szenarien und End-to-End-Tests validieren das System aus Sicht der Zielgruppe. Bei kritischen Komponenten wird eine Peer Review des Codes durchgeführt.
+
+### 4. Wie wird die Lösung betrieben?
+Nach dem Deployment läuft das System dauerhaft auf einem Cloud-Server (z. B. Render). Der Betrieb umfasst die Überwachung der Serververfügbarkeit, regelmäßige Backups der Datenbank und gelegentliche Wartung. Fehler und Nutzungsverhalten werden über einfache Logging-Lösungen analysiert. Updates werden automatisiert über die CI/CD-Pipeline eingespielt.
+
+### 5. Wer zahlt was?
+Im Rahmen eines studentischen Projekts werden vorrangig kostenlose Tools und Dienste genutzt (z. B. GitHub Free, MongoDB Atlas Free Tier). Sollten kostenpflichtige Dienste notwendig sein (z. B. Custom Domain, höherer Serverbedarf), werden diese entweder vom Projektteam privat getragen oder über Fördermittel/Institution finanziert.
