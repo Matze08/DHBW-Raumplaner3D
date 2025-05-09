@@ -96,3 +96,48 @@ Nach dem Deployment läuft das System dauerhaft auf einem Cloud-Server (z. B. 
 
 ### 5. Wer zahlt was?
 Im Rahmen eines studentischen Projekts werden vorrangig kostenlose Tools und Dienste genutzt (z. B. GitHub Free, MongoDB Atlas Free Tier). Sollten kostenpflichtige Dienste notwendig sein (z. B. Custom Domain, höherer Serverbedarf), werden diese entweder vom Projektteam privat getragen oder über Fördermittel/Institution finanziert.
+
+## Testkonzept
+
+### Welche Tests sollten geplant werden?  
+Für die Webanwendung werden folgende Testarten vorgesehen:
+
+- **Funktionale Tests**: Überprüfung der Kernfunktionen wie Raum-Suche, Raumplanung, Login und Navigation.
+- **Usability-Tests**: Testen der Benutzerfreundlichkeit, insbesondere der 3D-Navigation für Erstsemester.
+- **Kompatibilitätstests**: Sicherstellen der Funktion auf verschiedenen Geräten (Desktop, Tablet, Smartphone) und Browsern.
+- **Sicherheitstests**: Überprüfung der Authentifizierung (Admin-Login), Rechteverwaltung und Schutz gegen gängige Angriffe (XSS, CSRF).
+- **Leistungstests**: Prüfung der Ladezeiten der 3D-Ansicht und der Reaktionszeit bei Suchanfragen.
+- **Regressionstests**: Nach Änderungen wird getestet, ob bestehende Funktionen weiterhin korrekt arbeiten.
+
+### Wann werden die Tests durchgeführt?  
+Die Tests werden iterativ in jeder Entwicklungsphase durchgeführt:
+
+- **Unit-Tests** während der Entwicklung einzelner Module (z. B. API-Endpunkte).
+- **Integrationstests** nach Fertigstellung von Teilsystemen (z. B. Datenbankanbindung mit 3D-Ansicht).
+- **Systemtests** vor jedem Release, um das Gesamtsystem zu prüfen.
+- **Abschließende Akzeptanztests** vor Projektabgabe, mit Fokus auf realistische Nutzungsszenarien.
+
+---
+
+## Funktionaler Testfall: Raum-Suche
+
+### Testziel  
+Es soll überprüft werden, ob die Raum-Suche korrekt funktioniert und der richtige Navigationspfad angezeigt wird.
+
+### Testschritte  
+1. Aufruf der Startseite.  
+2. Auswahl des aktuellen Standorts über das Dropdown-Menü (z. B. *Eingang Cafeteria*).  
+3. Eingabe eines existierenden Raums in das Suchfeld (z. B. *Raum B3.12*).  
+4. Klick auf „Suche starten“.  
+5. Beobachtung der folgenden Navigation (3D-Kamerafahrt).  
+
+### Eingabedaten  
+- Startpunkt: *Eingang Cafeteria*  
+- Zielraum: *B3.12*  
+
+### Erwartete Ausgabe  
+- Die 3D-Ansicht zoomt in das Gebäude hinein.  
+- Eine animierte Kamerafahrt zeigt den direkten Weg vom Standort zum Raum B3.12.  
+- Der Zielraum wird grün (frei) oder rot (belegt) eingefärbt angezeigt.  
+- Raumdaten wie Kurs, Dozent und Uhrzeit werden eingeblendet.
+
