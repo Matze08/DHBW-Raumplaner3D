@@ -1,8 +1,8 @@
 ### Inhaltsverzeichnis
 
-1. [Projektbeschreibung](https://github.com/Matze08/DHBW-Raumplaner3D/main/docs.md#Projektbeschreibung)
-2. [Architektur](https://github.com/Matze08/DHBW-Raumplaner3D/main/docs.md#Architektur)
-3. [Implementierung](https://github.com/Matze08/DHBW-Raumplaner3D/main/docs.md#Implementierung)
+1. [Projektbeschreibung](https://github.com/Matze08/DHBW-Raumplaner3D/blob/main/docs.md#Projektbeschreibung)
+2. [Architektur](https://github.com/Matze08/DHBW-Raumplaner3D/blob/main/docs.md#Architektur)
+3. [Implementierung](https://github.com/Matze08/DHBW-Raumplaner3D/blob/main/docs.md#Implementierung)
 
 # Projektbeschreibung
 ## First tasks
