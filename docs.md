@@ -14,6 +14,7 @@ und auch die Raumplanung für die Lehrkräfte zu vereinfachen.
 ### Interne und externe Stakeholder / Wer nimmt an den aktuellen Prozessen teil?
 | Stakeholder | Art | Beschreibung |
 |--|--|--|
+|Sekretariat|extern|Einfachere und übersichtlichere Verwaltung der Räume|
 |Dozenten|extern|Einfachere Raumplanung, Sicherheit bei der Planung|
 |Erstsemester|extern|Raumsuche vereinfachen, Orientierungslosigkeit vermeiden|
 |andere Studenten|intern|Raumsuche vereinfachen, Verspätungen zu Vorlesungen verhindern|
