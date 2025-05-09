@@ -1,4 +1,9 @@
-# Dokumentation
+### Inhaltsverzeichnis
+
+1. [Projektbeschreibung](https://github.com/Matze08/DHBW-Raumplaner3D/main/docs.md#Projektbeschreibung)
+2. [Architektur](https://github.com/Matze08/DHBW-Raumplaner3D/main/docs.md#Architektur)
+
+# Projektbeschreibung
 ## First tasks
 DHBW Wayfinder & Booking Solution GmbH
 Name der App: DHBW Wayfinder & Booking
@@ -44,9 +49,30 @@ Der Erfolg wird daran gemessen, ob die Webanwendung effizienter und übersichtli
     - 3D/2D Ansicht des Gebäudes
     - Kameraführung durch 3D Gebäude zu gesuchtem Raum
     - Räume sich eingefärbt, passend zum Buchungsstatus (frei = grün, rot = belegt)
-### Optinale Anforderungen
+### Optionale Anforderungen
     - Optimierung für mobile Endgeräte
     - Filtermöglichkeiten bei Raum-Suche (Weg nur über Treppe, etc.)
     - Vorlesungsplan für Kurse auf Sub-Seite
     - automatische Standorterfassung
     - Virtuelle Quests
+
+# Architektur
+## Lösungsbeschreibung
+
+### 1. Wie ist das System strukturiert und aufgebaut?
+Das System ist als Webanwendung mit einem Express.js-Backend und einer Three.js-basierten 3D-Visualisierung im Frontend aufgebaut. Die Architektur folgt dem Client-Server-Modell. Das Frontend übernimmt die Benutzerinteraktion, Visualisierung der Räume und Navigation, während das Backend die Geschäftslogik, Datenhaltung und Authentifizierung verwaltet. Die Kommunikation zwischen Frontend und Backend erfolgt über REST-APIs.
+
+### 2. Welche Schnittstellen und Rahmenbedingungen gibt es?
+Es existiert eine REST-API, über die das Frontend Raumdaten, Buchungen und Benutzerinformationen vom Server abruft oder sendet. Die Authentifizierung der Admins erfolgt über ein Login-Panel mit abgesicherter Sitzungsverwaltung. Die Datenbank-Schnittstelle verwaltet digitale Räume und Zugriffsrechte. Die Anwendung muss DSGVO-konform sein, insbesondere im Umgang mit Benutzer- und Standortdaten.
+
+### 3. Welche Anwendungen und Daten werden benötigt?
+Benötigt werden eine Webanwendung für die Nutzer (z. B. Studierende) und eine Verwaltungsoberfläche für Admins. Daten, die verwaltet werden, umfassen Raumobjekte, Buchungsinformationen (Dozent, Zeit, Kurs), Benutzerrollen, Zugriffsrechte sowie Standortdaten. Optional können Kurspläne und Quest-Daten gespeichert werden.
+
+### 4. Wie wird die Infrastruktur aussehen?
+Die Anwendung wird über einen Node.js-Webserver gehostet. Das System kann lokal oder cloudbasiert (z. B. über Render, Heroku oder AWS) betrieben werden. Die Datenbank läuft parallel (z. B. MongoDB oder PostgreSQL). Bei Bedarf kann Docker zur Containerisierung verwendet werden. Für Entwicklungs- und Testzwecke kann ein CI/CD-Workflow integriert werden.
+
+### 5. Welche Standards werden gesetzt?
+Es gelten Codekonventionen nach ESLint/Prettier im JavaScript-Code. Für die API gelten REST-Prinzipien mit konsistenter Namensgebung und Fehlerbehandlung. Sicherheitsstandards umfassen HTTPS, gesicherte Login-Sessions und Schutz gegen gängige Angriffe (z. B. XSS, CSRF). Für die 3D-Visualisierung wird einheitliches Objekt-Handling mit Three.js durchgesetzt.
+
+### 6. Wie werden die Qualitätsanforderungen erreicht?
+Die Qualität wird durch Unit- und Integrationstests im Backend sowie manuelles Testing der 3D-Oberfläche sichergestellt. Code-Reviews und strukturierte Entwicklungsprozesse gewährleisten sauberen und wartbaren Code. Die Anwendung wird auf Performance und Usability getestet, besonders im Hinblick auf die 3D-Darstellung und mobile Optimierung. Bei Bedarf kann Monitoring über einfache Logging-Lösungen implementiert werden.
