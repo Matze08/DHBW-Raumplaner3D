@@ -69,7 +69,7 @@ Es existiert eine REST-API, über die das Frontend Raumdaten, Buchungen und Benu
 Benötigt werden eine Webanwendung für die Nutzer (z. B. Studierende) und eine Verwaltungsoberfläche für Admins. Daten, die verwaltet werden, umfassen Raumobjekte, Buchungsinformationen (Dozent, Zeit, Kurs), Benutzerrollen, Zugriffsrechte sowie Standortdaten. Optional können Kurspläne und Quest-Daten gespeichert werden.
 
 ### 4. Wie wird die Infrastruktur aussehen?
-Die Anwendung wird über einen Node.js-Webserver gehostet. Das System kann lokal oder cloudbasiert (z. B. über Render, Heroku oder AWS) betrieben werden. Die Datenbank läuft parallel (z. B. MongoDB oder PostgreSQL). Bei Bedarf kann Docker zur Containerisierung verwendet werden. Für Entwicklungs- und Testzwecke kann ein CI/CD-Workflow integriert werden.
+Das Backend wird über einen Node.js-Webserver gehostet. Das System kann lokal oder cloudbasiert (z. B. AWS) betrieben werden. Die Datenbank läuft parallel (MongoDB).
 
 ### 5. Welche Standards werden gesetzt?
 Es gelten Codekonventionen nach ESLint/Prettier im JavaScript-Code. Für die API gelten REST-Prinzipien mit konsistenter Namensgebung und Fehlerbehandlung. Sicherheitsstandards umfassen HTTPS, gesicherte Login-Sessions und Schutz gegen gängige Angriffe (z. B. XSS, CSRF). Für die 3D-Visualisierung wird einheitliches Objekt-Handling mit Three.js durchgesetzt.
