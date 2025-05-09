@@ -94,7 +94,6 @@ export class TopViewScene {
 
             const material = new THREE.MeshStandardMaterial({ color: 0xff0000 });
             this.waypoint.children[0].material = material;
-            this.waypoint.position.set(0, 10, 0);
         });
 
         //init startpoint
@@ -103,7 +102,6 @@ export class TopViewScene {
 
             const material = new THREE.MeshStandardMaterial({ color: 0x0000ff });
             this.startpoint.children[0].material = material;
-            this.startpoint.position.set(0, 10, 0);
         });
         
         this._camera.position.y = 60;
@@ -112,7 +110,7 @@ export class TopViewScene {
 
     updateCameraPos(angle){
         const radius = 80;
-        this._camera.position.x = radius * Math.cos(angle);
+        this._camera.position.x = radius * Math.cos(angle) + 10;
         this._camera.position.z = radius * Math.sin(angle);
         this._camera.lookAt(new THREE.Vector3(0,10,0));
     }
@@ -140,6 +138,24 @@ export class TopViewScene {
                 this._scene.add(this.waypoint);
             }
         });
+    }
+
+    setEntry(entry){
+        this._scene.remove(this.startpoint);
+        const waypointHolder = this._scene.getObjectByName(entry);
+        if (waypointHolder){
+            this.startpoint.position.copy(waypointHolder.position);
+            this.startpoint.position.y += 2;
+            this._scene.add(this.startpoint);
+        }
+    }
+
+    drawLine(){
+        this._scene.remove(this.line);
+        const geometry = new THREE.BufferGeometry().setFromPoints([this.startpoint.position, this.waypoint.position]);
+        const material = new THREE.LineBasicMaterial({ color: 0xff0500 });
+        this.line = new THREE.Line(geometry, material);
+        this._scene.add(this.line);
     }
 
 

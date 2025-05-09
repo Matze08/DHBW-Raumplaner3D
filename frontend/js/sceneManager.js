@@ -70,11 +70,16 @@ document.getElementById('submit-form').addEventListener('submit', function(event
     const floorNr = roomNr[1];
     activeScene.showFloor(floorNr);
     activeScene.setWaypoint(roomNr);
+    activeScene.drawLine();
 
 });
 
 document.getElementById('orbitSlider').addEventListener('input', function(event) {
     activeScene.updateCameraPos(event.target.value);
+});
+
+document.getElementById('selectEntry').addEventListener('input', function(event) {
+    activeScene.setEntry(event.target.value);
 });
 
 //add Resize-EventListener -> so renderer is responsive
