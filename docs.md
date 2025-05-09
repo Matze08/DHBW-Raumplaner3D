@@ -85,7 +85,7 @@ Die Qualität wird durch Unit- und Integrationstests im Backend sowie manuelles 
 Für die Umsetzung wird Node.js (OpenJS Foundation) als Webserver verwendet. Das Backend basiert auf Express.js. MongoDB dient als Datenbanklösung. Für die 3D-Darstellung kommt Three.js zum Einsatz. Die Benutzeroberfläche wird mit HTML, CSS und JavaScript umgesetzt. Optional werden Tools wie Docker (Docker Inc.), GitHub (Microsoft) für Versionskontrolle und Render oder Heroku für das Hosting genutzt.
 
 ### 2. Wie wird das System entwickelt und ausgerollt?
-Die Entwicklung erfolgt iterativ in kleinen Sprints. GitHub wird zur Quellcodeverwaltung und Kollaboration genutzt. Lokale Entwicklung erfolgt mit Node.js-Umgebung, während Tests und Deployment über eine CI/CD-Pipeline automatisiert werden. Das finale System wird auf einer Cloud-Plattform ausgerollt und dort öffentlich zugänglich gemacht.
+Die Entwicklung erfolgt iterativ in kleinen Sprints. GitHub wird zur Quellcodeverwaltung und Kollaboration genutzt. Lokale Entwicklung erfolgt mit Node.js-Umgebung, während Tests und Deployment über eine CI/CD-Pipeline automatisiert werden. Das finale System wird auf einer Cloud-Plattform ausgerollt durch eine andere Abteilung (wer?) und dort öffentlich zugänglich gemacht.
 
 ### 3. Welche Verifikationsmethoden werden verwendet?
 Die Funktionalität wird durch Unit- und Integrationstests im Backend überprüft. Zusätzlich erfolgen manuelle Tests im Frontend zur Prüfung der 3D-Visualisierung und Benutzerinteraktionen. Einfache Testnutzer-Szenarien und End-to-End-Tests validieren das System aus Sicht der Zielgruppe. Bei kritischen Komponenten wird eine Peer Review des Codes durchgeführt.
