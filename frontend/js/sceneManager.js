@@ -70,6 +70,7 @@ document.getElementById('submit-form').addEventListener('submit', function(event
     const floorNr = roomNr[1];
     activeScene.showFloor(floorNr);
     activeScene.setWaypoint(roomNr);
+    activeScene.findNextStaircase();
     activeScene.drawLine();
 
 });

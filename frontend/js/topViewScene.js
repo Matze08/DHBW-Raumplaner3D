@@ -109,6 +109,8 @@ export class TopViewScene {
     }
 
     updateCameraPos(angle){
+        //update camera position based on slider value
+        //angle = 0 -> camera is in front of the building
         const radius = 80;
         this._camera.position.x = radius * Math.cos(angle) + 10;
         this._camera.position.z = radius * Math.sin(angle);
@@ -116,12 +118,13 @@ export class TopViewScene {
     }
 
     showFloor(floor){
-        console.log(floor)
+        //show all floors except roof (reset)
         this._scene.getObjectByName("Roof").visible = false;
         for (let i = 5; i > 0; i--){
             this._scene.getObjectByName("OG" + i).visible = true;
         }
 
+        //remove all floors above the selected floor
         for (let i = 5; i > floor; i--){
             this._scene.getObjectByName("OG" + i).visible = false;
         }
@@ -130,20 +133,48 @@ export class TopViewScene {
     setWaypoint(roomNr){
         this._scene.remove(this.waypoint);
         const floorNr = roomNr[1];
-        const waypointHolder = this._scene.getObjectByName("OG"+floorNr+"Waypoints");
+        //get the name of the waypoint holder
+        const waypointHolder = this._scene.getObjectByName("OG"+floorNr+"Level");
+        //search for the correct room (waypoint)
         waypointHolder.children.forEach(element => {
             if (element.name == roomNr){
                 this.waypoint.position.copy(element.position);
                 this.waypoint.position.y += 5;
+                this.waypoint.name = element.name;
                 this._scene.add(this.waypoint);
             }
         });
     }
 
+    findNextStaircase(){
+        //gets the name of the startpoint
+        let startPointName = this.startpoint.name;
+        let OGX = 0;
+        let nearestStairway = null;
+        if (startPointName == "EingangOben"){
+            OGX = 1;
+        }
+        const stairways = this._scene.getObjectByName("OG"+OGX+"Staircase").children;
+        //finds the nearest stairway
+        stairways.forEach(stairway => {
+            let distance = this.startpoint.position.distanceTo(stairway.position);
+            if (nearestStairway == null || distance < nearestStairway.distance){
+                nearestStairway = {
+                    name: stairway.name,
+                    position: stairway.position,
+                    distance: distance
+                };
+            }
+        });
+        this.nearestStairway = nearestStairway;
+    }
+
     setEntry(entry){
         this._scene.remove(this.startpoint);
         const waypointHolder = this._scene.getObjectByName(entry);
+        //set startpoint obj to the entry
         if (waypointHolder){
+            this.startpoint.name = entry;
             this.startpoint.position.copy(waypointHolder.position);
             this.startpoint.position.y += 2;
             this._scene.add(this.startpoint);
@@ -151,11 +182,29 @@ export class TopViewScene {
     }
 
     drawLine(){
-        this._scene.remove(this.line);
-        const geometry = new THREE.BufferGeometry().setFromPoints([this.startpoint.position, this.waypoint.position]);
+        const geometry = new THREE.BufferGeometry().setFromPoints([this.startpoint.position, this.nearestStairway.position]);
         const material = new THREE.LineBasicMaterial({ color: 0xff0500 });
         this.line = new THREE.Line(geometry, material);
+
+        //get name of nearest stairway and replace the number with the number of the waypoint
+        let stairwaytop = this.nearestStairway.name;
+        stairwaytop = stairwaytop.split('');
+        stairwaytop[2] = this.waypoint.name[1];
+        stairwaytop = stairwaytop.join('');
+
+        const geometry1 = new THREE.BufferGeometry().setFromPoints([this.nearestStairway.position, this._scene.getObjectByName(stairwaytop).position]);
+        const material1 = new THREE.LineBasicMaterial({ color: 0xff0500 });
+        this.line1 = new THREE.Line(geometry1, material1);
+
+
+        const geometry2 = new THREE.BufferGeometry().setFromPoints([this._scene.getObjectByName(stairwaytop).position, this.waypoint.position]);
+        const material2 = new THREE.LineBasicMaterial({ color: 0xff0500 });
+        this.line2 = new THREE.Line(geometry2, material2);
+
+        //add lines to scene
         this._scene.add(this.line);
+        this._scene.add(this.line1);
+        this._scene.add(this.line2);
     }
 
 
