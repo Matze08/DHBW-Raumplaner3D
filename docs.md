@@ -4,6 +4,7 @@
 1. [Business Case](https://github.com/Matze08/DHBW-Raumplaner3D/blob/main/docs.md#Business-Case)
 2. [Architektur](https://github.com/Matze08/DHBW-Raumplaner3D/blob/main/docs.md#Architektur)
 3. [Implementierung](https://github.com/Matze08/DHBW-Raumplaner3D/blob/main/docs.md#Implementierung)
+4. [Testkonzept](https://github.com/Matze08/DHBW-Raumplaner3D/blob/main/docs.md#Testkonzept)
 
 DHBW Wayfinder & Booking Solution GmbH
 Name der App: DHBW Wayfinder & Booking
@@ -96,3 +97,78 @@ Nach dem Deployment läuft das System dauerhaft auf einem Cloud-Server (z. B. 
 
 ### 5. Wer zahlt was?
 Im Rahmen eines studentischen Projekts werden vorrangig kostenlose Tools und Dienste genutzt (z. B. GitHub Free, MongoDB Atlas Free Tier). Sollten kostenpflichtige Dienste notwendig sein (z. B. Custom Domain, höherer Serverbedarf), werden diese entweder vom Projektteam privat getragen oder über Fördermittel/Institution finanziert.
+
+## Testkonzept
+
+### Welche Tests sollten geplant werden?  
+Für die Webanwendung werden folgende Testarten vorgesehen:
+
+- **Funktionale Tests**: Überprüfung der Kernfunktionen wie Raum-Suche, Raumplanung, Login und Navigation.
+- **Usability-Tests**: Testen der Benutzerfreundlichkeit, insbesondere der 3D-Navigation für Erstsemester.
+- **Kompatibilitätstests**: Sicherstellen der Funktion auf verschiedenen Geräten (Desktop, Tablet, Smartphone) und Browsern.
+- **Sicherheitstests**: Überprüfung der Authentifizierung (Admin-Login), Rechteverwaltung und Schutz gegen gängige Angriffe (XSS, CSRF).
+- **Leistungstests**: Prüfung der Ladezeiten der 3D-Ansicht und der Reaktionszeit bei Suchanfragen.
+- **Regressionstests**: Nach Änderungen wird getestet, ob bestehende Funktionen weiterhin korrekt arbeiten.
+
+### Wann werden die Tests durchgeführt?  
+Die Tests werden iterativ in jeder Entwicklungsphase durchgeführt:
+
+- **Unit-Tests** während der Entwicklung einzelner Module (z. B. API-Endpunkte).
+- **Integrationstests** nach Fertigstellung von Teilsystemen (z. B. Datenbankanbindung mit 3D-Ansicht).
+- **Systemtests** vor jedem Release, um das Gesamtsystem zu prüfen.
+- **Abschließende Akzeptanztests** vor Projektabgabe, mit Fokus auf realistische Nutzungsszenarien.
+
+---
+
+## 1. Funktionaler Testfall: Raum-Suche
+
+### Testziel  
+Es soll überprüft werden, ob die Raum-Suche korrekt funktioniert und der richtige Navigationspfad angezeigt wird.
+
+### Testschritte  
+1. Aufruf der Startseite.  
+2. Auswahl des aktuellen Standorts über das Dropdown-Menü (z. B. *Eingang Cafeteria*).  
+3. Eingabe eines existierenden Raums in das Suchfeld (z. B. *Raum B3.12*).  
+4. Klick auf „Suche starten“.  
+5. Beobachtung der folgenden Navigation (3D-Kamerafahrt).  
+
+### Eingabedaten  
+- Startpunkt: *Eingang Cafeteria*  
+- Zielraum: *B3.12*  
+
+### Erwartete Ausgabe  
+- Die 3D-Ansicht zoomt in das Gebäude hinein.  
+- Eine animierte Kamerafahrt zeigt den direkten Weg vom Standort zum Raum B3.12.  
+- Der Zielraum wird grün (frei) oder rot (belegt) eingefärbt angezeigt.  
+- Raumdaten wie Kurs, Dozent und Uhrzeit werden eingeblendet.
+
+## 2. Funktionaler Testfall: Raumplanung (Admin-Zugang)
+
+### Testziel  
+Überprüfung, ob ein Admin erfolgreich einen neuen Raum erstellen, bearbeiten und löschen kann.
+
+### Testschritte  
+1. Aufruf der Login-Seite.  
+2. Eingabe gültiger Admin-Zugangsdaten (z. B. *admin@dhbw.de*, *passwort123*).  
+3. Klick auf „Login“.  
+4. Navigation zum Raumplanungspanel.  
+5. Klick auf „Raum erstellen“.  
+6. Eingabe der Raumdaten (Raumname, Etage, Kapazität).  
+7. Speichern des Raums.  
+8. Auswahl des neu erstellten Raums.  
+9. Änderung der Kapazität.  
+10. Speichern der Änderungen.  
+11. Löschen des Raums.  
+
+### Eingabedaten  
+- Admin-Login: `admin@dhbw.de`, `passwort123`  
+- Neuer Raum: `B4.10`, Etage: `4`, Kapazität: `30`  
+- Neue Kapazität: `40`  
+
+### Erwartete Ausgabe  
+- Admin wird erfolgreich eingeloggt.  
+- Raum `B4.10` wird erstellt und in der Übersicht angezeigt.  
+- Nach Bearbeitung zeigt der Raum `B4.10` die Kapazität `40`.  
+- Nach dem Löschen ist der Raum nicht mehr in der Liste sichtbar.
+
+
