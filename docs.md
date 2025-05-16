@@ -80,6 +80,13 @@ Es gelten Codekonventionen nach ESLint/Prettier im JavaScript-Code. Für die API
 ### 6. Wie werden die Qualitätsanforderungen erreicht?
 Die Qualität wird durch Unit- und Integrationstests im Backend sowie manuelles Testing der 3D-Oberfläche sichergestellt. Code-Reviews und strukturierte Entwicklungsprozesse gewährleisten sauberen und wartbaren Code. Die Anwendung wird auf Performance und Usability getestet, besonders im Hinblick auf die 3D-Darstellung und mobile Optimierung. Bei Bedarf kann Monitoring über einfache Logging-Lösungen implementiert werden.
 
+### Softwareversionen
+| Software | Version |
+|--|--|
+|MongoDB|8.0.9|
+|NodeJS|20.17.0|
+|ThreeJS|0.165.0|
+
 ## Implementierung
 
 ### 1. Welche Produkte und Komponenten (von welchen Herstellern) werden für das System benötigt?
