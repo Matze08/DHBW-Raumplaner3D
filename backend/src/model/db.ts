@@ -1,9 +1,17 @@
 import { MongoClient } from 'mongodb';
 import { readFileSync } from 'fs';
+import dotenv from "dotenv";
+
 
 export default async function run() {
-    const connStr: string = readFileSync('mongo.txt', 'utf8');
-    const client = new MongoClient(connStr);
+    dotenv.config();
+    const mongoUri = process.env.MONGODB_URI;
+
+    if (!mongoUri) {
+      throw new Error("MONGODB_URI is not defined in .env file");
+    }
+
+    const client = new MongoClient(mongoUri);
   try {
     await client.connect();
     const db = client.db('raumTest');
