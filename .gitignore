@@ -258,3 +258,4 @@ gradle-app.setting
 
 
 *.blend1
+*mongo.txt
