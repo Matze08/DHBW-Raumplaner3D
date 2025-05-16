@@ -7,6 +7,7 @@
 4. [Testkonzept](https://github.com/Matze08/DHBW-Raumplaner3D/blob/main/docs.md#Testkonzept)
 5. [Work-Breakdown-Structure](https://github.com/Matze08/DHBW-Raumplaner3D/blob/main/docs.md#Work-Breakdown-Structure)
 6. [Rollenverteilung](https://github.com/Matze08/DHBW-Raumplaner3D/blob/main/docs.md#Projektrollen-und-Phasen)
+7. [Stakeholder](https://github.com/Matze08/DHBW-Raumplaner3D/blob/main/docs.md#Stakeholder)
 
 DHBW Wayfinder & Booking Solution GmbH
 Name der App: DHBW Wayfinder & Booking
@@ -243,3 +244,20 @@ Es soll überprüft werden, ob die Raum-Suche korrekt funktioniert und der richt
 
 6. **Abschluss & Abgabe**  
    Fertigstellung der Dokumentation, Projektpräsentation und Übergabe des Projekts.
+
+## Stakeholder
+
+| Stakeholder       | Einfluss | Interesse | Kategorie            | Einbindung                          |
+|-------------------|----------|-----------|-----------------------|-------------------------------------|
+| Dozenten          | Hoch     | Hoch      | Schlüsselakteur       | Eng einbinden, regelmäßig Feedback  |
+| Erstsemester      | Niedrig  | Hoch      | Benutzer              | Beobachten, Usability-Tests         |
+| IT-Verwaltung     | Hoch     | Mittel    | Sponsor/Technikgeber  | Konsultieren, technische Anforderungen klären |
+| DHBW-Leitung      | Hoch     | Mittel    | Entscheidungsträger   | Informieren, Fortschritt berichten  |
+| Projektteam (Matze, Michael) | Hoch | Hoch | Entwicklungsteam      | Voll eingebunden                    |
+
+### Einbindungsstrategie
+
+- **Schlüsselakteure (Dozenten)**: In Review-Meetings einbinden, direkte Anforderungen einholen.
+- **Benutzer (Studierende)**: In Testszenarien einbinden, intuitive Bedienbarkeit sicherstellen.
+- **IT-Verwaltung**: Abstimmung bei Hosting, Datenzugriff und Infrastruktur.
+- **DHBW-Leitung**: Projektziele und Nutzen kommunizieren, z. B. durch Pitch oder Bericht.
