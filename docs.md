@@ -5,6 +5,8 @@
 2. [Architektur](https://github.com/Matze08/DHBW-Raumplaner3D/blob/main/docs.md#Architektur)
 3. [Implementierung](https://github.com/Matze08/DHBW-Raumplaner3D/blob/main/docs.md#Implementierung)
 4. [Testkonzept](https://github.com/Matze08/DHBW-Raumplaner3D/blob/main/docs.md#Testkonzept)
+5. [Work-Breakdown-Structure](https://github.com/Matze08/DHBW-Raumplaner3D/blob/main/docs.md#Work-Breakdown-Structure)
+6. [Rollenverteilung](https://github.com/Matze08/DHBW-Raumplaner3D/blob/main/docs.md#Projektrollen-und-Phasen)
 
 DHBW Wayfinder & Booking Solution GmbH
 Name der App: DHBW Wayfinder & Booking
@@ -178,4 +180,66 @@ Es soll überprüft werden, ob die Raum-Suche korrekt funktioniert und der richt
 - Nach Bearbeitung zeigt der Raum `B4.10` die Kapazität `40`.  
 - Nach dem Löschen ist der Raum nicht mehr in der Liste sichtbar.
 
+## Work Breakdown Structure
 
+1. **Anforderungsanalyse**
+    1.1. Funktionsbeschreibung Raum-Suche  
+    1.2. Zieldefinition für Navigation  
+    1.3. Erfassung der Nutzereingaben (Standort & Zielraum)  
+
+2. **Backend-Entwicklung (Express.js)**
+    2.1. API-Endpunkt zur Raumabfrage  
+    2.2. API-Endpunkt zur Wegberechnung  
+    2.3. Anbindung an MongoDB (Räume, Buchungsstatus)  
+
+3. **Frontend-Entwicklung**
+    3.1. Formular zur Eingabe von Start- & Zielraum  
+    3.2. Anzeige der Navigationsergebnisse  
+    3.3. Integration der 3D-Komponente (Three.js)  
+
+4. **3D-Visualisierung (Three.js)**
+    4.1. Modellierung der Gebäude-Etagen  
+    4.2. Logik zur Kamerafahrt (Pfadanimation)  
+    4.3. Einfärbung von Räumen nach Buchungsstatus  
+
+5. **Testing & Validierung**
+    5.1. Funktionaler Test Raum-Suche  
+    5.2. Test der Pfadberechnung und -anzeige  
+    5.3. Usability-Test mit Studierenden  
+
+6. **Deployment & Betrieb**
+    6.1. Hosten der Anwendung (z. B. via Render/Heroku)  
+    6.2. Monitoring & Fehlertracking  
+    6.3. Dokumentation für Admins & User
+
+## Projektrollen und Phasen
+
+### Rollen im Projektteam
+
+- **Matze – Frontend Developer**  
+  Verantwortlich für die Gestaltung und Entwicklung der Benutzeroberfläche, inklusive 3D-Navigation mit Three.js, responsives Design und Usability.
+
+- **Michael – Backend Developer & Dokumentation**  
+  Zuständig für die API-Entwicklung mit Express.js, Datenbankanbindung (MongoDB), Rechteverwaltung und technische Dokumentation des Projekts.
+
+### Projektphasen
+
+1. **Planung & Anforderungsanalyse**  
+   Gemeinsame Erfassung der funktionalen und nicht-funktionalen Anforderungen. Definition des Funktionsumfangs und der Zielgruppe.
+
+2. **Architekturdesign**  
+   Aufteilung der Systemstruktur in Frontend, Backend und Datenbank. Festlegung der Technologien und Schnittstellen.
+
+3. **Implementierung**  
+   - Matze: Entwicklung der Benutzeroberfläche und 3D-Visualisierung.  
+   - Michael: Aufbau der API, Datenbankmodelle und Sicherheitslogik.  
+   Parallel erfolgt die Erstellung der Architekturdokumentation.
+
+4. **Testphase**  
+   Gemeinsames Testen der Anwendung (funktional, technisch und usability-basiert). Identifikation und Behebung von Fehlern.
+
+5. **Deployment**  
+   Veröffentlichung der Webanwendung auf einem geeigneten Webserver. Finaler Test im Live-System.
+
+6. **Abschluss & Abgabe**  
+   Fertigstellung der Dokumentation, Projektpräsentation und Übergabe des Projekts.
