@@ -8,6 +8,7 @@
 5. [Work-Breakdown-Structure](https://github.com/Matze08/DHBW-Raumplaner3D/blob/main/docs.md#Work-Breakdown-Structure)
 6. [Rollenverteilung](https://github.com/Matze08/DHBW-Raumplaner3D/blob/main/docs.md#Projektrollen-und-Phasen)
 7. [Stakeholder](https://github.com/Matze08/DHBW-Raumplaner3D/blob/main/docs.md#Stakeholder)
+8. [Rechtlicher Rahmen](#rechtlicher-rahmen)
 
 DHBW Wayfinder & Booking Solution GmbH
 Name der App: DHBW Wayfinder & Booking
@@ -261,3 +262,21 @@ Es soll überprüft werden, ob die Raum-Suche korrekt funktioniert und der richt
 - **Benutzer (Studierende)**: In Testszenarien einbinden, intuitive Bedienbarkeit sicherstellen.
 - **IT-Verwaltung**: Abstimmung bei Hosting, Datenzugriff und Infrastruktur.
 - **DHBW-Leitung**: Projektziele und Nutzen kommunizieren, z. B. durch Pitch oder Bericht.
+
+## Rechtlicher Rahmen
+
+### Schutz der Website
+
+Die entwickelte Webanwendung ist urheberrechtlich geschützt. Der Quellcode, das Design sowie die erstellten 3D-Modelle unterliegen automatisch dem deutschen Urheberrecht (§§ 1, 2 UrhG). Um den rechtlichen Schutz zu ergänzen und die Rechte klar zu kennzeichnen, sollten folgende Maßnahmen umgesetzt werden:
+
+- Einbindung eines Lizenzvermerks (MIT-Lizenz), falls Teile der Software oder Inhalte veröffentlicht oder wiederverwendet werden dürfen.
+- Vollständiges Impressum und eine DSGVO-konforme Datenschutzerklärung, da personenbezogene Daten (z. B. bei Logins) verarbeitet werden.
+- Sicherstellung, dass verwendete Drittinhalte (z. B. Icons, Bibliotheken, Modelle) lizenzkonform eingebunden sind.
+
+### Definition von Nutzungsrechten
+
+Zur geregelten Nutzung der Anwendung sind folgende Rechte und Einschränkungen zu definieren:
+
+- Erstellung von Nutzungsbedingungen, die festlegen, welche Funktionen den Endnutzern zur Verfügung stehen (z. B. Raumsuche, Navigation) und welche Rechte Administratoren haben (z. B. Raumverwaltung).
+- Technische Zugriffskontrollen (z. B. Login, Rollenverteilung) zur Durchsetzung dieser Rechte.
+- Bei einer Veröffentlichung als Open-Source-Projekt: Wahl einer passenden Lizenz (z. B. MIT für einfache Wiederverwendung oder GPL für quelloffene Weiterentwicklung), um die Weitergabe und Nutzung rechtssicher zu ermöglichen.
