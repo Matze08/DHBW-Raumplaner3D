@@ -280,3 +280,27 @@ Zur geregelten Nutzung der Anwendung sind folgende Rechte und Einschränkungen z
 - Erstellung von Nutzungsbedingungen, die festlegen, welche Funktionen den Endnutzern zur Verfügung stehen (z. B. Raumsuche, Navigation) und welche Rechte Administratoren haben (z. B. Raumverwaltung).
 - Technische Zugriffskontrollen (z. B. Login, Rollenverteilung) zur Durchsetzung dieser Rechte.
 - Bei einer Veröffentlichung als Open-Source-Projekt: Wahl einer passenden Lizenz (z. B. MIT für einfache Wiederverwendung oder GPL für quelloffene Weiterentwicklung), um die Weitergabe und Nutzung rechtssicher zu ermöglichen.
+
+### Genutzte Open-Source-Tools
+
+Im Projekt werden verschiedene Open-Source-Tools und Bibliotheken eingesetzt:
+
+- **Express.js**: Framework zur Erstellung des Webservers (Backend)
+- **Three.js**: JavaScript-Bibliothek zur Darstellung der 3D-Navigation
+- **Mongoose**: ODM für MongoDB zur Modellierung der Datenbank
+- **Nodemon** (dev): Automatischer Server-Reload während der Entwicklung
+- **Dotenv**: Verwaltung von Umgebungsvariablen
+
+### Lizenzmodelle und kommerzielle Nutzung
+
+Die eingesetzten Tools stehen unter folgenden Open-Source-Lizenzen:
+
+- **Express.js** – MIT-Lizenz  
+- **Three.js** – MIT-Lizenz  
+- **Mongoose** – MIT-Lizenz  
+- **Nodemon** – MIT-Lizenz  
+- **Dotenv** – BSD-2-Clause-Lizenz
+
+Alle genannten Lizenzen (MIT, BSD) sind **permissive Lizenzen**. Sie erlauben die **kommerzielle Nutzung, Modifikation und Weiterverbreitung**, solange ein Lizenzhinweis enthalten ist und ggf. Copyright-Angaben erhalten bleiben.
+
+Daher dürfen die verwendeten Tools **auch in einer kommerziellen Version der Website eingesetzt werden**, ohne Lizenzgebühren oder Einschränkungen, sofern die Lizenzbedingungen eingehalten werden (z. B. Beibehaltung der Lizenztexte).
