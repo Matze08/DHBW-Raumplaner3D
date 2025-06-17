@@ -69,6 +69,8 @@ Der Erfolg wird daran gemessen, ob die Webanwendung effizienter und übersichtli
 ### 1. Wie ist das System strukturiert und aufgebaut?
 Das System ist als Webanwendung mit einem Express.js-Backend und einer Three.js-basierten 3D-Visualisierung im Frontend aufgebaut. Die Architektur folgt dem Client-Server-Modell. Das Frontend übernimmt die Benutzerinteraktion, Visualisierung der Räume und Navigation, während das Backend die Geschäftslogik, Datenhaltung und Authentifizierung verwaltet. Die Kommunikation zwischen Frontend und Backend erfolgt über REST-APIs.
 
+Für das Frontend wird kein Framework wie z.B. Angular genutzt, da das Frontend hauptsächlich aus 3D-modellierten Szenen besteht, welche durch solch ein Framework stark verlangsamt werden.
+
 ### 2. Welche Schnittstellen und Rahmenbedingungen gibt es?
 Es existiert eine REST-API, über die das Frontend Raumdaten, Buchungen und Benutzerinformationen vom Server abruft oder sendet. Die Authentifizierung der Admins erfolgt über ein Login-Panel mit abgesicherter Sitzungsverwaltung. Die Datenbank-Schnittstelle verwaltet digitale Räume und Zugriffsrechte. Die Anwendung muss DSGVO-konform sein, insbesondere im Umgang mit Benutzer- und Standortdaten.
 
@@ -90,12 +92,12 @@ Die Qualität wird durch Unit- und Integrationstests im Backend sowie manuelles 
 |MongoDB|8.0.9|
 |NodeJS|20.17.0|
 |ThreeJS|0.165.0|
+|Bootstrap|5.3|
 
 ## Implementierung
 
-### 1. Welche Produkte und Komponenten (von welchen Herstellern) werden für das System benötigt?
-*Version hinzufügen!*     
-Für die Umsetzung wird Node.js (OpenJS Foundation) als Webserver verwendet. Das Backend basiert auf Express.js. MongoDB dient als Datenbanklösung. Für die 3D-Darstellung kommt Three.js zum Einsatz. Die Benutzeroberfläche wird mit HTML, CSS und JavaScript umgesetzt. Optional werden Tools wie Docker (Docker Inc.), GitHub (Microsoft) für Versionskontrolle und Render oder Heroku für das Hosting genutzt.
+### 1. Welche Produkte und Komponenten (von welchen Herstellern) werden für das System benötigt?   
+Für die Umsetzung wird Node.js (OpenJS Foundation) als Webserver verwendet. Das Backend basiert auf Express.js. MongoDB dient als Datenbanklösung. Für die 3D-Darstellung kommt Three.js zum Einsatz. Die Benutzeroberfläche wird mit HTML, CSS und JavaScript umgesetzt, außerdem wird hier Bootstrap genutzt 5.3. Optional werden Tools wie Docker (Docker Inc.), GitHub (Microsoft) für Versionskontrolle und Render oder Heroku für das Hosting genutzt.
 
 ### 2. Wie wird das System entwickelt und ausgerollt?
 Die Entwicklung erfolgt iterativ in kleinen Sprints. GitHub wird zur Quellcodeverwaltung und Kollaboration genutzt. Lokale Entwicklung erfolgt mit Node.js-Umgebung, während Tests und Deployment über eine CI/CD-Pipeline automatisiert werden. Das finale System wird auf einer Cloud-Plattform ausgerollt durch eine andere Abteilung (wer?) und dort öffentlich zugänglich gemacht.
