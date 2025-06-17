@@ -10,5 +10,8 @@
   "description": "",
   "devDependencies": {
     "jsdoc": "^4.0.4"
+  },
+  "dependencies": {
+    "bootstrap": "^5.3.6"
   }
 }

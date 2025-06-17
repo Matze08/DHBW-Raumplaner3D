@@ -3,23 +3,46 @@ import { readFileSync } from 'fs';
 import dotenv from "dotenv";
 
 
-export default async function run() {
-    dotenv.config();
-    const mongoUri = process.env.MONGODB_URI;
+export async function run() {
+  dotenv.config();
+  const mongoUri = process.env.MONGODB_URI;
 
-    if (!mongoUri) {
-      throw new Error("MONGODB_URI is not defined in .env file");
-    }
+  if (!mongoUri) {
+    throw new Error("MONGODB_URI is not defined in .env file");
+  }
 
-    const client = new MongoClient(mongoUri);
+  const client = new MongoClient(mongoUri);
   try {
     await client.connect();
-    const db = client.db('raumTest');
-    const collection = db.collection('raum');
+    const db = client.db("raumTest");
+    const collection = db.collection("raum");
 
     // Find the first document in the collection
     const first = await collection.findOne();
     return first;
+  } finally {
+    // Close the database connection when finished or an error occurs
+    await client.close();
+  }
+}
+
+export async function getUser(username: string, password: string) {
+  dotenv.config();
+  const mongoUri = process.env.MONGODB_URI;
+
+  if (!mongoUri) {
+    throw new Error("MONGODB_URI is not defined in .env file");
+  }
+
+  const client = new MongoClient(mongoUri);
+  try {
+    await client.connect();
+    const db = client.db("raumTest");
+    const collection = db.collection("users");
+
+    // Find the user with the given username and password
+    const user = await collection.findOne({ username, password });
+    return user;
   } finally {
     // Close the database connection when finished or an error occurs
     await client.close();
