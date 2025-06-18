@@ -1,5 +1,5 @@
 import express from "express";
-import { getUser, run } from "./model/db.js";
+import { getUser, insertUser, run, findOne } from "./model/db.js";
 import path from "path";
 import bodyParser from "body-parser";
 import cors from "cors";
@@ -10,7 +10,7 @@ const port = 3001;
 app.use(
   cors({
     origin: "http://localhost:3000",
-    methods: ["GET", "POST", "PUT", "DELETE"],
+    methods: ["GET", "POST", "DELETE"],
     allowedHeaders: ["Content-Type", "Authorization"],
   })
 );
@@ -49,5 +49,50 @@ app.post("/api/login", async (req, res) => {
     res.json({ success: true, user });
   } else {
     res.status(401).json({ success: false, message: "Invalid credentials" });
+  }
+});
+
+app.post("/api/register", async (req, res) => {
+  const { email, password, registeredBy } = req.body;
+  const authHeader = req.headers.authorization;
+
+  // Einfache Überprüfung, ob ein Benutzer authentifiziert ist
+  // In einer produktiven Umgebung würde man hier JWT oder Sessions verwenden
+  if (!authHeader && !registeredBy) {
+    res.status(403).json({
+      success: false,
+      message: "Sie müssen eingeloggt sein, um neue Benutzer zu registrieren",
+    });
+    return;
+  }
+
+  if (!email || !password) {
+    res.status(400).json({
+      success: false,
+      message: "Email and password are required",
+    });
+    return;
+  }
+
+  // Prüfe, ob ein Benutzer mit dieser E-Mail bereits existiert
+  const existingUser = await findOne("admin", { email });
+  if (existingUser) {
+    res.status(409).json({
+      success: false,
+      message: "Ein Benutzer mit dieser E-Mail existiert bereits",
+    });
+    return;
+  }
+
+  // Benutzer mit Informationen zum Registrierenden anlegen
+  const user = await insertUser(email, password, registeredBy);
+
+  if (user) {
+    res.json({ success: true, user });
+  } else {
+    res.status(500).json({
+      success: false,
+      message: "Fehler beim Anlegen des Benutzers",
+    });
   }
 });
