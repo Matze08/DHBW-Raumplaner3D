@@ -2,9 +2,18 @@ import express from "express";
 import { getUser, run } from "./model/db.js";
 import path from "path";
 import bodyParser from "body-parser";
+import cors from "cors";
 
 const app = express();
-const port = 3000;
+const port = 3001;
+
+app.use(
+  cors({
+    origin: "http://localhost:3000",
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+  })
+);
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
@@ -24,15 +33,17 @@ app.get("/api/", async (req, res) => {
   res.send(await run());
 });
 
-app.get("/api/login/", async (req, res) => {
-  const { username, password } = req.query;
+app.post("/api/login", async (req, res) => {
+  const { email, password } = req.body;
 
-  if (!username || !password) {
-    res.status(400).send("Username and password are required");
+  if (!email || !password) {
+    res
+      .status(400)
+      .json({ success: false, message: "Email and password are required" });
     return;
   }
 
-  const user = await getUser(username as string, password as string);
+  const user = await getUser(email, password);
 
   if (user) {
     res.json({ success: true, user });

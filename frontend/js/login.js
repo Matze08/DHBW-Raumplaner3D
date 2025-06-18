@@ -9,19 +9,18 @@ const form = document.querySelector('form');
     const password = form.password.value;
 
     try {
-      const response = await fetch('http://localhost/api/login', {
-        method: 'POST',
+      const response = await fetch("http://localhost:3001/api/login", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json'
+          "Content-Type": "application/json",
         },
-        body: JSON.stringify({ email, password })
+        body: JSON.stringify({ email, password }),
       });
 
       if (!response.ok) {
-        errorMessage.textContent = error.message || 'Login fehlgeschlagen';
-        errorMessage.style.display = 'block';
         const error = await response.json();
-        alert('Fehler: ' + (error.message || 'Login fehlgeschlagen'));
+        errorMessage.textContent = error.message || "Login fehlgeschlagen";
+        errorMessage.style.display = "block";
         return;
       }
 
@@ -30,7 +29,8 @@ const form = document.querySelector('form');
       // z.B. weiterleiten:
       // window.location.href = '/dashboard';
     } catch (err) {
-  errorMessage.textContent = 'Netzwerkfehler. Bitte versuche es später erneut.';
+      errorMessage.textContent =
+        "Netzwerkfehler. Bitte versuche es später erneut.";
       errorMessage.style.display = 'block';
       console.error(err);
     }

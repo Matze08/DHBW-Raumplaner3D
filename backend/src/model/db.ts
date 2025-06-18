@@ -26,7 +26,7 @@ export async function run() {
   }
 }
 
-export async function getUser(username: string, password: string) {
+export async function getUser(email: string, password: string) {
   dotenv.config();
   const mongoUri = process.env.MONGODB_URI;
 
@@ -40,8 +40,8 @@ export async function getUser(username: string, password: string) {
     const db = client.db("raumTest");
     const collection = db.collection("users");
 
-    // Find the user with the given username and password
-    const user = await collection.findOne({ username, password });
+    // Find the user with the given email and password
+    const user = await collection.findOne({ email, password });
     return user;
   } finally {
     // Close the database connection when finished or an error occurs
