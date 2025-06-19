@@ -3,6 +3,7 @@ import { getUser, insertUser, run, findOne } from "./model/db.js";
 import path from "path";
 import bodyParser from "body-parser";
 import cors from "cors";
+import timetableRoutes from "./model/timetable.js";
 
 const app = express();
 const port = 3001;
@@ -17,6 +18,9 @@ app.use(
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
+
+// Mount timetable routes
+app.use("/api", timetableRoutes);
 
 console.log("INFO | Starting Raumplaner-Backend...");
 

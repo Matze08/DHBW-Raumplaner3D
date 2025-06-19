@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <title>DHBW Stuttgart Raumplaner | Stundenplan</title>
+  <link rel="icon" type="image/x-icon" href="/frontend/media/icon.ico">
+  <link rel="stylesheet" href="/frontend/css/main.css" />
+  <link rel="stylesheet" href="../css/timetable.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet" />
+</head>
+<body>
+  <nav>
+    <img src="/frontend/media/dhbw_logo.png" alt="dhbw_logo" style="height: 3rem;">
+    <h1>DHBW Stuttgart Raumplaner | Stundenplan</h1>
+    <a href="/frontend/html/root.html" class="nav-link">Raumfinder</a>
+  </nav>
+
+  <div class="timetable-container">
+    <div class="filter-section">
+      <h2>Filter</h2>
+      <div class="filter-group">
+        <label for="roomFilter">Raum:</label>
+        <select id="roomFilter">
+          <option value="">Alle Räume</option>
+          <!-- Räume werden dynamisch geladen -->
+        </select>
+      </div>
+      <div class="filter-group">
+        <label for="courseFilter">Kurs:</label>
+        <select id="courseFilter">
+          <option value="">Alle Kurse</option>
+          <!-- Kurse werden dynamisch geladen -->
+        </select>
+      </div>
+      <div class="filter-group">
+        <label for="lecturerFilter">Dozent:</label>
+        <select id="lecturerFilter">
+          <option value="">Alle Dozenten</option>
+          <!-- Dozenten werden dynamisch geladen -->
+        </select>
+      </div>
+      <div class="filter-group">
+        <label for="lectureFilter">Vorlesung:</label>
+        <select id="lectureFilter">
+          <option value="">Alle Vorlesungen</option>
+          <!-- Vorlesungen werden dynamisch geladen -->
+        </select>
+      </div>
+      <div class="filter-group">
+        <label for="dateFilter">Datum:</label>
+        <input type="date" id="dateFilter">
+      </div>
+      <button id="applyFilter" class="filter-button">Filter anwenden</button>
+      <button id="resetFilter" class="filter-button">Filter zurücksetzen</button>
+    </div>
+
+    <div class="timetable-section">
+      <div class="timetable-header">
+        <div class="time-column">Zeit</div>
+        <div class="day-columns">
+          <div class="day-column">
+            <div class="day-name">Montag</div>
+            <div class="day-date" id="date-monday"></div>
+          </div>
+          <div class="day-column">
+            <div class="day-name">Dienstag</div>
+            <div class="day-date" id="date-tuesday"></div>
+          </div>
+          <div class="day-column">
+            <div class="day-name">Mittwoch</div>
+            <div class="day-date" id="date-wednesday"></div>
+          </div>
+          <div class="day-column">
+            <div class="day-name">Donnerstag</div>
+            <div class="day-date" id="date-thursday"></div>
+          </div>
+          <div class="day-column">
+            <div class="day-name">Freitag</div>
+            <div class="day-date" id="date-friday"></div>
+          </div>
+        </div>
+      </div>
+      <div class="timetable-body" id="timetableBody">
+        <!-- Timetable content will be generated dynamically -->
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="../js/timetable.js"></script>
+</body>
+</html>
