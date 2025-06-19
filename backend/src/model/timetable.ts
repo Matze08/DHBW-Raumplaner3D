@@ -88,15 +88,26 @@ router.post("/bookings/filter", async (req, res) => {
     const filter: BuchungFilter = req.body;
     const query: any = {};
     
-    // If date is provided, filter by date
+    // If date is provided, filter by the whole week containing that date
     if (filter.date) {
       const selectedDate = new Date(filter.date);
-      const nextDay = new Date(selectedDate);
-      nextDay.setDate(nextDay.getDate() + 1);
+      
+      // Get the Monday of the week containing the selected date
+      const monday = new Date(selectedDate);
+      const dayOfWeek = monday.getDay(); // 0 = Sunday, 1 = Monday, ...
+      
+      // Adjust to get Monday (if selectedDate is Sunday, we get Monday of previous week)
+      monday.setDate(monday.getDate() - (dayOfWeek === 0 ? 6 : dayOfWeek - 1));
+      monday.setHours(0, 0, 0, 0); // Start of Monday
+      
+      // Get the end of Friday (Sunday 00:00 technically)
+      const saturday = new Date(monday);
+      saturday.setDate(monday.getDate() + 6); // Saturday (end of week)
+      saturday.setHours(0, 0, 0, 0); // Start of Saturday
       
       query.zeitStart = {
-        $gte: selectedDate,
-        $lt: nextDay
+        $gte: monday,
+        $lt: saturday
       };
     }
     

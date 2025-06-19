@@ -177,15 +177,10 @@ function clearBookings() {
 // Display bookings on the timetable
 function displayBookings(bookings) {
   if (!bookings || bookings.length === 0) return;
-
   bookings.forEach((booking) => {
     // Convert dates to Date objects
     const startTime = new Date(booking.zeitStart);
     const endTime = new Date(booking.zeitEnde);
-
-    // Skip if not on the selected date
-    const selectedDate = new Date(dateFilter.value);
-    if (startTime.toDateString() !== selectedDate.toDateString()) return;
 
     // Calculate day index (0 = Monday, 4 = Friday)
     const dayIndex = startTime.getDay() - 1; // getDay(): 0 = Sunday, so -1 gives Monday = 0
