@@ -1,0 +1,9 @@
+/* Body-Stil speziell für die Timetable-Seite */
+body.timetable-page {
+  position: relative; /* Statt absolute */
+  margin: 0;
+  min-height: 100vh;
+  width: 100%;
+  display: block; /* Statt flex */
+  overflow-y: auto; /* Erlaubt vertikales Scrollen */
+}

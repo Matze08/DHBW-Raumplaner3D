@@ -1,75 +1,81 @@
 // Constants for time display
 const START_HOUR = 8;
 const END_HOUR = 20;
-const HOUR_HEIGHT = 60; // Height in pixels for an hour
-const API_BASE_URL = 'http://localhost:3001/api';
+const HOUR_HEIGHT = 60; // Height in pixels for an hour (2 x 30px rows)
+const API_BASE_URL = "http://localhost:3001/api";
 
 // DOM Elements
-const timetableBody = document.getElementById('timetableBody');
-const roomFilter = document.getElementById('roomFilter');
-const courseFilter = document.getElementById('courseFilter');
-const lecturerFilter = document.getElementById('lecturerFilter');
-const lectureFilter = document.getElementById('lectureFilter');
-const dateFilter = document.getElementById('dateFilter');
-const applyFilterBtn = document.getElementById('applyFilter');
-const resetFilterBtn = document.getElementById('resetFilter');
+const timetableBody = document.getElementById("timetableBody");
+const roomFilter = document.getElementById("roomFilter");
+const courseFilter = document.getElementById("courseFilter");
+const lecturerFilter = document.getElementById("lecturerFilter");
+const lectureFilter = document.getElementById("lectureFilter");
+const dateFilter = document.getElementById("dateFilter");
+const applyFilterBtn = document.getElementById("applyFilter");
+const resetFilterBtn = document.getElementById("resetFilter");
 
 // Set today's date as default for date filter
 const today = new Date();
-dateFilter.value = today.toISOString().split('T')[0];
+dateFilter.value = today.toISOString().split("T")[0];
 
 // Initialize the timetable
-document.addEventListener('DOMContentLoaded', async () => {
+document.addEventListener("DOMContentLoaded", async () => {
   // Initialize the timetable structure
   createTimetableStructure();
-  
+
   // Update dates in the header
   updateDateHeaders();
-  
+
   // Load filter options
   await loadFilterOptions();
-  
+
   // Load bookings with default filters (today's date)
   await loadBookings();
-  
+
   // Set up event listeners
   setupEventListeners();
-  
+
   // Create a modal for booking details
   createBookingModal();
 });
 
 // Create the basic timetable structure
 function createTimetableStructure() {
-  timetableBody.innerHTML = '';
-  
+  timetableBody.innerHTML = "";
+
   // Create rows for each hour
   for (let hour = START_HOUR; hour < END_HOUR; hour++) {
     // Create half-hour rows
     for (let minute = 0; minute < 60; minute += 30) {
-      const timeRow = document.createElement('div');
-      timeRow.className = 'time-row';
-      
+      const timeRow = document.createElement("div");
+      timeRow.className = "time-row";
+
       // Time cell
-      const timeCell = document.createElement('div');
-      timeCell.className = 'time-cell';
-      timeCell.textContent = `${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}`;
-      
+      const timeCell = document.createElement("div");
+      timeCell.className = "time-cell";
+
+      // Only show time for full hours, leave half-hour cells empty
+      if (minute === 0) {
+        timeCell.textContent = `${hour.toString().padStart(2, "0")}:00`;
+      } else {
+        timeCell.innerHTML = "&nbsp;"; // Empty space to maintain cell structure
+      }
+
       // Day cells container
-      const dayCells = document.createElement('div');
-      dayCells.className = 'day-cells';
-      
+      const dayCells = document.createElement("div");
+      dayCells.className = "day-cells";
+
       // Create cells for each day of the week (Monday to Friday)
       for (let day = 0; day < 5; day++) {
-        const dayCell = document.createElement('div');
-        dayCell.className = 'day-cell';
+        const dayCell = document.createElement("div");
+        dayCell.className = "day-cell";
         dayCell.dataset.day = day;
         dayCell.dataset.hour = hour;
         dayCell.dataset.minute = minute;
-        
+
         dayCells.appendChild(dayCell);
       }
-      
+
       timeRow.appendChild(timeCell);
       timeRow.appendChild(dayCells);
       timetableBody.appendChild(timeRow);
@@ -81,39 +87,49 @@ function createTimetableStructure() {
 async function loadFilterOptions() {
   try {
     // Load rooms
-    const rooms = await fetchData('/rooms');
-    populateFilterSelect(roomFilter, rooms, 'bezeichnung', '_id');
-    
+    const rooms = await fetchData("/rooms");
+    populateFilterSelect(roomFilter, rooms, "bezeichnung", "_id");
+
     // Load courses
-    const courses = await fetchData('/courses');
-    populateFilterSelect(courseFilter, courses, 'bezeichnung', '_id');
-    
+    const courses = await fetchData("/courses");
+    populateFilterSelect(courseFilter, courses, "bezeichnung", "_id");
+
     // Load lecturers
-    const lecturers = await fetchData('/lecturers');
-    populateFilterSelect(lecturerFilter, lecturers, item => `${item.vorname} ${item.nachname}`, '_id');
-    
+    const lecturers = await fetchData("/lecturers");
+    populateFilterSelect(
+      lecturerFilter,
+      lecturers,
+      (item) => `${item.vorname} ${item.nachname}`,
+      "_id"
+    );
+
     // Load lectures
-    const lectures = await fetchData('/lectures');
-    populateFilterSelect(lectureFilter, lectures, 'bezeichnung', '_id');
+    const lectures = await fetchData("/lectures");
+    populateFilterSelect(lectureFilter, lectures, "bezeichnung", "_id");
   } catch (error) {
-    console.error('Error loading filter options:', error);
-    showNotification('Fehler beim Laden der Filteroptionen', 'error');
+    console.error("Error loading filter options:", error);
+    showNotification("Fehler beim Laden der Filteroptionen", "error");
   }
 }
 
 // Helper function to populate select elements
-function populateFilterSelect(selectElement, items, labelProperty, valueProperty) {
+function populateFilterSelect(
+  selectElement,
+  items,
+  labelProperty,
+  valueProperty
+) {
   if (!items || items.length === 0) return;
-  
+
   // Clear existing options except the first one (All)
   while (selectElement.options.length > 1) {
     selectElement.remove(1);
   }
-  
+
   // Add options
-  items.forEach(item => {
-    const option = document.createElement('option');
-    if (typeof labelProperty === 'function') {
+  items.forEach((item) => {
+    const option = document.createElement("option");
+    if (typeof labelProperty === "function") {
       option.textContent = labelProperty(item);
     } else {
       option.textContent = item[labelProperty];
@@ -132,103 +148,129 @@ async function loadBookings() {
       roomId: roomFilter.value || null,
       courseId: courseFilter.value || null,
       lecturerId: lecturerFilter.value || null,
-      lectureId: lectureFilter.value || null
+      lectureId: lectureFilter.value || null,
     };
-    
+
     // Update date headers based on selected date
     updateDateHeaders(new Date(dateFilter.value));
-    
+
     // Fetch bookings with filters
-    const bookings = await fetchData('/bookings/filter', 'POST', filters);
-    
+    const bookings = await fetchData("/bookings/filter", "POST", filters);
+
     // Clear existing bookings
     clearBookings();
-    
+
     // Display bookings
     displayBookings(bookings);
   } catch (error) {
-    console.error('Error loading bookings:', error);
-    showNotification('Fehler beim Laden der Buchungen', 'error');
+    console.error("Error loading bookings:", error);
+    showNotification("Fehler beim Laden der Buchungen", "error");
   }
 }
 
 // Clear all bookings from the timetable
 function clearBookings() {
-  const bookingElements = document.querySelectorAll('.booking');
-  bookingElements.forEach(el => el.remove());
+  const bookingElements = document.querySelectorAll(".booking");
+  bookingElements.forEach((el) => el.remove());
 }
 
 // Display bookings on the timetable
 function displayBookings(bookings) {
   if (!bookings || bookings.length === 0) return;
-  
-  bookings.forEach(booking => {
+
+  bookings.forEach((booking) => {
     // Convert dates to Date objects
     const startTime = new Date(booking.zeitStart);
     const endTime = new Date(booking.zeitEnde);
-    
+
     // Skip if not on the selected date
     const selectedDate = new Date(dateFilter.value);
     if (startTime.toDateString() !== selectedDate.toDateString()) return;
-    
+
     // Calculate day index (0 = Monday, 4 = Friday)
     const dayIndex = startTime.getDay() - 1; // getDay(): 0 = Sunday, so -1 gives Monday = 0
     if (dayIndex < 0 || dayIndex > 4) return; // Skip weekends
-    
+
     // Calculate position and height
     const startHour = startTime.getHours();
     const startMinute = startTime.getMinutes();
     const endHour = endTime.getHours();
     const endMinute = endTime.getMinutes();
-    
+
     // Find the correct cell to place the booking
     const startPositionY = calculatePositionY(startHour, startMinute);
     const height = calculateHeight(startHour, startMinute, endHour, endMinute);
-    
+
     // Create booking element
-    const bookingElement = document.createElement('div');
-    bookingElement.className = 'booking';
+    const bookingElement = document.createElement("div");
+    bookingElement.className = "booking";
     bookingElement.dataset.id = booking._id;
     bookingElement.style.top = `${startPositionY}px`;
     bookingElement.style.height = `${height}px`;
-    
+
     // Add booking content
     bookingElement.innerHTML = `
-      <div class="booking-title">${booking.vorlesung?.bezeichnung || 'Keine Angabe'}</div>
+      <div class="booking-title">${
+        booking.vorlesung?.bezeichnung || "Keine Angabe"
+      }</div>
       <div class="booking-details">
-        <div class="booking-room">Raum: ${booking.raum?.bezeichnung || 'Keine Angabe'}</div>
-        <div class="booking-course">Kurs: ${booking.kurs?.bezeichnung || 'Keine Angabe'}</div>
-        <div class="booking-lecturer">Dozent: ${booking.lehrbeauftragter ? 
-          `${booking.lehrbeauftragter.vorname} ${booking.lehrbeauftragter.nachname}` : 'Keine Angabe'}</div>
-        <div class="booking-time">${formatTime(startTime)} - ${formatTime(endTime)}</div>
+        <div class="booking-room">Raum: ${
+          booking.raum?.bezeichnung || "Keine Angabe"
+        }</div>
+        <div class="booking-course">Kurs: ${
+          booking.kurs?.bezeichnung || "Keine Angabe"
+        }</div>
+        <div class="booking-lecturer">Dozent: ${
+          booking.lehrbeauftragter
+            ? `${booking.lehrbeauftragter.vorname} ${booking.lehrbeauftragter.nachname}`
+            : "Keine Angabe"
+        }</div>
+        <div class="booking-time">${formatTime(startTime)} - ${formatTime(
+      endTime
+    )}</div>
       </div>
     `;
-    
+
     // Find all cells for this day
-    const dayCells = document.querySelectorAll(`.day-cell[data-day="${dayIndex}"]`);
+    const dayCells = document.querySelectorAll(
+      `.day-cell[data-day="${dayIndex}"]`
+    );
     if (dayCells.length > 0) {
       // Add to the first cell of the day (we'll position it absolutely)
       dayCells[0].appendChild(bookingElement);
-      
+
       // Add click event to show details
-      bookingElement.addEventListener('click', () => showBookingDetails(booking));
+      bookingElement.addEventListener("click", () =>
+        showBookingDetails(booking)
+      );
     }
   });
 }
 
 // Calculate vertical position based on time
 function calculatePositionY(hour, minute) {
-  const hourOffset = (hour - START_HOUR) * HOUR_HEIGHT;
-  const minuteOffset = (minute / 60) * HOUR_HEIGHT;
-  return hourOffset + minuteOffset;
+  // Calculate the number of half-hour slots before this time
+  const halfHourSlots = (hour - START_HOUR) * 2 + Math.floor(minute / 30);
+
+  // Each time row has a min-height of 60px (for a full hour)
+  // So each half-hour slot has 30px height
+  return halfHourSlots * 30;
 }
 
 // Calculate height based on duration
 function calculateHeight(startHour, startMinute, endHour, endMinute) {
+  // Calculate start and end in minutes since midnight
   const startTotalMinutes = startHour * 60 + startMinute;
   const endTotalMinutes = endHour * 60 + endMinute;
+
+  // Duration in minutes
   const durationMinutes = endTotalMinutes - startTotalMinutes;
-  return (durationMinutes / 60) * HOUR_HEIGHT;
+
+  // Convert to half-hour slots
+  const halfHourSlots = durationMinutes / 30;
+
+  // Each half-hour slot is 30px high
+  return halfHourSlots * 30;
 }
 
 // Format time as HH:MM
