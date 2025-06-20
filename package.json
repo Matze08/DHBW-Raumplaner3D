@@ -1,0 +1,32 @@
+{
+  "name": "dhbw-raumplaner3d",
+  "version": "1.0.0",
+  "description": "DHBW Room Planner 3D - Full Stack Application",
+  "main": "gulpfile.js",
+  "scripts": {
+    "build": "gulp build",
+    "dev": "gulp dev",
+    "clean": "gulp clean",
+    "install-all": "npm install && npm run install-backend && npm run install-frontend",
+    "install-backend": "cd backend && npm install",
+    "install-frontend": "cd frontend && npm install"
+  },
+  "keywords": [
+    "dhbw",
+    "room-planner",
+    "3d",
+    "typescript",
+    "express",
+    "three.js"
+  ],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "gulp": "^5.0.0",
+    "gulp-shell": "^0.8.0",
+    "gulp-clean": "^0.4.0",
+    "del": "^7.1.0",
+    "gulp-typescript": "^6.0.0-alpha.1",
+    "typescript": "^5.8.3"
+  }
+}
