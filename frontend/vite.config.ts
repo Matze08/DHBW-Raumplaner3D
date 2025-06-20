@@ -1,7 +1,7 @@
 import {defineConfig} from 'vite';
 
 export default defineConfig({
-    base: '/frontend/',
+    base: '/frontend',
     server: {
         port: 3000,
     }});

@@ -56,9 +56,10 @@ loadScene(0); //load topViewScene
 window.loadScene = loadScene;
 window.getActiveScene = getActiveScene;
 
+//add event listener to buttons
 document.getElementById('submit-form').addEventListener('submit', function(event) {
     event.preventDefault(); // prevents page reload
-    const regex = /^[ABC][0-5]\d{2}$/;
+    const regex = /^[ABC][0-5]\d{2}$/; // regex to match room numbers like C305, A102, B204, etc.
     const form = event.target;
     const roomNr = form.roomNr.value;
     const entry = event.selectEntry;

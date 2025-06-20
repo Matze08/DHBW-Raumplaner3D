@@ -131,6 +131,7 @@ export class TopViewScene {
     }
 
     setWaypoint(roomNr){
+        // roomNr is a string like "C305", "A102", "B204"
         this._scene.remove(this.waypoint);
         const floorNr = roomNr[1];
         //get the name of the waypoint holder
@@ -139,7 +140,7 @@ export class TopViewScene {
         waypointHolder.children.forEach(element => {
             if (element.name == roomNr){
                 this.waypoint.position.copy(element.position);
-                this.waypoint.position.y += 5;
+                this.waypoint.position.y;
                 this.waypoint.name = element.name;
                 this._scene.add(this.waypoint);
             }
