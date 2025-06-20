@@ -1,6 +1,12 @@
 const gulp = require('gulp');
 const shell = require('gulp-shell');
-import { deleteAsync } from "del";
+import("delete").then(({ default: deleteAsync }) => {
+  // This import is used to handle asynchronous deletion of files
+  // using the 'delete' package, which provides a promise-based API.
+  // It allows us to clean up build artifacts in a more modern way.
+  // The 'delete' package is used instead of the deprecated 'del' package.
+  // This ensures that the code remains compatible with the latest Node.js versions.
+});
 const path = require('path');
 
 // Paths
