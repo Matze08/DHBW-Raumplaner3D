@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <title>Benutzer registrieren</title>
+  <link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.min.css" />
+  <link rel="stylesheet" href="../css/login.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet" />
+  
+</head>
+<body class="dark-mode">
+  <div class="login-card">
+    <h2>Neuen Benutzer registrieren</h2>
+    <p id="registerInfo" class="text-info mb-3"></p>
+    <form>
+      <div class="mb-3">
+        <label for="email">E-Mail</label>
+        <input type="email" class="form-control" id="email" required />
+      </div>
+      <div class="mb-3">
+        <label for="password">Passwort</label>
+        <input type="password" class="form-control" id="password" required />
+      </div>
+      <button type="submit">Registrieren</button>
+      <div id="errorMessage" class="text-danger mt-2" style="display:none;"></div>
+    </form>
+    <div class="mt-3">
+      <a href="root.html" class="btn btn-sm btn-outline-secondary">Zurück zur Hauptseite</a>
+    </div>
+  </div>
+
+  <script src="node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+  <script type="module" src="../js/register.js"></script>
+</body>
+</html>
