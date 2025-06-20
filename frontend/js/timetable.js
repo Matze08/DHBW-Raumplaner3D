@@ -210,6 +210,9 @@ function displayBookings(bookings) {
     bookingElement.style.top = `${startPositionY}px`;
     bookingElement.style.height = `${height}px`;
 
+    // Check if this is an admin page to show delete button
+    const isAdminPage = document.body.classList.contains("admin-page");
+
     // Add booking content
     bookingElement.innerHTML = `
       <div class="booking-title">${
@@ -231,7 +234,11 @@ function displayBookings(bookings) {
       endTime
     )}</div>
       </div>
-      <button class="booking-delete-btn" title="Buchung löschen">×</button>
+      ${
+        isAdminPage
+          ? '<button class="booking-delete-btn" title="Buchung löschen">×</button>'
+          : ""
+      }
     `;
 
     // Find all cells for this day
@@ -248,7 +255,7 @@ function displayBookings(bookings) {
         showBookingDetails(booking);
       });
 
-      // Add click event for delete button
+      // Add click event for delete button (only exists on admin pages)
       const deleteBtn = bookingElement.querySelector(".booking-delete-btn");
       if (deleteBtn) {
         deleteBtn.addEventListener("click", (event) => {
