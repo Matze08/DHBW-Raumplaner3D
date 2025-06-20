@@ -131,6 +131,7 @@ export class TopViewScene {
     }
 
     setWaypoint(roomNr){
+        //roomNr is a string like "C305"
         this._scene.remove(this.waypoint);
         const floorNr = roomNr[1];
         //get the name of the waypoint holder
