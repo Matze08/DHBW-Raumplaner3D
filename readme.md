@@ -13,8 +13,11 @@ If you still want to build the project yourself, follow these instructions:
 
 ### Instructions
 1. Go into the project's root folder
+2. Run `npx gulp install-all` to install all packages via npm. (You might be asked to install `gulp`)
 2. Run the command `npx gulp build` to build without testing. Run `npx gulp build-with-tests` to build with testing. 
-3. Gulp will now execute the installation (and testing) via `npm` for frontend and backend and compile the source files into deployable scripts.
+3. Gulp will now execute the building process (and testing) for frontend and backend and compile the source files into deployable ones.
 4. The compiled files can be found in the `dist` directory.
-
+s
 Please note that a seperate MongoDB server is needed. For the purposes of this university project, one is hosted at `scheiternistgeil.de`, which is connected to by default (see `backend/src/model/db.ts`).
+
+Please also note that running the website locally by just opening the .html files is NOT possible because of CORS issues as the javascript files are imported as ES6 modules.
