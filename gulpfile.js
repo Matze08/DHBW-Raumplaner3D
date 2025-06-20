@@ -57,19 +57,39 @@ gulp.task('copy-backend', function() {
     .pipe(gulp.dest('dist/backend'));
 });
 
-// Copy frontend build to unified dist folder
-gulp.task('copy-frontend', function() {
-  return gulp.src('frontend/dist/**/*', { base: 'frontend/dist' })
-    .pipe(gulp.dest('dist/frontend'));
+// Copy frontend build to unified dist folder (all files at root level)
+gulp.task("copy-frontend", function () {
+  return gulp
+    .src("frontend/dist/**/*", { base: "frontend/dist" })
+    .pipe(gulp.dest("dist"));
 });
 
-// Copy static assets
+// Move HTML files from html/ subdirectory to root level
+gulp.task("flatten-html", async function () {
+  await new Promise((resolve) => {
+    gulp.src("dist/html/*.html").pipe(gulp.dest("dist")).on("end", resolve);
+  });
+
+  // Delete the html directory after copying files
+  const { deleteAsync } = await import("del");
+  return deleteAsync(["dist/html"]);
+});
+
+// Fix paths in HTML files after moving them to root level
+gulp.task("fix-html-paths", function () {
+  const replace = require("gulp-replace");
+
+  return gulp
+    .src("dist/*.html")
+    .pipe(replace("../", "./"))
+    .pipe(gulp.dest("dist"));
+});
+
+// Copy static assets to root level
 gulp.task('copy-assets', function() {
-  return gulp.src([
-    'frontend/media/**/*',
-    'backend/package.json'
-  ], { base: '.' })
-    .pipe(gulp.dest('dist'));
+  return gulp
+    .src(["frontend/media/**/*", "backend/package.json"], { base: "frontend" }) // Changed base to flatten the media folder structure
+    .pipe(gulp.dest("dist"));
 });
 
 // Test tasks (defined early so build tasks can reference them)
@@ -116,11 +136,16 @@ gulp.task(
 gulp.task("test", gulp.series("test-backend", "test-frontend"));
 
 // Build both backend and frontend (without tests - fast for development)
-gulp.task('build', gulp.series(
-  'clean',
-  gulp.parallel('build-backend', 'build-frontend'),
-  gulp.parallel('copy-backend', 'copy-frontend', 'copy-assets')
-));
+gulp.task(
+  "build",
+  gulp.series(
+    "clean",
+    gulp.parallel("build-backend", "build-frontend"),
+    gulp.parallel("copy-backend", "copy-frontend", "copy-assets"),
+    "flatten-html",
+    "fix-html-paths"
+  )
+);
 
 // Build with tests (recommended for production/CI)
 gulp.task(
@@ -129,7 +154,9 @@ gulp.task(
     "clean",
     gulp.parallel("test-backend", "test-frontend"), // Run tests first
     gulp.parallel("build-backend", "build-frontend"),
-    gulp.parallel("copy-backend", "copy-frontend", "copy-assets")
+    gulp.parallel("copy-backend", "copy-frontend", "copy-assets"),
+    "flatten-html",
+    "fix-html-paths"
   )
 );
 
@@ -140,7 +167,9 @@ gulp.task(
     "clean",
     gulp.parallel("build-backend", "build-frontend"),
     gulp.parallel("test-backend", "test-frontend"), // Test the built code
-    gulp.parallel("copy-backend", "copy-frontend", "copy-assets")
+    gulp.parallel("copy-backend", "copy-frontend", "copy-assets"),
+    "flatten-html",
+    "fix-html-paths"
   )
 );
 
@@ -243,6 +272,8 @@ gulp.task(
     "install-all", // Ensure dependencies are installed
     gulp.parallel("test-backend-coverage", "test-frontend-coverage"), // Run tests with coverage
     gulp.parallel("build-backend", "build-frontend"),
-    gulp.parallel("copy-backend", "copy-frontend", "copy-assets")
+    gulp.parallel("copy-backend", "copy-frontend", "copy-assets"),
+    "flatten-html",
+    "fix-html-paths"
   )
 );

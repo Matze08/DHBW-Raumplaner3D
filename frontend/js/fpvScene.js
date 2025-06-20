@@ -83,15 +83,15 @@ export class FpvScene {
     initSkybox() {
         const loader = new RGBELoader();
     
-        loader.load('/frontend/media/textures/skybox.hdr', (texture) => {
-            // Set the mapping to equirectangular
-            texture.mapping = THREE.EquirectangularReflectionMapping;
-            
-            // Set background and environment map for the scene
-            this._scene.background = texture;
-            this._scene.environment = texture;
+        loader.load("./media/textures/skybox.hdr", (texture) => {
+          // Set the mapping to equirectangular
+          texture.mapping = THREE.EquirectangularReflectionMapping;
 
-            texture.dispose();
+          // Set background and environment map for the scene
+          this._scene.background = texture;
+          this._scene.environment = texture;
+
+          texture.dispose();
         });
     }
 
@@ -140,9 +140,9 @@ export class FpvScene {
         this.initLight();
 
         //add building to scene
-        this.initModel('frontend/media/models/dhbw_building.glb', (dhbw_building) => {
-            dhbw_building.rotation.y = Math.PI; //rotate obj
-            this._scene.add(dhbw_building);
+        this.initModel("./media/models/dhbw_building.glb", (dhbw_building) => {
+          dhbw_building.rotation.y = Math.PI; //rotate obj
+          this._scene.add(dhbw_building);
         });
         this._camera.position.set(-36, 2, 4); //set camera position
         this._camera.rotation.set(0, 5, 0);

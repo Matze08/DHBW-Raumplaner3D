@@ -83,25 +83,25 @@ export class TopViewScene {
         this._scene.background = new THREE.Color('#3188d4');
 
         //add building to scene
-        this.initModel('/frontend/media/models/dhbw_building.glb', (dhbw_building) => {
-            this.dhbw_building = dhbw_building;
-            this._scene.add(this.dhbw_building);
+        this.initModel("./media/models/dhbw_building.glb", (dhbw_building) => {
+          this.dhbw_building = dhbw_building;
+          this._scene.add(this.dhbw_building);
         });
 
         //init waypoint
-        this.initModel('/frontend/media/models/waypoint.glb', (waypoint) => {
-            this.waypoint = waypoint;
+        this.initModel("./media/models/waypoint.glb", (waypoint) => {
+          this.waypoint = waypoint;
 
-            const material = new THREE.MeshStandardMaterial({ color: 0xff0000 });
-            this.waypoint.children[0].material = material;
+          const material = new THREE.MeshStandardMaterial({ color: 0xff0000 });
+          this.waypoint.children[0].material = material;
         });
 
         //init startpoint
-        this.initModel('/frontend/media/models/waypoint.glb', (startpoint) => {
-            this.startpoint = startpoint;
+        this.initModel("./media/models/waypoint.glb", (startpoint) => {
+          this.startpoint = startpoint;
 
-            const material = new THREE.MeshStandardMaterial({ color: 0x0000ff });
-            this.startpoint.children[0].material = material;
+          const material = new THREE.MeshStandardMaterial({ color: 0x0000ff });
+          this.startpoint.children[0].material = material;
         });
         
         this._camera.position.y = 60;
