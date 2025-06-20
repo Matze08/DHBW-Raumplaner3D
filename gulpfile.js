@@ -1,6 +1,6 @@
 const gulp = require('gulp');
 const shell = require('gulp-shell');
-const { deleteAsync } = require('del');
+import { deleteAsync } from "del";
 const path = require('path');
 
 // Paths

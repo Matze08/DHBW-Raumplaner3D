@@ -13,7 +13,7 @@ If you still want to build the project yourself, follow these instructions:
 
 ### Instructions
 1. Go into the project's root folder
-2. Run `npx gulp install-all` to install all packages via npm. (You might be asked to install `gulp`)
+2. Run `npm i` and `npx gulp install-all` to install all packages via npm. (You might be asked to install `gulp`)
 2. Run the command `npx gulp build` to build without testing. Run `npx gulp build-with-tests` to build with testing. 
 3. Gulp will now execute the building process (and testing) for frontend and backend and compile the source files into deployable ones.
 4. The compiled files can be found in the `dist` directory.
