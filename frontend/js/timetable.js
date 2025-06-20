@@ -221,7 +221,7 @@ function displayBookings(bookings) {
       <div class="booking-details">
         <div class="booking-room">Raum: ${
           booking.raum?.bezeichnung || "Keine Angabe"
-        }</div>
+        } </div>
         <div class="booking-course">Kurs: ${
           booking.kurs?.bezeichnung || "Keine Angabe"
         }</div>
@@ -336,7 +336,11 @@ function showBookingDetails(booking) {
       <span class="modal-label">Raum:</span>
       <span class="modal-value">${
         booking.raum?.bezeichnung || "Keine Angabe"
-      }</span>
+      } ${
+    booking.raum
+      ? `<button class="navigate-btn" data-room="${booking.raum.bezeichnung}">Navigieren</button>`
+      : ""
+  }</span>
     </div>
     <div class="modal-detail">
       <span class="modal-label">Kurs:</span>
@@ -382,6 +386,19 @@ function showBookingDetails(booking) {
   closeButton.addEventListener("click", () => {
     modal.style.display = "none";
   });
+
+  // Add event listener for navigate button
+  const navigateButton = modalContent.querySelector(".navigate-btn");
+  if (navigateButton) {
+    navigateButton.addEventListener("click", (event) => {
+      event.stopPropagation();
+      const roomName = event.target.getAttribute("data-room");
+      if (roomName) {
+        // Navigate to root.html with room parameter
+        window.location.href = `root.html?room=${encodeURIComponent(roomName)}`;
+      }
+    });
+  }
 
   // Close modal when clicking outside
   modal.addEventListener("click", (event) => {
