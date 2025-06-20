@@ -6,4 +6,5 @@ body.timetable-page {
   width: 100%;
   display: block; /* Statt flex */
   overflow-y: auto; /* Erlaubt vertikales Scrollen */
+  padding-top: 80px; /* Add padding to account for navbar height */
 }
