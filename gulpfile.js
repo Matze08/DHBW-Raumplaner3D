@@ -95,8 +95,29 @@ gulp.task('test-backend-coverage', shell.task([
   verbose: true
 }));
 
+gulp.task(
+  "test-frontend",
+  shell.task(["cd frontend && npm test"], {
+    verbose: true,
+  })
+);
+
+gulp.task(
+  "test-frontend-watch",
+  shell.task(["cd frontend && npm run test:watch"], {
+    verbose: true,
+  })
+);
+
+gulp.task(
+  "test-frontend-coverage",
+  shell.task(["cd frontend && npm run test:coverage"], {
+    verbose: true,
+  })
+);
+
 // Test all
-gulp.task('test', gulp.series('test-backend'));
+gulp.task("test", gulp.series("test-backend", "test-frontend"));
 
 // Build both backend and frontend (without tests - fast for development)
 gulp.task('build', gulp.series(
@@ -106,20 +127,26 @@ gulp.task('build', gulp.series(
 ));
 
 // Build with tests (recommended for production/CI)
-gulp.task('build-with-tests', gulp.series(
-  'clean',
-  'test-backend', // Run tests first
-  gulp.parallel('build-backend', 'build-frontend'),
-  gulp.parallel('copy-backend', 'copy-frontend', 'copy-assets')
-));
+gulp.task(
+  "build-with-tests",
+  gulp.series(
+    "clean",
+    gulp.parallel("test-backend", "test-frontend"), // Run tests first
+    gulp.parallel("build-backend", "build-frontend"),
+    gulp.parallel("copy-backend", "copy-frontend", "copy-assets")
+  )
+);
 
 // Safe build - tests after build but before deployment
-gulp.task('build-safe', gulp.series(
-  'clean',
-  gulp.parallel('build-backend', 'build-frontend'),
-  'test-backend', // Test the built code
-  gulp.parallel('copy-backend', 'copy-frontend', 'copy-assets')
-));
+gulp.task(
+  "build-safe",
+  gulp.series(
+    "clean",
+    gulp.parallel("build-backend", "build-frontend"),
+    gulp.parallel("test-backend", "test-frontend"), // Test the built code
+    gulp.parallel("copy-backend", "copy-frontend", "copy-assets")
+  )
+);
 
 // Development task - runs both backend and frontend in development mode
 gulp.task('dev-backend', shell.task([
@@ -194,11 +221,18 @@ gulp.task('help', function(done) {
     "  watch                - Watch for changes and rebuild automatically"
   );
   console.log("  start                - Start production servers");
-  console.log("  test                 - Run all backend unit tests");
+  console.log(
+    "  test                 - Run all unit tests (backend + frontend)"
+  );
   console.log("  test-backend         - Run backend unit tests once");
   console.log("  test-backend-watch   - Run backend unit tests in watch mode");
   console.log(
     "  test-backend-coverage- Run backend unit tests with coverage report"
+  );
+  console.log("  test-frontend        - Run frontend unit tests once");
+  console.log("  test-frontend-watch  - Run frontend unit tests in watch mode");
+  console.log(
+    "  test-frontend-coverage- Run frontend unit tests with coverage report"
   );
   console.log("  help                 - Show this help message");
   console.log('');
@@ -206,10 +240,13 @@ gulp.task('help', function(done) {
 });
 
 // CI/CD build (comprehensive testing and building)
-gulp.task('ci-build', gulp.series(
-  'clean',
-  'install-all', // Ensure dependencies are installed
-  'test-backend-coverage', // Run tests with coverage
-  gulp.parallel('build-backend', 'build-frontend'),
-  gulp.parallel('copy-backend', 'copy-frontend', 'copy-assets')
-));
+gulp.task(
+  "ci-build",
+  gulp.series(
+    "clean",
+    "install-all", // Ensure dependencies are installed
+    gulp.parallel("test-backend-coverage", "test-frontend-coverage"), // Run tests with coverage
+    gulp.parallel("build-backend", "build-frontend"),
+    gulp.parallel("copy-backend", "copy-frontend", "copy-assets")
+  )
+);
