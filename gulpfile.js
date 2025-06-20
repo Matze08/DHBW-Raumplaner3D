@@ -1,6 +1,5 @@
 const gulp = require('gulp');
-const shell = require('gulp-shell');
-const deleteAsync = require("del");
+const shell = require("gulp-shell");
 const path = require('path');
 
 // Paths
@@ -19,12 +18,9 @@ const paths = {
 };
 
 // Clean task - removes all build artifacts
-gulp.task('clean', function() {
-  return deleteAsync([
-    paths.backend.dist,
-    paths.frontend.dist,
-    paths.dist
-  ]);
+gulp.task("clean", async function () {
+  const { deleteAsync } = await import("del");
+  return deleteAsync([paths.backend.dist, paths.frontend.dist, paths.dist]);
 });
 
 // Install dependencies for both backend and frontend
