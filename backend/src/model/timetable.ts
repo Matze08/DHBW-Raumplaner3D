@@ -82,6 +82,30 @@ router.get("/bookings/:id", async (req, res) => {
   }
 });
 
+// DELETE a booking by ID
+router.delete("/bookings/:id", async (req, res) => {
+  try {
+    const id = req.params.id;
+    
+    if (!ObjectId.isValid(id)) {
+      res.status(400).json({ error: "Invalid booking ID format" });
+      return;
+    }
+    
+    const result = await deleteOne("buchung", { _id: new ObjectId(id) });
+    
+    if (result.deletedCount === 0) {
+      res.status(404).json({ error: "Booking not found" });
+      return;
+    }
+    
+    res.json({ success: true, deleted: true, message: "Booking successfully deleted" });
+  } catch (error) {
+    console.error("Error deleting booking:", error);
+    res.status(500).json({ error: "Failed to delete booking" });
+  }
+});
+
 // POST filter bookings
 router.post("/bookings/filter", async (req, res) => {
   try {
@@ -136,6 +160,179 @@ router.post("/bookings/filter", async (req, res) => {
   } catch (error) {
     console.error("Error filtering bookings:", error);
     res.status(500).json({ error: "Failed to filter bookings" });
+  }
+});
+
+// POST create new booking
+router.post("/bookings", async (req, res) => {
+  try {
+    const bookingData = req.body;
+    
+    // Validate required fields
+    if (!bookingData.raum || !bookingData.kurs || !bookingData.lehrbeauftragter || 
+        !bookingData.vorlesung || !bookingData.zeitStart || !bookingData.zeitEnde) {
+      res.status(400).json({ error: "Missing required booking information" });
+      return;
+    }
+    
+    // Convert string IDs to ObjectIds
+    const booking = {
+      raum: new ObjectId(bookingData.raum),
+      kurs: new ObjectId(bookingData.kurs),
+      lehrbeauftragter: new ObjectId(bookingData.lehrbeauftragter),
+      vorlesung: new ObjectId(bookingData.vorlesung),
+      zeitStart: new Date(bookingData.zeitStart),
+      zeitEnde: new Date(bookingData.zeitEnde)
+    };
+    
+    // Validate booking time
+    if (booking.zeitEnde <= booking.zeitStart) {
+      res.status(400).json({ error: "End time must be after start time" });
+      return;
+    }
+    
+    // Check for time conflicts with existing bookings
+    const conflictQuery = {
+      raum: booking.raum,
+      $or: [
+        // New booking starts during an existing booking
+        {
+          zeitStart: { $lte: booking.zeitStart },
+          zeitEnde: { $gt: booking.zeitStart }
+        },
+        // New booking ends during an existing booking
+        {
+          zeitStart: { $lt: booking.zeitEnde },
+          zeitEnde: { $gte: booking.zeitEnde }
+        },
+        // New booking completely contains an existing booking
+        {
+          zeitStart: { $gte: booking.zeitStart },
+          zeitEnde: { $lte: booking.zeitEnde }
+        }
+      ]
+    };
+    
+    const existingBookings = await find("buchung", conflictQuery);
+    
+    if (existingBookings.length > 0) {
+       res.status(409).json({ 
+        error: "Time conflict with existing booking",
+        conflicts: existingBookings
+      });
+      return;
+    }
+    
+    // Insert the new booking
+    const result = await insertOne("buchung", booking);
+    
+    // Fetch the newly created booking with populated fields
+    const newBooking = await findOne("buchung", { _id: result.insertedId });
+    const populatedBooking = await populateBooking(newBooking);
+    
+    res.status(201).json({
+      success: true,
+      message: "Booking created successfully",
+      booking: populatedBooking
+    });
+  } catch (error) {
+    console.error("Error creating booking:", error);
+    res.status(500).json({ error: "Failed to create booking" });
+  }
+});
+
+// PUT update an existing booking
+router.put("/bookings/:id", async (req, res) => {
+  try {
+    const id = req.params.id;
+    const bookingData = req.body;
+    
+    // Validate required fields
+    if (!bookingData.raum || !bookingData.kurs || !bookingData.lehrbeauftragter || 
+        !bookingData.vorlesung || !bookingData.zeitStart || !bookingData.zeitEnde) {
+       res.status(400).json({ error: "Missing required booking information" });
+       return;
+    }
+    
+    // Validate ID format
+    if (!ObjectId.isValid(id)) {
+       res.status(400).json({ error: "Invalid booking ID format" });
+      return;
+    }
+    
+    // Convert string IDs to ObjectIds
+    const booking = {
+      raum: new ObjectId(bookingData.raum),
+      kurs: new ObjectId(bookingData.kurs),
+      lehrbeauftragter: new ObjectId(bookingData.lehrbeauftragter),
+      vorlesung: new ObjectId(bookingData.vorlesung),
+      zeitStart: new Date(bookingData.zeitStart),
+      zeitEnde: new Date(bookingData.zeitEnde)
+    };
+    
+    // Validate booking time
+    if (booking.zeitEnde <= booking.zeitStart) {
+       res.status(400).json({ error: "End time must be after start time" });
+       return;
+    }
+    
+    // Check for time conflicts with existing bookings (excluding this booking)
+    const conflictQuery = {
+      _id: { $ne: new ObjectId(id) },
+      raum: booking.raum,
+      $or: [
+        // Updated booking starts during an existing booking
+        {
+          zeitStart: { $lte: booking.zeitStart },
+          zeitEnde: { $gt: booking.zeitStart }
+        },
+        // Updated booking ends during an existing booking
+        {
+          zeitStart: { $lt: booking.zeitEnde },
+          zeitEnde: { $gte: booking.zeitEnde }
+        },
+        // Updated booking completely contains an existing booking
+        {
+          zeitStart: { $gte: booking.zeitStart },
+          zeitEnde: { $lte: booking.zeitEnde }
+        }
+      ]
+    };
+    
+    const existingBookings = await find("buchung", conflictQuery);
+    
+    if (existingBookings.length > 0) {
+       res.status(409).json({ 
+        error: "Time conflict with existing booking",
+        conflicts: existingBookings
+      });
+      return;
+    }
+    
+    // Update the booking
+    const result = await updateOne(
+      "buchung", 
+      { _id: new ObjectId(id) }, 
+      { $set: booking }
+    );
+    
+    if (result.matchedCount === 0) {
+       res.status(404).json({ error: "Booking not found" });
+       return;
+    }
+    
+    // Fetch the updated booking with populated fields
+    const updatedBooking = await findOne("buchung", { _id: new ObjectId(id) });
+    const populatedBooking = await populateBooking(updatedBooking);
+    
+    res.json({
+      success: true,
+      message: "Booking updated successfully",
+      booking: populatedBooking
+    });
+  } catch (error) {
+    console.error("Error updating booking:", error);
+    res.status(500).json({ error: "Failed to update booking" });
   }
 });
 

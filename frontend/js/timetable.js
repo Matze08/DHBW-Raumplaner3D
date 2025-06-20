@@ -72,6 +72,13 @@ function createTimetableStructure() {
         dayCell.dataset.day = day;
         dayCell.dataset.hour = hour;
         dayCell.dataset.minute = minute;
+        // Add a title attribute for better UX
+        dayCell.title = "Klicken, um eine neue Buchung zu erstellen";
+
+        // Add a subtle visual indicator that cells are clickable in admin view
+        if (document.body.classList.contains("admin-page")) {
+          dayCell.style.cursor = "pointer";
+        }
 
         dayCells.appendChild(dayCell);
       }
@@ -224,6 +231,7 @@ function displayBookings(bookings) {
       endTime
     )}</div>
       </div>
+      <button class="booking-delete-btn" title="Buchung löschen">×</button>
     `;
 
     // Find all cells for this day
@@ -235,9 +243,19 @@ function displayBookings(bookings) {
       dayCells[0].appendChild(bookingElement);
 
       // Add click event to show details
-      bookingElement.addEventListener("click", () =>
-        showBookingDetails(booking)
-      );
+      bookingElement.addEventListener("click", (event) => {
+        event.stopPropagation(); // Prevent event from bubbling to day cell
+        showBookingDetails(booking);
+      });
+
+      // Add click event for delete button
+      const deleteBtn = bookingElement.querySelector(".booking-delete-btn");
+      if (deleteBtn) {
+        deleteBtn.addEventListener("click", (event) => {
+          event.stopPropagation(); // Prevent event from bubbling to day cell or booking
+          deleteBooking(booking._id, event);
+        });
+      }
     }
   });
 }
@@ -270,28 +288,31 @@ function calculateHeight(startHour, startMinute, endHour, endMinute) {
 
 // Format time as HH:MM
 function formatTime(date) {
-  return `${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}`;
+  return `${date.getHours().toString().padStart(2, "0")}:${date
+    .getMinutes()
+    .toString()
+    .padStart(2, "0")}`;
 }
 
 // Show booking details in a modal
 function showBookingDetails(booking) {
-  const modal = document.getElementById('bookingModal');
-  const modalContent = document.querySelector('.modal-content');
-  
+  const modal = document.getElementById("bookingDetailsModal");
+  const modalContent = modal.querySelector(".modal-content");
+
   // Format dates
   const startTime = new Date(booking.zeitStart);
   const endTime = new Date(booking.zeitEnde);
-  const formattedDate = startTime.toLocaleDateString('de-DE', { 
-    weekday: 'long', 
-    year: 'numeric', 
-    month: 'long', 
-    day: 'numeric' 
+  const formattedDate = startTime.toLocaleDateString("de-DE", {
+    weekday: "long",
+    year: "numeric",
+    month: "long",
+    day: "numeric",
   });
-  
+
   // Set modal content
   modalContent.innerHTML = `
     <div class="modal-header">
-      <h3>${booking.vorlesung?.bezeichnung || 'Buchungsdetails'}</h3>
+      <h3>${booking.vorlesung?.bezeichnung || "Buchungsdetails"}</h3>
       <button class="close-modal">&times;</button>
     </div>
     <div class="modal-detail">
@@ -300,48 +321,65 @@ function showBookingDetails(booking) {
     </div>
     <div class="modal-detail">
       <span class="modal-label">Zeit:</span>
-      <span class="modal-value">${formatTime(startTime)} - ${formatTime(endTime)}</span>
+      <span class="modal-value">${formatTime(startTime)} - ${formatTime(
+    endTime
+  )}</span>
     </div>
     <div class="modal-detail">
       <span class="modal-label">Raum:</span>
-      <span class="modal-value">${booking.raum?.bezeichnung || 'Keine Angabe'}</span>
+      <span class="modal-value">${
+        booking.raum?.bezeichnung || "Keine Angabe"
+      }</span>
     </div>
     <div class="modal-detail">
       <span class="modal-label">Kurs:</span>
-      <span class="modal-value">${booking.kurs?.bezeichnung || 'Keine Angabe'}</span>
+      <span class="modal-value">${
+        booking.kurs?.bezeichnung || "Keine Angabe"
+      }</span>
     </div>
     <div class="modal-detail">
       <span class="modal-label">Dozent:</span>
-      <span class="modal-value">${booking.lehrbeauftragter ? 
-        `${booking.lehrbeauftragter.vorname} ${booking.lehrbeauftragter.nachname}` : 'Keine Angabe'}</span>
+      <span class="modal-value">${
+        booking.lehrbeauftragter
+          ? `${booking.lehrbeauftragter.vorname} ${booking.lehrbeauftragter.nachname}`
+          : "Keine Angabe"
+      }</span>
     </div>
-    ${booking.lehrbeauftragter?.firma ? `
+    ${
+      booking.lehrbeauftragter?.firma
+        ? `
       <div class="modal-detail">
         <span class="modal-label">Firma:</span>
         <span class="modal-value">${booking.lehrbeauftragter.firma}</span>
       </div>
-    ` : ''}
-    ${booking.lehrbeauftragter?.mail ? `
+    `
+        : ""
+    }
+    ${
+      booking.lehrbeauftragter?.mail
+        ? `
       <div class="modal-detail">
         <span class="modal-label">E-Mail:</span>
         <span class="modal-value">${booking.lehrbeauftragter.mail}</span>
       </div>
-    ` : ''}
+    `
+        : ""
+    }
   `;
-  
+
   // Show modal
-  modal.style.display = 'flex';
-  
+  modal.style.display = "flex";
+
   // Close modal when clicking the close button
-  const closeButton = modalContent.querySelector('.close-modal');
-  closeButton.addEventListener('click', () => {
-    modal.style.display = 'none';
+  const closeButton = modalContent.querySelector(".close-modal");
+  closeButton.addEventListener("click", () => {
+    modal.style.display = "none";
   });
-  
+
   // Close modal when clicking outside
-  modal.addEventListener('click', (event) => {
+  modal.addEventListener("click", (event) => {
     if (event.target === modal) {
-      modal.style.display = 'none';
+      modal.style.display = "none";
     }
   });
 }
@@ -349,15 +387,15 @@ function showBookingDetails(booking) {
 // Create modal for booking details
 function createBookingModal() {
   // Check if modal already exists
-  if (document.getElementById('bookingModal')) return;
-  
-  const modal = document.createElement('div');
-  modal.id = 'bookingModal';
-  modal.className = 'booking-modal';
-  
-  const modalContent = document.createElement('div');
-  modalContent.className = 'modal-content';
-  
+  if (document.getElementById("bookingDetailsModal")) return;
+
+  const modal = document.createElement("div");
+  modal.id = "bookingDetailsModal";
+  modal.className = "booking-modal";
+
+  const modalContent = document.createElement("div");
+  modalContent.className = "modal-content";
+
   modal.appendChild(modalContent);
   document.body.appendChild(modal);
 }
@@ -365,28 +403,28 @@ function createBookingModal() {
 // Setup event listeners
 function setupEventListeners() {
   // Apply filter button
-  applyFilterBtn.addEventListener('click', loadBookings);
-  
+  applyFilterBtn.addEventListener("click", loadBookings);
+
   // Reset filter button
-  resetFilterBtn.addEventListener('click', () => {
-    roomFilter.value = '';
-    courseFilter.value = '';
-    lecturerFilter.value = '';
-    lectureFilter.value = '';
-    
+  resetFilterBtn.addEventListener("click", () => {
+    roomFilter.value = "";
+    courseFilter.value = "";
+    lecturerFilter.value = "";
+    lectureFilter.value = "";
+
     // Set today's date
     const today = new Date();
-    dateFilter.value = today.toISOString().split('T')[0];
-    
+    dateFilter.value = today.toISOString().split("T")[0];
+
     // Update date headers with today's date
     updateDateHeaders(today);
-    
+
     // Reload bookings
     loadBookings();
   });
-  
+
   // Date filter change
-  dateFilter.addEventListener('change', loadBookings);
+  dateFilter.addEventListener("change", loadBookings);
 }
 
 // Update date headers based on selected date
@@ -394,57 +432,93 @@ function updateDateHeaders(selectedDate = new Date()) {
   // Get the Monday of the week containing the selected date
   const monday = new Date(selectedDate);
   const dayOfWeek = monday.getDay(); // 0 = Sunday, 1 = Monday, ...
-  
+
   // Adjust to get Monday (if today is Sunday, we get Monday of previous week)
   monday.setDate(monday.getDate() - (dayOfWeek === 0 ? 6 : dayOfWeek - 1));
-  
+
   // Format options for date display
-  const dateFormatOptions = { day: '2-digit', month: '2-digit' };
-  
+  const dateFormatOptions = { day: "2-digit", month: "2-digit" };
+
   // Update each day's date display
-  document.getElementById('date-monday').textContent = monday.toLocaleDateString('de-DE', dateFormatOptions);
-  
+  document.getElementById("date-monday").textContent =
+    monday.toLocaleDateString("de-DE", dateFormatOptions);
+
   const tuesday = new Date(monday);
   tuesday.setDate(monday.getDate() + 1);
-  document.getElementById('date-tuesday').textContent = tuesday.toLocaleDateString('de-DE', dateFormatOptions);
-  
+  document.getElementById("date-tuesday").textContent =
+    tuesday.toLocaleDateString("de-DE", dateFormatOptions);
+
   const wednesday = new Date(monday);
   wednesday.setDate(monday.getDate() + 2);
-  document.getElementById('date-wednesday').textContent = wednesday.toLocaleDateString('de-DE', dateFormatOptions);
-  
+  document.getElementById("date-wednesday").textContent =
+    wednesday.toLocaleDateString("de-DE", dateFormatOptions);
+
   const thursday = new Date(monday);
   thursday.setDate(monday.getDate() + 3);
-  document.getElementById('date-thursday').textContent = thursday.toLocaleDateString('de-DE', dateFormatOptions);
-  
+  document.getElementById("date-thursday").textContent =
+    thursday.toLocaleDateString("de-DE", dateFormatOptions);
+
   const friday = new Date(monday);
   friday.setDate(monday.getDate() + 4);
-  document.getElementById('date-friday').textContent = friday.toLocaleDateString('de-DE', dateFormatOptions);
+  document.getElementById("date-friday").textContent =
+    friday.toLocaleDateString("de-DE", dateFormatOptions);
 }
 
 // Helper function to fetch data from the API
-async function fetchData(endpoint, method = 'GET', body = null) {
+async function fetchData(endpoint, method = "GET", body = null) {
   try {
     const options = {
       method,
       headers: {
-        'Content-Type': 'application/json'
-      }
+        "Content-Type": "application/json",
+      },
     };
-    
-    if (body && method !== 'GET') {
+
+    if (body && method !== "GET") {
       options.body = JSON.stringify(body);
     }
-    
+
     const response = await fetch(`${API_BASE_URL}${endpoint}`, options);
-    
+
     if (!response.ok) {
       throw new Error(`HTTP error! Status: ${response.status}`);
     }
-    
+
     return await response.json();
   } catch (error) {
     console.error(`Error fetching from ${endpoint}:`, error);
     throw error;
+  }
+}
+
+// Delete a booking by ID
+async function deleteBooking(bookingId, event) {
+  // Stop event propagation to prevent opening the booking details modal
+  event.stopPropagation();
+
+  if (!confirm("Möchten Sie diese Buchung wirklich löschen?")) {
+    return;
+  }
+
+  try {
+    const response = await fetchData(`/bookings/${bookingId}`, "DELETE");
+
+    if (response.success || response.deleted) {
+      // Remove the booking element from the DOM
+      const bookingElement = document.querySelector(
+        `.booking[data-id="${bookingId}"]`
+      );
+      if (bookingElement) {
+        bookingElement.remove();
+      }
+
+      showNotification("Buchung erfolgreich gelöscht", "success");
+    } else {
+      throw new Error("Fehler beim Löschen der Buchung");
+    }
+  } catch (error) {
+    console.error("Error deleting booking:", error);
+    showNotification("Fehler beim Löschen der Buchung", "error");
   }
 }
 

@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <title>DHBW Stuttgart Raumplaner | Stundenplan</title>
+  <link rel="icon" type="image/x-icon" href="/frontend/media/icon.ico">
+  <link rel="stylesheet" href="/frontend/css/main.css" />
+  <link rel="stylesheet" href="../css/timetable.css" />
+  <link rel="stylesheet" href="../css/timetable-body.css" />
+  <link rel="stylesheet" href="../css/booking-management.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet" />
+</head>
+<body class="timetable-page admin-page">
+  <nav>
+    <img src="/frontend/media/dhbw_logo.png" alt="dhbw_logo" style="height: 3rem;">
+    <h1>DHBW Stuttgart Raumplaner | Administration</h1>
+    <a href="/frontend/html/root.html" class="nav-link">Raumfinder</a>
+  </nav>
+
+  <div id="adminInfo" class="admin-info"></div>
+
+  <div class="timetable-container">
+    <div class="filter-section">
+      <h2>Filter</h2>
+      <div class="filter-group">
+        <label for="roomFilter">Raum:</label>
+        <select id="roomFilter">
+          <option value="">Alle Räume</option>
+          <!-- Räume werden dynamisch geladen -->
+        </select>
+      </div>
+      <div class="filter-group">
+        <label for="courseFilter">Kurs:</label>
+        <select id="courseFilter">
+          <option value="">Alle Kurse</option>
+          <!-- Kurse werden dynamisch geladen -->
+        </select>
+      </div>
+      <div class="filter-group">
+        <label for="lecturerFilter">Dozent:</label>
+        <select id="lecturerFilter">
+          <option value="">Alle Dozenten</option>
+          <!-- Dozenten werden dynamisch geladen -->
+        </select>
+      </div>
+      <div class="filter-group">
+        <label for="lectureFilter">Vorlesung:</label>
+        <select id="lectureFilter">
+          <option value="">Alle Vorlesungen</option>
+          <!-- Vorlesungen werden dynamisch geladen -->
+        </select>
+      </div>
+      <div class="filter-group">
+        <label for="dateFilter">Datum:</label>
+        <input type="date" id="dateFilter">
+      </div>
+      <button id="applyFilter" class="filter-button">Filter anwenden</button>
+      <button id="resetFilter" class="filter-button">Filter zurücksetzen</button>
+    </div>
+
+    <div class="timetable-section">
+      <div class="timetable-header">
+        <div class="time-column">Zeit</div>
+        <div class="day-columns">
+          <div class="day-column">
+            <div class="day-name">Montag</div>
+            <div class="day-date" id="date-monday"></div>
+          </div>
+          <div class="day-column">
+            <div class="day-name">Dienstag</div>
+            <div class="day-date" id="date-tuesday"></div>
+          </div>
+          <div class="day-column">
+            <div class="day-name">Mittwoch</div>
+            <div class="day-date" id="date-wednesday"></div>
+          </div>
+          <div class="day-column">
+            <div class="day-name">Donnerstag</div>
+            <div class="day-date" id="date-thursday"></div>
+          </div>
+          <div class="day-column">
+            <div class="day-name">Freitag</div>
+            <div class="day-date" id="date-friday"></div>
+          </div>
+        </div>
+      </div>
+      <div class="timetable-body" id="timetableBody">
+        <!-- Timetable content will be generated dynamically -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Booking Modal -->
+  <div id="bookingModal" class="modal">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <h2 id="modalTitle">Neue Buchung erstellen</h2>
+      <form id="bookingForm">
+        <input type="hidden" id="modalBookingId">
+        <input type="hidden" id="modalDay">
+        <input type="hidden" id="modalHour">
+        <input type="hidden" id="modalMinute">
+        
+        <div class="form-group">
+          <label for="modalRoom">Raum:</label>
+          <select id="modalRoom" required>
+            <option value="">Bitte auswählen</option>
+            <!-- Dynamically filled -->
+          </select>
+        </div>
+        
+        <div class="form-group">
+          <label for="modalCourse">Kurs:</label>
+          <select id="modalCourse" required>
+            <option value="">Bitte auswählen</option>
+            <!-- Dynamically filled -->
+          </select>
+        </div>
+        
+        <div class="form-group">
+          <label for="modalLecturer">Dozent:</label>
+          <select id="modalLecturer" required>
+            <option value="">Bitte auswählen</option>
+            <!-- Dynamically filled -->
+          </select>
+        </div>
+        
+        <div class="form-group">
+          <label for="modalLecture">Vorlesung:</label>
+          <select id="modalLecture" required>
+            <option value="">Bitte auswählen</option>
+            <!-- Dynamically filled -->
+          </select>
+        </div>
+        
+        <div class="form-group">
+          <label for="modalDate">Datum:</label>
+          <input type="date" id="modalDate" required>
+        </div>
+        
+        <div class="form-group">
+          <label for="modalStartTime">Startzeit:</label>
+          <input type="time" id="modalStartTime" required>
+        </div>
+        
+        <div class="form-group">
+          <label for="modalEndTime">Endzeit:</label>
+          <input type="time" id="modalEndTime" required>
+        </div>
+        
+        <div class="modal-buttons">
+          <button type="button" id="cancelBooking" class="secondary-button">Abbrechen</button>
+          <button type="button" id="deleteBooking" class="danger-button" style="display: none;">Löschen</button>
+          <button type="submit" id="saveBooking" class="primary-button">Speichern</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script type="module" src="../js/admin.js"></script>
+  <script type="module" src="../js/timetable.js"></script>
+</body>
+</html>
