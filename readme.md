@@ -4,7 +4,7 @@ This digital 3D room planner lets you create bookings for your university to you
 This is a university project for the module "Einsatz von Web-Technologien" by Matthias F. and Michael B.   
 
 ## Installation
-Note that a complete demo version of this project is alreadyd hosted at `scheiternistgeil.de`.   
+A complete demo version of this project is hosted at `http://167.99.245.119:3000/frontend/html/root.html` 
 If you still want to build the project yourself, follow these instructions:
 
 ### Requirements
@@ -16,8 +16,8 @@ If you still want to build the project yourself, follow these instructions:
 2. Run `npm i` and `npx gulp install-all` to install all packages via npm. (You might be asked to install `gulp`)
 2. Run the command `npx gulp build` to build without testing. Run `npx gulp build-with-tests` to build with testing. 
 3. Gulp will now execute the building process (and testing) for frontend and backend and compile the source files into deployable ones.
-4. The compiled files can be found in the `dist` directory.
-s
+4. The compiled files can be found in the `dist` directory.s
+
 Please note that a seperate MongoDB server is needed. For the purposes of this university project, one is hosted at `scheiternistgeil.de`, which is connected to by default (see `backend/src/model/db.ts`).
 
 Please also note that running the website locally by just opening the .html files is NOT possible because of CORS issues as the javascript files are imported as ES6 modules.
