@@ -2,7 +2,7 @@
 const START_HOUR = 8;
 const END_HOUR = 20;
 const HOUR_HEIGHT = 60; // Height in pixels for an hour (2 x 30px rows)
-const API_BASE_URL = "http://localhost:3001/api";
+const API_BASE_URL = "http://209.38.184.211:3001/api";
 
 // DOM Elements
 const timetableBody = document.getElementById("timetableBody");
