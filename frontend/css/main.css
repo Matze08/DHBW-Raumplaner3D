@@ -25,6 +25,26 @@ nav * {
     margin-left: 5%;
 }
 
+#fpv-preview
+{
+    position: absolute;
+    bottom: 2rem;
+    left: 2rem;
+    z-index: 1;
+    background-color: #222222e6;
+    border-radius: .5rem;
+    width: 10%;
+    height: auto;
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    padding: .5rem;
+}
+
+#fpv-preview img{
+    width: 100%;
+}
+
 #info-overlay{
     position: absolute;
     top: 50%;
