@@ -31,11 +31,12 @@
         <option disabled selected>Startpunkt</option>
         <option value="EingangOben">Eingang Oben</option>
         <option value="EingangUnten">Eingang Unten</option>
-        <option value="EingangCafeteria">Cafeteria</option>
+        <option value="EingangCafeteria">Eingang Cafeteria</option>
       </select>
-      <input required type="text" name="roomNr" placeholder="Enter Room">
+      <input required type="text" name="roomNr" placeholder="Enter Room (e.g. C3.05)">
       <input type="submit" value="Go" class="submit-btn">
     </form>
+    <p id="error-message" style="font-size: small; color: red;"></p>
     <div>
       <p id="floor-number">Floor: Roof</p>
       <img src="/media/arrow.png" alt="arrow-up" class="arrow-icon" id="arrow-up">
@@ -50,7 +51,6 @@
         <input type="checkbox" id="toggle-3d">2D View
       </label>
     </div>
-    <div id="error-message" style="display: none; color: red;">Room not found</div>
   </div>
   <div id="wasd-instruction" style="display: none">
     <img src="/media/close.png" alt="x" class="close-icon" id="close-instruction">

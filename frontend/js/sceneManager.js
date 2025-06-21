@@ -68,7 +68,8 @@ document.getElementById('submit-form').addEventListener('submit', function(event
 
     if (!regex.test(roomNr)){
         document.getElementById('error-message').textContent = "Error: Room Number <" + roomNr + "> is not valid (example: C3.05)";
-        console.log("Error: Room Number <" + roomNr + "> is not valid (example: C305");
+        document.getElementById('error-message').style.display = "block";
+        console.log("Error: Room Number <" + roomNr + "> is not valid (example: C3.05");
         return;
     }
     floorNr = roomNr[1];
