@@ -10,6 +10,8 @@ let lastMouseX = null;
 let autoRotation = true; // Flag to control auto-rotation
 let view2d = false; // Flag to control 2D/3D view
 
+var floorNr = 6; //stores current floor number
+
 //topViewScene class is instantiating a scene
 export class TopViewScene {
     constructor(renderer) {//called once at the beginning
@@ -53,6 +55,9 @@ export class TopViewScene {
     start(){
         //init enviroment
         this.initEnv();
+
+        // Call the function to check for URL parameters
+        this.checkUrlParameters();
     }
 
     //function called by sceneManager to update renderer (called every frame)
@@ -156,6 +161,9 @@ export class TopViewScene {
         this.initModel('/frontend/media/models/dhbw_building.glb', (dhbw_building) => {
             this.dhbw_building = dhbw_building;
             this._scene.add(this.dhbw_building);
+
+            // Set default entry point after loading the building, before error caused by missing entry point in model
+            this.setEntry("EingangOben");
         });
 
         //init waypoint
@@ -247,6 +255,8 @@ export class TopViewScene {
     }
 
     setEntry(entry){
+        //entry is a string like "EingangOben", "EingangUnten"
+        console.log("Setting entry to: " + entry);
         this._scene.remove(this.startpoint);
         const waypointHolder = this._scene.getObjectByName(entry);
         //set startpoint obj to the entry
@@ -293,7 +303,58 @@ export class TopViewScene {
         return this._camera;
     }
 
+
+    calculateWay(roomNr) {
+        const regex = /^[ABC][0-5]\.\d{2}$/; // regex to match room numbers like C3.05, A1.02, B2.04, etc.
+        if (!regex.test(roomNr)) {
+        document.getElementById("error-message").textContent =
+            "Error: Room Number <" + roomNr + "> is not valid (example: C3.05)";
+        return;
+        }
+        floorNr = roomNr[1];
+        this.showFloor(floorNr);
+        this.setWaypoint(roomNr);
+        this.findNextStaircase();
+        this.drawLine();
+    }
+
+    // Check for URL parameters and automatically set waypoint if "room" parameter exists
+    checkUrlParameters() {
+        console.log("Checking URL parameters...");
+        const urlParams = new URLSearchParams(window.location.search);
+        const roomParam = urlParams.get('room');
+        
+        if (roomParam) {
+            // Populate the room input field with the URL parameter
+            const roomInput = document.querySelector('input[name="roomNr"]');
+            if (roomInput) {
+                roomInput.value = roomParam;
+            }
+    
+            console.log(`Room parameter found: ${roomParam}`);
+            
+            // Wait a brief moment for the scene to be fully initialized
+            setTimeout(() => {
+                this.calculateWay(roomParam);
+            }, 100);
+        }
+    }
+
     addListeners() {
+        // Add event listeners
+        document.getElementById("submit-form").addEventListener("submit", (event) => {
+            event.preventDefault(); // prevents page reload
+            document.getElementById("error-message").textContent = ""; // clear previous error message
+            const form = event.target;
+            const roomNr = form.roomNr.value;
+
+            this.calculateWay(roomNr);
+        });
+
+        document.getElementById('selectEntry').addEventListener('input', (event) => {
+            this.setEntry(event.target.value);
+        });
+
         window.addEventListener('mousedown', (event) => {
             isMousePressed = true;
             lastMouseX = event.clientX;
@@ -315,7 +376,6 @@ export class TopViewScene {
         window.addEventListener('wheel', (event) => {
             const zoomSpeed = 1; // Adjust zoom speed
             const delta = event.deltaY > 0 ? zoomSpeed : -zoomSpeed; // Determine zoom direction
-            console.log(`Zoom delta: ${delta}`); // Log zoom delta for debugging
         
             if (view2d) {
                 // In 2D view, adjust the camera's Y position for zooming
@@ -345,14 +405,14 @@ export class TopViewScene {
         document.getElementById('arrow-down').addEventListener('click', () => {
             if (floorNr > 0) {
                 floorNr--;
-                activeScene.showFloor(floorNr);
+                this.showFloor(floorNr);
                 document.getElementById('floor-number').textContent = `Floor: ${floorNr}`;
             }
         });
         document.getElementById('arrow-up').addEventListener('click', () => {
             if (floorNr < 6) {
                 floorNr++;
-                activeScene.showFloor(floorNr);
+                this.showFloor(floorNr);
         
                 if (floorNr === 6) {
                     document.getElementById('floor-number').textContent = 'Floor: Roof';
