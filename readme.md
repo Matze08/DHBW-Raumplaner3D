@@ -13,7 +13,7 @@ This is a university project for the module "Einsatz von Web-Technologien" by Ma
   - [3D-Model](#3d-model)
 
 ## Installation
-A complete demo version of this project is hosted at `http://167.99.245.119:3000/frontend/html/root.html` 
+A complete demo version of this project is hosted at `http://167.99.245.119:3000/frontend/html/root.html`    
 If you still want to build the project yourself, follow these instructions:
 
 ### Requirements
