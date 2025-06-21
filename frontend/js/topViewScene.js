@@ -26,47 +26,7 @@ export class TopViewScene {
         this._clock.start();
 
         // Add event listeners
-        window.addEventListener('mousedown', (event) => {
-            isMousePressed = true;
-            lastMouseX = event.clientX;
-        });
-
-        window.addEventListener('mouseup', () => {
-            isMousePressed = false;
-            lastMouseX = null;
-        });
-
-        window.addEventListener('mousemove', (event) => {
-            if (isMousePressed && lastMouseX !== null) {
-                const deltaX = event.clientX - lastMouseX;
-                this.rotateCamera(deltaX * this._mouseSensitivity);
-                lastMouseX = event.clientX;
-            }
-        });
-
-        window.addEventListener('wheel', (event) => {
-            const zoomSpeed = 1; // Adjust zoom speed
-            const delta = event.deltaY > 0 ? zoomSpeed : -zoomSpeed; // Determine zoom direction
-            console.log(`Zoom delta: ${delta}`); // Log zoom delta for debugging
-        
-            if (view2d) {
-                // In 2D view, adjust the camera's Y position for zooming
-                this._camera.position.y += delta * 10; // Scale zoom for 2D view
-                this._camera.position.y = Math.max(50, Math.min(200, this._camera.position.y)); // Clamp zoom range
-            } else {
-                // In 3D view, adjust the camera's position based on the zoom delta
-                const direction = new THREE.Vector3();
-                this._camera.getWorldDirection(direction);
-                //get distance from camera to center of scene
-                const distance = this._camera.position.distanceTo(new THREE.Vector3(0, 10, 0));
-                // Prevent zooming in too close
-                if (distance < 10 && delta < 0 || distance > 200 && delta > 0) {
-                    return; // Prevent zooming in too close or too far
-                }
-                this._camera.position.addScaledVector(direction, -delta * 10); // Scale zoom for 3D view
-                this._camera.lookAt(new THREE.Vector3(0, 10, 0)); // Ensure camera looks at the center
-            }
-        });
+        this.addListeners.call(this);
 
         const toggleRotationButton = document.getElementById('toggle-rotation');
         const toggleViewButton = document.getElementById('toggle-3d');
@@ -245,7 +205,9 @@ export class TopViewScene {
     }
 
     setWaypoint(roomNr){
-        // roomNr is a string like "C305", "A102", "B204"
+        // roomNr is a string like "C3.05", "A1.02", "B2.04"
+        //remove . in string
+        roomNr = roomNr.replace('.', '');
         this._scene.remove(this.waypoint);
         const floorNr = roomNr[1];
         //get the name of the waypoint holder
@@ -331,8 +293,85 @@ export class TopViewScene {
         return this._camera;
     }
 
-    removeListeners(){
+    addListeners() {
+        window.addEventListener('mousedown', (event) => {
+            isMousePressed = true;
+            lastMouseX = event.clientX;
+        });
 
+        window.addEventListener('mouseup', () => {
+            isMousePressed = false;
+            lastMouseX = null;
+        });
+
+        window.addEventListener('mousemove', (event) => {
+            if (isMousePressed && lastMouseX !== null) {
+                const deltaX = event.clientX - lastMouseX;
+                this.rotateCamera(deltaX * this._mouseSensitivity);
+                lastMouseX = event.clientX;
+            }
+        });
+
+        window.addEventListener('wheel', (event) => {
+            const zoomSpeed = 1; // Adjust zoom speed
+            const delta = event.deltaY > 0 ? zoomSpeed : -zoomSpeed; // Determine zoom direction
+            console.log(`Zoom delta: ${delta}`); // Log zoom delta for debugging
+        
+            if (view2d) {
+                // In 2D view, adjust the camera's Y position for zooming
+                this._camera.position.y += delta * 10; // Scale zoom for 2D view
+                this._camera.position.y = Math.max(50, Math.min(200, this._camera.position.y)); // Clamp zoom range
+            } else {
+                // In 3D view, adjust the camera's position based on the zoom delta
+                const direction = new THREE.Vector3();
+                this._camera.getWorldDirection(direction);
+                //get distance from camera to center of scene
+                const distance = this._camera.position.distanceTo(new THREE.Vector3(0, 10, 0));
+                // Prevent zooming in too close
+                if (distance < 10 && delta < 0 || distance > 200 && delta > 0) {
+                    return; // Prevent zooming in too close or too far
+                }
+                this._camera.position.addScaledVector(direction, -delta * 10); // Scale zoom for 3D view
+                this._camera.lookAt(new THREE.Vector3(0, 10, 0)); // Ensure camera looks at the center
+            }
+        });
+
+        document.getElementById('fpv-preview').addEventListener('click', () => {
+            loadScene(1); //load fpvScene
+            document.getElementById('fpv-preview').style.display = 'none';
+            document.getElementById('info-overlay').style.display = 'none';
+        });
+        
+        document.getElementById('arrow-down').addEventListener('click', () => {
+            if (floorNr > 0) {
+                floorNr--;
+                activeScene.showFloor(floorNr);
+                document.getElementById('floor-number').textContent = `Floor: ${floorNr}`;
+            }
+        });
+        document.getElementById('arrow-up').addEventListener('click', () => {
+            if (floorNr < 6) {
+                floorNr++;
+                activeScene.showFloor(floorNr);
+        
+                if (floorNr === 6) {
+                    document.getElementById('floor-number').textContent = 'Floor: Roof';
+                }else{
+                    document.getElementById('floor-number').textContent = `Floor: ${floorNr}`;
+                }
+            }
+        });
+    }
+
+    removeListeners(){
+        // Remove all event listeners to prevent memory leaks
+        window.removeEventListener('mousedown', this.onMouseDown);
+        window.removeEventListener('mouseup', this.onMouseUp);
+        window.removeEventListener('mousemove', this.onMouseMove);
+        window.removeEventListener('wheel', this.onMouseWheel);
+        document.getElementById('fpv-preview').removeEventListener('click', this.onFpvPreviewClick);
+        document.getElementById('arrow-down').removeEventListener('click', this.onArrowDownClick);
+        document.getElementById('arrow-up').removeEventListener('click', this.onArrowUpClick);
     }
 
     //exit Scene
