@@ -55,29 +55,61 @@ initRenderer();
 initScenes();
 loadScene(0); //load topViewScene
 
+// Check for URL parameters and automatically set waypoint if "room" parameter exists
+function checkUrlParameters() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const roomParam = urlParams.get('room');
+    
+    if (roomParam) {
+        // Populate the room input field with the URL parameter
+        const roomInput = document.querySelector('input[name="roomNr"]');
+        if (roomInput) {
+            roomInput.value = roomParam;
+        }
+
+        console.log(`Room parameter found: ${roomParam}`);
+        
+        // Wait a brief moment for the scene to be fully initialized
+        setTimeout(() => {
+            setWaypoint(roomParam);
+        }, 100);
+    }
+}
+
+// Call the function to check for URL parameters
+checkUrlParameters();
+
 window.loadScene = loadScene;
 window.getActiveScene = getActiveScene;
 
 //add event listener to buttons
-document.getElementById('submit-form').addEventListener('submit', function(event) {
+document
+  .getElementById("submit-form")
+  .addEventListener("submit", function (event) {
     event.preventDefault(); // prevents page reload
-    document.getElementById('error-message').textContent = ""; // clear previous error message
-    const regex = /^[ABC][0-5]\.\d{2}$/; // regex to match room numbers like C3.05, A1.02, B2.04, etc.
+    document.getElementById("error-message").textContent = ""; // clear previous error message
     const form = event.target;
     const roomNr = form.roomNr.value;
 
-    if (!regex.test(roomNr)){
-        document.getElementById('error-message').textContent = "Error: Room Number <" + roomNr + "> is not valid (example: C305)";
-        console.log("Error: Room Number <" + roomNr + "> is not valid (example: C305");
-        return;
-    }
-    floorNr = roomNr[1];
-    activeScene.showFloor(floorNr);
-    activeScene.setWaypoint(roomNr);
-    activeScene.findNextStaircase();
-    activeScene.drawLine();
+    setWaypoint(roomNr);
+  });
 
-});
+function setWaypoint(roomNr) {
+  const regex = /^[ABC][0-5]\.\d{2}$/; // regex to match room numbers like C3.05, A1.02, B2.04, etc.
+  if (!regex.test(roomNr)) {
+    document.getElementById("error-message").textContent =
+      "Error: Room Number <" + roomNr + "> is not valid (example: C305)";
+    console.log(
+      "Error: Room Number <" + roomNr + "> is not valid (example: C305"
+    );
+    return;
+  }
+  floorNr = roomNr[1];
+  activeScene.showFloor(floorNr);
+  activeScene.setWaypoint(roomNr);
+  activeScene.findNextStaircase();
+  activeScene.drawLine();
+}
 
 document.getElementById('selectEntry').addEventListener('input', function(event) {
     activeScene.setEntry(event.target.value);
