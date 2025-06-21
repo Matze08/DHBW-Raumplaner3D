@@ -7,7 +7,7 @@
 function hashPassword(password, salt) {
   // Kombiniere Passwort mit Salt
   const saltedPassword = password + salt;
-
+console.log("hash", btoa(saltedPassword));
   // Konvertiere zu Base64
   return btoa(saltedPassword);
 }
