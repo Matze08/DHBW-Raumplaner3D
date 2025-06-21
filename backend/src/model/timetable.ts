@@ -354,8 +354,8 @@ router.post("/rooms", async (req, res) => {
     }
     
     const room = {
-      name: name.trim(),
-      createdAt: new Date()
+      bezeichnung: name.trim(),
+      createdAt: new Date(),
     };
     
     const result = await insertOne("raum", room);
@@ -389,8 +389,8 @@ router.post("/courses", async (req, res) => {
     }
     
     const course = {
-      name: name.trim(),
-      createdAt: new Date()
+      bezeichnung: name.trim(),
+      createdAt: new Date(),
     };
     
     const result = await insertOne("kurs", course);
@@ -424,8 +424,8 @@ router.post("/lecturers", async (req, res) => {
     }
     
     const lecturer = {
-      name: name.trim(),
-      createdAt: new Date()
+      bezeichnung: name.trim(),
+      createdAt: new Date(),
     };
     
     const result = await insertOne("lehrbeauftragter", lecturer);
@@ -459,8 +459,8 @@ router.post("/lectures", async (req, res) => {
     }
     
     const lecture = {
-      name: name.trim(),
-      createdAt: new Date()
+      bezeichnung: name.trim(),
+      createdAt: new Date(),
     };
     
     const result = await insertOne("vorlesung", lecture);

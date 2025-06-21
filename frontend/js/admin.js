@@ -498,7 +498,7 @@ async function saveNewItem(type, value, form, button, input) {
     };
 
     // Create the item
-    const data = { bezeichnung: value.trim() };
+    const data = { name: value.trim() };
     await fetchData(endpoints[type], 'POST', data);
 
     // Reset form
