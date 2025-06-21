@@ -507,12 +507,10 @@ async function saveNewItem(type, value, form, button, input) {
     input.value = '';
 
     // Show success message
-    alert(`${getTypeDisplayName(type)} wurde erfolgreich hinzugefügt!`);
+    console.log(`${getTypeDisplayName(type)} wurde erfolgreich hinzugefügt!`);
 
     // Reload the dropdown options if needed
-    if (window.loadFilterOptions) {
-      window.loadFilterOptions();
-    }
+    loadModalDropdowns();
 
   } catch (error) {
     console.error(`Error saving ${type}:`, error);
