@@ -1,25 +1,15 @@
 /**
- * Sichere Passwort-Hashing-Funktion mit SHA-256
- * @param {string} password - Das zu hashende Passwort
- * @param {string} salt - Ein Salt zur Erhöhung der Sicherheit (z.B. E-Mail des Benutzers)
- * @returns {Promise<string>} Der Passwort-Hash
+ * Passwort-Encoding-Funktion mit Base64
+ * @param {string} password - Das zu encodierende Passwort
+ * @param {string} salt - Ein Salt zur Kombination mit dem Passwort (z.B. E-Mail des Benutzers)
+ * @returns {string} Der Base64-encodierte String
  */
-async function hashPassword(password, salt) {
+function hashPassword(password, salt) {
   // Kombiniere Passwort mit Salt
   const saltedPassword = password + salt;
-  
-  // Konvertiere den String in ein Array von Bytes
-  const encoder = new TextEncoder();
-  const data = encoder.encode(saltedPassword);
-  
-  // Berechne den SHA-256 Hash
-  const hashBuffer = await crypto.subtle.digest('SHA-256', data);
-  
-  // Konvertiere das ArrayBuffer zu einem Hex-String
-  const hashArray = Array.from(new Uint8Array(hashBuffer));
-  const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
-  
-  return hashHex;
+
+  // Konvertiere zu Base64
+  return btoa(saltedPassword);
 }
 
 export { hashPassword };
