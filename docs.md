@@ -1,4 +1,4 @@
-# Projektdokumentation
+# Projektdokumentation (Architekturspezifikation)
 ### Inhaltsverzeichnis
 
 1. [Business Case](https://github.com/Matze08/DHBW-Raumplaner3D/blob/main/docs.md#Business-Case)
