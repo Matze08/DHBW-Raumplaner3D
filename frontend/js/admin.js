@@ -4,28 +4,31 @@ let currentUser = null;
 
 // Prüfe, ob der Benutzer eingeloggt ist, sonst weiterleiten zum Login
 document.addEventListener('DOMContentLoaded', () => {
-  const userJson = localStorage.getItem('user');
+  const userJson = localStorage.getItem("user");
   if (!userJson) {
     // Benutzer ist nicht eingeloggt - Weiterleitung zur Login-Seite
-    alert('Sie müssen eingeloggt sein, um diese Seite zu sehen.');
-    window.location.href = 'login.html';
+    alert("Sie müssen eingeloggt sein, um diese Seite zu sehen.");
+    window.location.href = "login.html";
     return;
   }
-  
+
   // Benutzer ist eingeloggt und damit automatisch Admin
   currentUser = JSON.parse(userJson);
-  
+
   // Optional: Zeige an, wer eingeloggt ist
-  const adminInfoElement = document.getElementById('adminInfo');
+  const adminInfoElement = document.getElementById("adminInfo");
   if (adminInfoElement) {
     adminInfoElement.textContent = `Eingeloggt als: ${currentUser.email}`;
   }
 
   // Hier kann zusätzliche Admin-Funktionalität initialisiert werden
   initializeAdminFunctionality();
-  
+
   // Setup event listeners for modal
   setupModalEventListeners();
+
+  // Setup event listeners for add buttons
+  setupAddButtonListeners();
 });
 
 function initializeAdminFunctionality() {
@@ -376,4 +379,154 @@ async function fetchData(endpoint, method = "GET", body = null) {
     console.error(`Error fetching data from ${endpoint}:`, error);
     throw error;
   }
+}
+
+// Setup event listeners for add buttons
+function setupAddButtonListeners() {
+  // Room add button
+  const addRoomBtn = document.getElementById('addRoomBtn');
+  const addRoomForm = document.getElementById('addRoomForm');
+  const saveRoomBtn = document.getElementById('saveRoom');
+  const cancelRoomBtn = document.getElementById('cancelRoom');
+  const newRoomInput = document.getElementById('newRoomInput');
+
+  addRoomBtn.addEventListener('click', () => {
+    addRoomBtn.style.display = 'none';
+    addRoomForm.style.display = 'block';
+    newRoomInput.focus();
+  });
+
+  cancelRoomBtn.addEventListener('click', () => {
+    addRoomForm.style.display = 'none';
+    addRoomBtn.style.display = 'block';
+    newRoomInput.value = '';
+  });
+
+  saveRoomBtn.addEventListener('click', () => saveNewItem('room', newRoomInput.value, addRoomForm, addRoomBtn, newRoomInput));
+
+  // Course add button
+  const addCourseBtn = document.getElementById('addCourseBtn');
+  const addCourseForm = document.getElementById('addCourseForm');
+  const saveCourseBtn = document.getElementById('saveCourse');
+  const cancelCourseBtn = document.getElementById('cancelCourse');
+  const newCourseInput = document.getElementById('newCourseInput');
+
+  addCourseBtn.addEventListener('click', () => {
+    addCourseBtn.style.display = 'none';
+    addCourseForm.style.display = 'block';
+    newCourseInput.focus();
+  });
+
+  cancelCourseBtn.addEventListener('click', () => {
+    addCourseForm.style.display = 'none';
+    addCourseBtn.style.display = 'block';
+    newCourseInput.value = '';
+  });
+
+  saveCourseBtn.addEventListener('click', () => saveNewItem('course', newCourseInput.value, addCourseForm, addCourseBtn, newCourseInput));
+
+  // Lecturer add button
+  const addLecturerBtn = document.getElementById('addLecturerBtn');
+  const addLecturerForm = document.getElementById('addLecturerForm');
+  const saveLecturerBtn = document.getElementById('saveLecturer');
+  const cancelLecturerBtn = document.getElementById('cancelLecturer');
+  const newLecturerInput = document.getElementById('newLecturerInput');
+
+  addLecturerBtn.addEventListener('click', () => {
+    addLecturerBtn.style.display = 'none';
+    addLecturerForm.style.display = 'block';
+    newLecturerInput.focus();
+  });
+
+  cancelLecturerBtn.addEventListener('click', () => {
+    addLecturerForm.style.display = 'none';
+    addLecturerBtn.style.display = 'block';
+    newLecturerInput.value = '';
+  });
+
+  saveLecturerBtn.addEventListener('click', () => saveNewItem('lecturer', newLecturerInput.value, addLecturerForm, addLecturerBtn, newLecturerInput));
+
+  // Lecture add button
+  const addLectureBtn = document.getElementById('addLectureBtn');
+  const addLectureForm = document.getElementById('addLectureForm');
+  const saveLectureBtn = document.getElementById('saveLecture');
+  const cancelLectureBtn = document.getElementById('cancelLecture');
+  const newLectureInput = document.getElementById('newLectureInput');
+
+  addLectureBtn.addEventListener('click', () => {
+    addLectureBtn.style.display = 'none';
+    addLectureForm.style.display = 'block';
+    newLectureInput.focus();
+  });
+
+  cancelLectureBtn.addEventListener('click', () => {
+    addLectureForm.style.display = 'none';
+    addLectureBtn.style.display = 'block';
+    newLectureInput.value = '';
+  });
+
+  saveLectureBtn.addEventListener('click', () => saveNewItem('lecture', newLectureInput.value, addLectureForm, addLectureBtn, newLectureInput));
+
+  // Enter key handling for all inputs
+  [newRoomInput, newCourseInput, newLecturerInput, newLectureInput].forEach((input, index) => {
+    input.addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') {
+        const types = ['room', 'course', 'lecturer', 'lecture'];
+        const forms = [addRoomForm, addCourseForm, addLecturerForm, addLectureForm];
+        const buttons = [addRoomBtn, addCourseBtn, addLecturerBtn, addLectureBtn];
+        
+        saveNewItem(types[index], input.value, forms[index], buttons[index], input);
+      }
+    });
+  });
+}
+
+// Save new item function
+async function saveNewItem(type, value, form, button, input) {
+  if (!value.trim()) {
+    alert('Bitte geben Sie einen Namen ein.');
+    return;
+  }
+
+  try {
+    // API endpoint mapping
+    const endpoints = {
+      room: '/rooms',
+      course: '/courses',
+      lecturer: '/lecturers',
+      lecture: '/lectures'
+    };
+
+    // Create the item
+    const data = { name: value.trim() };
+    await fetchData(endpoints[type], 'POST', data);
+
+    // Reset form
+    form.style.display = 'none';
+    button.style.display = 'block';
+    input.value = '';
+
+    // Show success message
+    alert(`${getTypeDisplayName(type)} wurde erfolgreich hinzugefügt!`);
+
+    // Reload the dropdown options if needed
+    if (window.loadFilterOptions) {
+      window.loadFilterOptions();
+    }
+
+  } catch (error) {
+    console.error(`Error saving ${type}:`, error);
+    alert(`Fehler beim Hinzufügen des ${getTypeDisplayName(type)}s: ${error.message}`);
+  }
+}
+
+// Helper function to get display names
+function getTypeDisplayName(type) {
+  const names = {
+    room: 'Raum',
+    course: 'Kurs',
+    lecturer: 'Dozent',
+    lecture: 'Vorlesung'
+  };
+  return names[type] || type;
 }
