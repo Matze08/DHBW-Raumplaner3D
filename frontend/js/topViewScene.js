@@ -59,7 +59,6 @@ export class TopViewScene {
                 this._camera.getWorldDirection(direction);
                 //get distance from camera to center of scene
                 const distance = this._camera.position.distanceTo(new THREE.Vector3(0, 10, 0));
-                console.log(`Camera distance to center: ${distance}`); // Log distance for debugging
                 // Prevent zooming in too close
                 if (distance < 10 && delta < 0 || distance > 200 && delta > 0) {
                     return; // Prevent zooming in too close or too far
