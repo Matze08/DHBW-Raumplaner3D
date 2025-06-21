@@ -16,15 +16,10 @@ async function withDatabase<T>(
   operation: (collection: Collection) => Promise<T>
 ): Promise<T> {
   // Use production MongoDB URI if in production, otherwise use environment variable
-  const mongoUri =
-    process.env.NODE_ENV === "production"
-      ? "mongodb://scheiternistgeil.de:27017"
-      : process.env.MONGODB_URI;
+  const mongoUri = process.env.MONGODB_URI;
 
   if (!mongoUri) {
-    throw new Error(
-      "MONGODB_URI is not defined in .env file and not in production mode"
-    );
+    throw new Error("MONGODB_URI is not defined in .env file");
   }
 
   const client = new MongoClient(mongoUri);
