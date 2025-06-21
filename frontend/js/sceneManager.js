@@ -7,6 +7,8 @@ var activeScene; //stores active scene
 
 var renderer; //stores active renderer
 
+var floorNr = 6; //stores current floor number
+
 //function which is closing old scene and opening new Scene (i --> SceneID of new Scene) 
 //export --> so scene Objects can call this function
 export function loadScene(i){ //function to switch between scenes
@@ -62,22 +64,17 @@ document.getElementById('submit-form').addEventListener('submit', function(event
     const regex = /^[ABC][0-5]\d{2}$/; // regex to match room numbers like C305, A102, B204, etc.
     const form = event.target;
     const roomNr = form.roomNr.value;
-    const entry = event.selectEntry;
 
     if (!regex.test(roomNr)){
         console.log("Error: Room Number <" + roomNr + "> is not valid (example: C305");
         return;
     }
-    const floorNr = roomNr[1];
+    floorNr = roomNr[1];
     activeScene.showFloor(floorNr);
     activeScene.setWaypoint(roomNr);
     activeScene.findNextStaircase();
     activeScene.drawLine();
 
-});
-
-document.getElementById('orbitSlider').addEventListener('input', function(event) {
-    activeScene.updateCameraPos(event.target.value);
 });
 
 document.getElementById('selectEntry').addEventListener('input', function(event) {
@@ -101,3 +98,22 @@ window.addEventListener('resize', () => {
     });
 });
 
+document.getElementById('arrow-down').addEventListener('click', () => {
+    if (floorNr > 0) {
+        floorNr--;
+        activeScene.showFloor(floorNr);
+        document.getElementById('floor-number').textContent = `Floor: ${floorNr}`;
+    }
+});
+document.getElementById('arrow-up').addEventListener('click', () => {
+    if (floorNr < 6) {
+        floorNr++;
+        activeScene.showFloor(floorNr);
+
+        if (floorNr === 6) {
+            document.getElementById('floor-number').textContent = 'Floor: Roof';
+        }else{
+            document.getElementById('floor-number').textContent = `Floor: ${floorNr}`;
+        }
+    }
+});
