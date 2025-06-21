@@ -6,6 +6,8 @@ This is a university project for the module "Einsatz von Web-Technologien" by Ma
 **The architecture specification can be found in `docs.md`.**   
 Other than this readme, there are some other markdown-files (and a mockup presentation) in the root folder of this project (e.g. `model.md`) which contain additional information about the project.    
 
+Link to our GitHub repository: https://github.com/Matze08/DHBW-Raumplaner3D/    
+
 ## Inhaltsverzeichnis
 - [Installation](#installation)
   - [Requirements](#requirements)
