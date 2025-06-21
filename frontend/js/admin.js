@@ -185,12 +185,7 @@ async function loadModalDropdowns() {
     
     // Load lecturers
     const lecturers = await fetchData("/lecturers");
-    populateSelect(
-      modalLecturer,
-      lecturers,
-      (item) => `${item.vorname} ${item.nachname}`,
-      "_id"
-    );
+    populateSelect(modalLecturer, lecturers, "bezeichnung", "_id");
     
     // Load lectures
     const lectures = await fetchData("/lectures");

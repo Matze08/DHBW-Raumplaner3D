@@ -8,8 +8,7 @@ export interface Raum {
 
 export interface Lehrbeauftragter {
   _id?: ObjectId;
-  vorname: string;
-  nachname: string;
+  bezeichnung: string;
   firma: string;
   mail: string;
 }

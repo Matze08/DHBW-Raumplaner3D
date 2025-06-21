@@ -101,12 +101,7 @@ async function loadFilterOptions() {
 
     // Load lecturers
     const lecturers = await fetchData("/lecturers");
-    populateFilterSelect(
-      lecturerFilter,
-      lecturers,
-      (item) => `${item.vorname} ${item.nachname}`,
-      "_id"
-    );
+    populateFilterSelect(lecturerFilter, lecturers, "bezeichnung", "_id");
 
     // Load lectures
     const lectures = await fetchData("/lectures");
@@ -249,9 +244,7 @@ function displayBookings(bookings) {
           booking.kurs?.bezeichnung || "Keine Angabe"
         }</div>
         <div class="booking-lecturer">Dozent: ${
-          booking.lehrbeauftragter
-            ? `${booking.lehrbeauftragter.vorname} ${booking.lehrbeauftragter.nachname}`
-            : "Keine Angabe"
+          booking.lehrbeauftragter?.bezeichnung || "Keine Angabe"
         }</div>
         <div class="booking-time">${formatTime(startTime)} - ${formatTime(
       endTime
@@ -394,9 +387,7 @@ function showBookingDetails(booking) {
     <div class="modal-detail">
       <span class="modal-label">Dozent:</span>
       <span class="modal-value">${
-        booking.lehrbeauftragter
-          ? `${booking.lehrbeauftragter.vorname} ${booking.lehrbeauftragter.nachname}`
-          : "Keine Angabe"
+        booking.lehrbeauftragter?.bezeichnung || "Keine Angabe"
       }</span>
     </div>
     ${
