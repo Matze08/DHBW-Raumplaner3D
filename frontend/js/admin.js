@@ -505,8 +505,8 @@ async function saveNewItem(type, value, form, button, input) {
     console.log(`${getTypeDisplayName(type)} wurde erfolgreich hinzugefügt!`);
 
     // Reload the dropdown options if needed
-    loadModalDropdowns();
-    loadFilterOptions();
+    await loadFilterOptions();
+    await loadModalDropdowns();
 
   } catch (error) {
     console.error(`Error saving ${type}:`, error);
