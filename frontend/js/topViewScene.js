@@ -269,6 +269,9 @@ export class TopViewScene {
     }
 
     drawLine(){
+        this._scene.remove(this.line);
+        this._scene.remove(this.line1);
+        this._scene.remove(this.line2);
         const geometry = new THREE.BufferGeometry().setFromPoints([this.startpoint.position, this.nearestStairway.position]);
         const material = new THREE.LineBasicMaterial({ color: 0xff0500 });
         this.line = new THREE.Line(geometry, material);
