@@ -42,17 +42,17 @@ form.addEventListener('submit', async (e) => {
     // Hole das Auth-Token oder die User-ID des eingeloggten Benutzers
     const userData = JSON.parse(currentUser);
     
-    const response = await fetch("http://localhost:3001/api/register", {
+    const response = await fetch("http://167.99.245.119:3001/api/register", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
         // Optional: Füge einen Auth-Header hinzu, falls dein Backend das unterstützt
-        "Authorization": `Bearer ${userData._id || ''}`
+        Authorization: `Bearer ${userData._id || ""}`,
       },
-      body: JSON.stringify({ 
-        email, 
+      body: JSON.stringify({
+        email,
         password: passwordHash, // Sende den Hash anstatt des Klartextpassworts
-        registeredBy: userData.email || 'unknown' // Wer hat registriert
+        registeredBy: userData.email || "unknown", // Wer hat registriert
       }),
     });
 

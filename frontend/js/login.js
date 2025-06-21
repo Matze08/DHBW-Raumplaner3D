@@ -15,7 +15,7 @@ export async function handleLogin(email, password, errorMessage) {
     // Erzeuge einen sicheren Hash des Passworts mit der E-Mail als Salt
     const passwordHash = await hashPassword(password, trimmedEmail);
 
-    const response = await fetch("http://localhost:3001/api/login", {
+    const response = await fetch("http://167.99.245.119:3001/api/login", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

@@ -1,5 +1,5 @@
 // Admin authentication and functionality
-const API_BASE_URL = "http://localhost:3001/api";
+const API_BASE_URL = "http://167.99.245.119:3001/api";
 let currentUser = null;
 
 // Prüfe, ob der Benutzer eingeloggt ist, sonst weiterleiten zum Login
