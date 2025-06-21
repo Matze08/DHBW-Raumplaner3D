@@ -21,6 +21,7 @@ export class FpvScene {
 
     //function called everytime the scene is loaded
     start(){
+        document.getElementById("wasd-instruction").style.display = "flex"; //show instruction
         this.controls = new PointerLockControls(this._camera, document.body);
         this._scene.add(this.controls.getObject());
 
@@ -28,16 +29,16 @@ export class FpvScene {
         this.initEnv();
 
         // Event listener to request pointer lock on click
-        document.body.addEventListener('click', () => {
+        document.getElementById("close-instruction").addEventListener('click', () => {
             // Lock the pointer on first click
             document.body.requestPointerLock();
         });
 
         document.addEventListener('pointerlockchange', () => {
             if (document.pointerLockElement) {
-                document.getElementById("info-overlay").style.display = "none";
+                document.getElementById("wasd-instruction").style.display = "none";
             } else {
-                document.getElementById("info-overlay").style.display = "flex";
+                sceneManager.loadScene(0); // Load topViewScene if pointer lock is lost
             }
           });
 
@@ -81,9 +82,6 @@ export class FpvScene {
 
             this.controls.moveRight(-velocity.x);
             this.controls.moveForward(-velocity.z);
-
-
-            console.log("Camera Position: ", this._camera.position);
         }
     }
 
