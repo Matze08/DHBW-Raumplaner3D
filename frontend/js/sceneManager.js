@@ -44,7 +44,7 @@ function initRenderer(){
 function initScenes(){
     //init scenes
     const scene1 = new TopViewScene(renderer);
-    const scene2 = new FpvScene();
+    const scene2 = new FpvScene(renderer);
     scenes = [scene1, scene2];
 }
 
@@ -61,11 +61,13 @@ window.getActiveScene = getActiveScene;
 //add event listener to buttons
 document.getElementById('submit-form').addEventListener('submit', function(event) {
     event.preventDefault(); // prevents page reload
-    const regex = /^[ABC][0-5]\d{2}$/; // regex to match room numbers like C305, A102, B204, etc.
+    document.getElementById('error-message').textContent = ""; // clear previous error message
+    const regex = /^[ABC][0-5]\.\d{2}$/; // regex to match room numbers like C3.05, A1.02, B2.04, etc.
     const form = event.target;
     const roomNr = form.roomNr.value;
 
     if (!regex.test(roomNr)){
+        document.getElementById('error-message').textContent = "Error: Room Number <" + roomNr + "> is not valid (example: C305)";
         console.log("Error: Room Number <" + roomNr + "> is not valid (example: C305");
         return;
     }
@@ -96,6 +98,11 @@ window.addEventListener('resize', () => {
         scene.getCamera().aspect = width / height;
         scene.getCamera().updateProjectionMatrix();
     });
+});
+
+document.getElementById('fpv-preview').addEventListener('click', () => {
+    loadScene(1); //load fpvScene
+    document.getElementById('fpv-preview').style.display = 'none';
 });
 
 document.getElementById('arrow-down').addEventListener('click', () => {
