@@ -30,7 +30,7 @@ If you still want to build the project yourself, follow these instructions:
 3. Gulp will now execute the building process (and testing) for frontend and backend and compile the source files into deployable ones.
 4. The compiled files can be found in the `dist` directory.s
 
-Please note that a seperate MongoDB server is needed. For the purposes of this university project, one is hosted at `167.99.245.119:27017`, which is connected to by default (see `backend/src/model/db.ts`).
+Please note that a seperate MongoDB server is needed. For the purposes of this university project, one is hosted at `167.99.245.119:27017`, which can be  connected to by default (see `backend/src/model/db.ts`). It is still highly recommended to use the provided demo for full functionality.    
 
 Please also note that running the website locally by just opening the .html files is NOT possible because of CORS issues as the javascript files are imported as ES6 modules.
 
