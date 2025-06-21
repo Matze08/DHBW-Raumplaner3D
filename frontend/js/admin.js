@@ -287,7 +287,11 @@ async function handleBookingFormSubmit(event) {
     }
     
     // Success
-    alert(isNewBooking ? "Buchung erfolgreich erstellt!" : "Buchung erfolgreich aktualisiert!");
+    console.log(
+      isNewBooking
+        ? "Buchung erfolgreich erstellt!"
+        : "Buchung erfolgreich aktualisiert!"
+    );
     closeModal();
     
     // Refresh the bookings display
