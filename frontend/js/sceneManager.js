@@ -67,7 +67,7 @@ document.getElementById('submit-form').addEventListener('submit', function(event
     const roomNr = form.roomNr.value;
 
     if (!regex.test(roomNr)){
-        document.getElementById('error-message').textContent = "Error: Room Number <" + roomNr + "> is not valid (example: C305)";
+        document.getElementById('error-message').textContent = "Error: Room Number <" + roomNr + "> is not valid (example: C3.05)";
         console.log("Error: Room Number <" + roomNr + "> is not valid (example: C305");
         return;
     }
@@ -98,29 +98,4 @@ window.addEventListener('resize', () => {
         scene.getCamera().aspect = width / height;
         scene.getCamera().updateProjectionMatrix();
     });
-});
-
-document.getElementById('fpv-preview').addEventListener('click', () => {
-    loadScene(1); //load fpvScene
-    document.getElementById('fpv-preview').style.display = 'none';
-});
-
-document.getElementById('arrow-down').addEventListener('click', () => {
-    if (floorNr > 0) {
-        floorNr--;
-        activeScene.showFloor(floorNr);
-        document.getElementById('floor-number').textContent = `Floor: ${floorNr}`;
-    }
-});
-document.getElementById('arrow-up').addEventListener('click', () => {
-    if (floorNr < 6) {
-        floorNr++;
-        activeScene.showFloor(floorNr);
-
-        if (floorNr === 6) {
-            document.getElementById('floor-number').textContent = 'Floor: Roof';
-        }else{
-            document.getElementById('floor-number').textContent = `Floor: ${floorNr}`;
-        }
-    }
 });
