@@ -316,6 +316,8 @@ export class TopViewScene {
         this.setWaypoint(roomNr);
         this.findNextStaircase();
         this.drawLine();
+
+        document.getElementById("floor-number").textContent = `Floor: ${floorNr}`;
     }
 
     // Check for URL parameters and automatically set waypoint if "room" parameter exists
@@ -353,6 +355,10 @@ export class TopViewScene {
 
         document.getElementById('selectEntry').addEventListener('input', (event) => {
             this.setEntry(event.target.value);
+        });
+
+        document.getElementById("mmclose-instruction").addEventListener('click', (event) => {
+            document.getElementById("mousemove-instruction").style.display = "none"; //hide instruction
         });
 
         window.addEventListener('mousedown', (event) => {

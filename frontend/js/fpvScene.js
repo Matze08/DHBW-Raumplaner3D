@@ -184,5 +184,6 @@ export class FpvScene {
     //exit Scene
     exit(){
         this.removeListeners();
+        window.location.reload();
     }
 }

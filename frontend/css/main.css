@@ -81,18 +81,76 @@ nav * {
     font-size: 1.5rem;
 }
 
+#info-overlay form select, 
+#info-overlay form input,
+#info-overlay form input[type="text"]::placeholder,
+#info-overlay form .submit-btn {
+    background-color: #d03030; /* Set the background color to red */
+    color: white; /* Optional: Set the text color to white for better contrast */
+    border: none; /* Optional: Remove the border */
+    padding: 0.5rem; /* Optional: Add padding for better appearance */
+    border-radius: 0.5rem; /* Optional: Add rounded corners */
+    font-size: 1rem; /* Optional: Adjust font size */
+}
+
+#info-overlay form .submit-btn {
+    cursor: pointer;
+}
+
+#navigation-controls{
+    display: flex;
+    flex-direction: row;
+    align-items: center; 
+    justify-content: space-between;
+    gap: 10px;
+}
+
 .submit-btn{
     align-self: center;
     width: 30%;
 }
 
+
+#navigation-controls{
+    display: flex;
+    flex-direction: row;
+    align-items: center; 
+    justify-content: space-between;
+    gap: 1rem;
+}
+
+#navigation-controls p{
+    width: 10rem;
+
+}
+
 .arrow-icon{
-    height: 4rem;
+    height: 2rem;
 }
 
 #controls{
     display: flex;
     flex-direction: column;
+}
+
+#controls label{
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+    align-items: center;
+}
+
+#controls label input[type="checkbox"] {
+    accent-color: #d03030; /* Set the checkbox color to red */
+    width: 1.5rem; /* Optional: Adjust the size */
+    height: 1.5rem; /* Optional: Adjust the size */
+    cursor: pointer; /* Optional: Change the cursor to a pointer */
+}
+
+#controls label {
+    color: white; /* Optional: Set the label text color to white for better contrast */
+    font-size: 1.2rem; /* Optional: Adjust font size */
+    margin-left: 0.5rem; /* Optional: Add spacing between checkbox and label */
 }
 
 #wasd-instruction{
@@ -114,6 +172,36 @@ nav * {
 }
 
 #wasd-instruction .close-icon{
+    position: absolute;
+    top: 0;
+    right: 0;
+    transform: translate(30%, -30%);
+    height: 20%;
+    width: auto;
+    cursor: pointer;
+}
+
+
+#mousemove-instruction{
+    position: absolute; 
+    top: 50%; 
+    left: 50%;
+    width: 10%;
+    transform: translate(-50%, -50%);
+    z-index: 1;
+    background-color: #222222e6;
+    border-radius: 1rem;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#mousemove-instruction img{
+    width: 100%;
+}
+
+#mousemove-instruction .close-icon{
     position: absolute;
     top: 0;
     right: 0;

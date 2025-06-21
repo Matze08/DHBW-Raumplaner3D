@@ -38,23 +38,30 @@
       <input type="submit" value="Go" class="submit-btn">
     </form>
     <p id="error-message" style="font-size: small; color: red;"></p>
-    <div>
-      <p id="floor-number">Floor: Roof</p>
+    <div id="navigation-controls">
       <img src="/media/arrow.png" alt="arrow-up" class="arrow-icon" id="arrow-up">
       <img src="/media/arrow.png" alt="arrow-down" style="transform: rotate(180deg);" class="arrow-icon" id="arrow-down">
+      <p id="floor-number">Floor: Roof</p>
     </div>
+    
     <div id="controls">
-      <p>Controls</p>
       <label>
-        <input type="checkbox" id="toggle-rotation" checked>Rotation
+        <input type="checkbox" id="toggle-rotation" checked>
+        <p>Rotation</p>
       </label>
       <label>
-        <input type="checkbox" id="toggle-3d">2D View
+        <input type="checkbox" id="toggle-3d">
+        <p>2D View</p>
       </label>
     </div>
+  </div>
+  <div id="mousemove-instruction" style="display: block">
+    <img src="/media/close.png" alt="x" class="close-icon" id="mmclose-instruction">
+    <img src="/media/MouseMove.png" alt="mousemove-instruction">
   </div>
   <div id="wasd-instruction" style="display: none">
     <img src="/media/close.png" alt="x" class="close-icon" id="close-instruction">
     <img src="/media/wasd-instruction.jpg" alt="wasd-instruction">
   </div>
+
 </body>
