@@ -50,21 +50,6 @@ nav * {
     width: 30%;
 }
 
-#control-overlay{
-    position: absolute;
-    display: flex;
-    justify-content: center;
-    align-items: center; 
-    width: 70%;
-    height: 3%;
-    bottom: 2%;
-    z-index: 1;
-    background-color: #222222e6;
-    border-radius: 2rem;
+.arrow-icon{
+    height: 4rem;
 }
-
-#control-overlay input{
-    width: 95%;
-    accent-color: rgb(0, 123, 255);
-}
-
