@@ -24,6 +24,11 @@ export class TopViewScene {
     //function called by sceneManager to update renderer (called every frame)
     updateRender() {
         const delta = this._clock.getDelta();
+
+
+        //rotate camera around the building
+        this._camera.position.applyAxisAngle(new THREE.Vector3(0, 1, 0), delta * 0.2);
+        this._camera.lookAt(new THREE.Vector3(0, 10, 0)); //look at the center of the scene
     }
 
     //function to init light in scene
@@ -118,8 +123,8 @@ export class TopViewScene {
     }
 
     showFloor(floor){
-        //show all floors except roof (reset)
-        this._scene.getObjectByName("Roof").visible = false;
+        //show all floors (reset)
+        this._scene.getObjectByName("Roof").visible = true;
         for (let i = 5; i > 0; i--){
             this._scene.getObjectByName("OG" + i).visible = true;
         }
@@ -127,6 +132,10 @@ export class TopViewScene {
         //remove all floors above the selected floor
         for (let i = 5; i > floor; i--){
             this._scene.getObjectByName("OG" + i).visible = false;
+        }
+        //remove roof
+        if (floor < 6){
+            this._scene.getObjectByName("Roof").visible = false;
         }
     }
 
