@@ -34,7 +34,7 @@ export async function handleLogin(email, password, errorMessage) {
     }
 
     const data = await response.json();
-    alert("Erfolgreich eingeloggt!");
+    console.log("Erfolgreich eingeloggt!");
     // Speichere den Benutzer in localStorage für die Session
     localStorage.setItem("user", JSON.stringify(data.user));
     // Weiterleiten zur Hauptseite

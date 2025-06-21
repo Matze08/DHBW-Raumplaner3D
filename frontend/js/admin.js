@@ -506,6 +506,7 @@ async function saveNewItem(type, value, form, button, input) {
 
     // Reload the dropdown options if needed
     loadModalDropdowns();
+    loadFilterOptions();
 
   } catch (error) {
     console.error(`Error saving ${type}:`, error);
