@@ -10,7 +10,7 @@ const port = 3001;
 
 app.use(
   cors({
-    origin: "http://localhost:3000",
+    origin: "*",
     methods: ["GET", "POST", "DELETE"],
     allowedHeaders: ["Content-Type", "Authorization"],
   })
@@ -25,7 +25,7 @@ app.use("/api", timetableRoutes);
 console.log("INFO | Starting Raumplaner-Backend...");
 
 app.get("/", (req, res) => {
-  res.sendFile(path.join(__dirname, "../frontend/html/root.html"));
+  //res.sendFile(path.join(__dirname, "../frontend/html/root.html"));
 });
 
 app.listen(port, () => {

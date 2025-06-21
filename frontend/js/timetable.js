@@ -2,7 +2,7 @@
 const START_HOUR = 8;
 const END_HOUR = 20;
 const HOUR_HEIGHT = 60; // Height in pixels for an hour (2 x 30px rows)
-const API_BASE_URL = "http://localhost:3001/api";
+const API_BASE_URL = "http://209.38.184.211:3001/api";
 
 // DOM Elements
 const timetableBody = document.getElementById("timetableBody");
@@ -72,8 +72,6 @@ function createTimetableStructure() {
         dayCell.dataset.day = day;
         dayCell.dataset.hour = hour;
         dayCell.dataset.minute = minute;
-        // Add a title attribute for better UX
-        dayCell.title = "Klicken, um eine neue Buchung zu erstellen";
 
         // Add a subtle visual indicator that cells are clickable in admin view
         if (document.body.classList.contains("admin-page")) {
@@ -103,12 +101,7 @@ async function loadFilterOptions() {
 
     // Load lecturers
     const lecturers = await fetchData("/lecturers");
-    populateFilterSelect(
-      lecturerFilter,
-      lecturers,
-      (item) => `${item.vorname} ${item.nachname}`,
-      "_id"
-    );
+    populateFilterSelect(lecturerFilter, lecturers, "bezeichnung", "_id");
 
     // Load lectures
     const lectures = await fetchData("/lectures");
@@ -169,6 +162,9 @@ async function loadBookings() {
 
     // Display bookings
     displayBookings(bookings);
+
+    // Update cell titles for admin functionality
+    updateCellTitles();
   } catch (error) {
     console.error("Error loading bookings:", error);
     showNotification("Fehler beim Laden der Buchungen", "error");
@@ -179,6 +175,9 @@ async function loadBookings() {
 function clearBookings() {
   const bookingElements = document.querySelectorAll(".booking");
   bookingElements.forEach((el) => el.remove());
+
+  // Update cell titles after clearing bookings
+  updateCellTitles();
 }
 
 // Display bookings on the timetable
@@ -193,22 +192,41 @@ function displayBookings(bookings) {
     const dayIndex = startTime.getDay() - 1; // getDay(): 0 = Sunday, so -1 gives Monday = 0
     if (dayIndex < 0 || dayIndex > 4) return; // Skip weekends
 
-    // Calculate position and height
+    // Calculate time values
     const startHour = startTime.getHours();
     const startMinute = startTime.getMinutes();
     const endHour = endTime.getHours();
     const endMinute = endTime.getMinutes();
 
-    // Find the correct cell to place the booking
-    const startPositionY = calculatePositionY(startHour, startMinute);
+    // Find the specific cell where this booking should be placed
+    const startTimeSlot = findTimeSlot(startHour, startMinute);
+    const targetCell = document.querySelector(
+      `.day-cell[data-day="${dayIndex}"][data-hour="${startTimeSlot.hour}"][data-minute="${startTimeSlot.minute}"]`
+    );
+
+    if (!targetCell) return;
+
+    // Calculate height and position within the cell
     const height = calculateHeight(startHour, startMinute, endHour, endMinute);
+    const offsetWithinSlot = calculateOffsetWithinSlot(
+      startHour,
+      startMinute,
+      startTimeSlot.hour,
+      startTimeSlot.minute
+    );
 
     // Create booking element
     const bookingElement = document.createElement("div");
     bookingElement.className = "booking";
+
+    // Add special class for multi-slot bookings
+    if (height > 30) {
+      bookingElement.classList.add("multi-slot");
+    }
+
     bookingElement.dataset.id = booking._id;
-    bookingElement.style.top = `${startPositionY}px`;
     bookingElement.style.height = `${height}px`;
+    bookingElement.style.top = `${offsetWithinSlot}px`;
 
     // Check if this is an admin page to show delete button
     const isAdminPage = document.body.classList.contains("admin-page");
@@ -226,9 +244,7 @@ function displayBookings(bookings) {
           booking.kurs?.bezeichnung || "Keine Angabe"
         }</div>
         <div class="booking-lecturer">Dozent: ${
-          booking.lehrbeauftragter
-            ? `${booking.lehrbeauftragter.vorname} ${booking.lehrbeauftragter.nachname}`
-            : "Keine Angabe"
+          booking.lehrbeauftragter?.bezeichnung || "Keine Angabe"
         }</div>
         <div class="booking-time">${formatTime(startTime)} - ${formatTime(
       endTime
@@ -241,30 +257,50 @@ function displayBookings(bookings) {
       }
     `;
 
-    // Find all cells for this day
-    const dayCells = document.querySelectorAll(
-      `.day-cell[data-day="${dayIndex}"]`
-    );
-    if (dayCells.length > 0) {
-      // Add to the first cell of the day (we'll position it absolutely)
-      dayCells[0].appendChild(bookingElement);
+    // Add to the correct cell
+    targetCell.appendChild(bookingElement);
 
-      // Add click event to show details
-      bookingElement.addEventListener("click", (event) => {
-        event.stopPropagation(); // Prevent event from bubbling to day cell
-        showBookingDetails(booking);
+    // Add click event to show details
+    bookingElement.addEventListener("click", (event) => {
+      event.stopPropagation(); // Prevent event from bubbling to day cell
+      showBookingDetails(booking);
+    });
+
+    // Add click event for delete button (only exists on admin pages)
+    const deleteBtn = bookingElement.querySelector(".booking-delete-btn");
+    if (deleteBtn) {
+      deleteBtn.addEventListener("click", (event) => {
+        event.stopPropagation(); // Prevent event from bubbling to day cell or booking
+        deleteBooking(booking._id, event);
       });
-
-      // Add click event for delete button (only exists on admin pages)
-      const deleteBtn = bookingElement.querySelector(".booking-delete-btn");
-      if (deleteBtn) {
-        deleteBtn.addEventListener("click", (event) => {
-          event.stopPropagation(); // Prevent event from bubbling to day cell or booking
-          deleteBooking(booking._id, event);
-        });
-      }
     }
   });
+}
+
+// Find which time slot a booking should be placed in
+function findTimeSlot(hour, minute) {
+  // Find the 30-minute slot that contains this time
+  if (minute < 30) {
+    return { hour: hour, minute: 0 };
+  } else {
+    return { hour: hour, minute: 30 };
+  }
+}
+
+// Calculate offset within a time slot
+function calculateOffsetWithinSlot(
+  actualHour,
+  actualMinute,
+  slotHour,
+  slotMinute
+) {
+  // Calculate how many minutes into the slot this booking starts
+  const slotStartMinutes = slotHour * 60 + slotMinute;
+  const actualStartMinutes = actualHour * 60 + actualMinute;
+  const offsetMinutes = actualStartMinutes - slotStartMinutes;
+
+  // Convert to pixels (1 minute = 1 pixel, since 30 minutes = 30px)
+  return offsetMinutes;
 }
 
 // Calculate vertical position based on time
@@ -351,9 +387,7 @@ function showBookingDetails(booking) {
     <div class="modal-detail">
       <span class="modal-label">Dozent:</span>
       <span class="modal-value">${
-        booking.lehrbeauftragter
-          ? `${booking.lehrbeauftragter.vorname} ${booking.lehrbeauftragter.nachname}`
-          : "Keine Angabe"
+        booking.lehrbeauftragter?.bezeichnung || "Keine Angabe"
       }</span>
     </div>
     ${
@@ -486,6 +520,32 @@ function updateDateHeaders(selectedDate = new Date()) {
   friday.setDate(monday.getDate() + 4);
   document.getElementById("date-friday").textContent =
     friday.toLocaleDateString("de-DE", dateFormatOptions);
+}
+
+// Update cell titles for admin functionality
+function updateCellTitles() {
+  // Only add titles on admin pages
+  const isAdminPage = document.body.classList.contains("admin-page");
+
+  if (!isAdminPage) {
+    return;
+  }
+
+  // Get all day cells
+  const dayCells = document.querySelectorAll(".day-cell");
+
+  dayCells.forEach((cell) => {
+    // Check if this cell has any booking elements
+    const hasBookings = cell.querySelector(".booking") !== null;
+
+    if (hasBookings) {
+      // Remove title if cell has bookings
+      cell.removeAttribute("title");
+    } else {
+      // Add title only if cell is empty
+      cell.title = "Klicken, um eine neue Buchung zu erstellen";
+    }
+  });
 }
 
 // Helper function to fetch data from the API

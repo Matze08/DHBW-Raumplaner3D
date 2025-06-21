@@ -336,6 +336,146 @@ router.put("/bookings/:id", async (req, res) => {
   }
 });
 
+// POST create new room
+router.post("/rooms", async (req, res) => {
+  try {
+    const { name } = req.body;
+    
+    if (!name || !name.trim()) {
+      res.status(400).json({ error: "Room name is required" });
+      return;
+    }
+    
+    // Check if room with same name already exists
+    const existingRoom = await findOne("raum", { name: name.trim() });
+    if (existingRoom) {
+      res.status(409).json({ error: "Room with this name already exists" });
+      return;
+    }
+    
+    const room = {
+      bezeichnung: name.trim(),
+      createdAt: new Date(),
+    };
+    
+    const result = await insertOne("raum", room);
+    
+    res.status(201).json({
+      success: true,
+      message: "Room created successfully",
+      room: { _id: result.insertedId, ...room }
+    });
+  } catch (error) {
+    console.error("Error creating room:", error);
+    res.status(500).json({ error: "Failed to create room" });
+  }
+});
+
+// POST create new course
+router.post("/courses", async (req, res) => {
+  try {
+    const { name } = req.body;
+    
+    if (!name || !name.trim()) {
+      res.status(400).json({ error: "Course name is required" });
+      return;
+    }
+    
+    // Check if course with same name already exists
+    const existingCourse = await findOne("kurs", { name: name.trim() });
+    if (existingCourse) {
+      res.status(409).json({ error: "Course with this name already exists" });
+      return;
+    }
+    
+    const course = {
+      bezeichnung: name.trim(),
+      createdAt: new Date(),
+    };
+    
+    const result = await insertOne("kurs", course);
+    
+    res.status(201).json({
+      success: true,
+      message: "Course created successfully",
+      course: { _id: result.insertedId, ...course }
+    });
+  } catch (error) {
+    console.error("Error creating course:", error);
+    res.status(500).json({ error: "Failed to create course" });
+  }
+});
+
+// POST create new lecturer
+router.post("/lecturers", async (req, res) => {
+  try {
+    const { name } = req.body;
+    
+    if (!name || !name.trim()) {
+      res.status(400).json({ error: "Lecturer name is required" });
+      return;
+    }
+    
+    // Check if lecturer with same name already exists
+    const existingLecturer = await findOne("lehrbeauftragter", { name: name.trim() });
+    if (existingLecturer) {
+      res.status(409).json({ error: "Lecturer with this name already exists" });
+      return;
+    }
+    
+    const lecturer = {
+      bezeichnung: name.trim(),
+      createdAt: new Date(),
+    };
+    
+    const result = await insertOne("lehrbeauftragter", lecturer);
+    
+    res.status(201).json({
+      success: true,
+      message: "Lecturer created successfully",
+      lecturer: { _id: result.insertedId, ...lecturer }
+    });
+  } catch (error) {
+    console.error("Error creating lecturer:", error);
+    res.status(500).json({ error: "Failed to create lecturer" });
+  }
+});
+
+// POST create new lecture
+router.post("/lectures", async (req, res) => {
+  try {
+    const { name } = req.body;
+    
+    if (!name || !name.trim()) {
+      res.status(400).json({ error: "Lecture name is required" });
+      return;
+    }
+    
+    // Check if lecture with same name already exists
+    const existingLecture = await findOne("vorlesung", { name: name.trim() });
+    if (existingLecture) {
+      res.status(409).json({ error: "Lecture with this name already exists" });
+      return;
+    }
+    
+    const lecture = {
+      bezeichnung: name.trim(),
+      createdAt: new Date(),
+    };
+    
+    const result = await insertOne("vorlesung", lecture);
+    
+    res.status(201).json({
+      success: true,
+      message: "Lecture created successfully",
+      lecture: { _id: result.insertedId, ...lecture }
+    });
+  } catch (error) {
+    console.error("Error creating lecture:", error);
+    res.status(500).json({ error: "Failed to create lecture" });
+  }
+});
+
 // Helper function to populate a single booking with related entities
 async function populateBooking(booking: any) {
   if (!booking) return null;

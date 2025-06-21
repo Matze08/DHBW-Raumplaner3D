@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <title>DHBW Stuttgart Raumplaner | Stundenplan</title>
   <link rel="icon" type="image/x-icon" href="/frontend/media/icon.ico">
-  <link rel="stylesheet" href="/frontend/css/main.css" />
+  <link rel="stylesheet" href="/css/main.css" />
   <link rel="stylesheet" href="../css/timetable.css" />
   <link rel="stylesheet" href="../css/timetable-body.css" />
   <link rel="stylesheet" href="../css/booking-management.css" />
@@ -12,15 +12,16 @@
 </head>
 <body class="timetable-page admin-page">
   <nav>
-    <img src="/frontend/media/dhbw_logo.png" alt="dhbw_logo" style="height: 3rem;">
+    <img src="/media/dhbw_logo.png" alt="dhbw_logo" style="height: 3rem;">
     <h1>DHBW Stuttgart Raumplaner | Administration</h1>
     <a href="/frontend/html/root.html" class="nav-link">Raumfinder</a>
     <a href="/frontend/html/timetable.html" class="nav-link" style="color: #333; text-decoration: none; margin-left: 20px; font-weight: 600;">Stundenplan</a>
   </nav>
 
   <div id="adminInfo" class="admin-info"></div>
-
-  <div class="timetable-container">
+  <div><a href="./login.html" class="nav-link" style="color: #333; text-decoration: none; margin-left: 20px; font-weight: 600;">Logout</a>
+  <a href="./register.html" class="nav-link" style="color: #333; text-decoration: none; margin-left: 20px; font-weight: 600;">Neuen Benutzer registrieren</a>
+  </div>    <div class="timetable-container">
     <div class="filter-section">
       <h2>Filter</h2>
       <div class="filter-group">
@@ -29,6 +30,12 @@
           <option value="">Alle Räume</option>
           <!-- Räume werden dynamisch geladen -->
         </select>
+        <button id="addRoomBtn" class="add-button">+ Neuen Raum hinzufügen</button>
+        <div id="addRoomForm" class="add-form" style="display: none;">
+          <input type="text" id="newRoomInput" placeholder="Raumname eingeben" class="add-input">
+          <button id="saveRoom" class="save-button">Speichern</button>
+          <button id="cancelRoom" class="cancel-button">Abbrechen</button>
+        </div>
       </div>
       <div class="filter-group">
         <label for="courseFilter">Kurs:</label>
@@ -36,6 +43,12 @@
           <option value="">Alle Kurse</option>
           <!-- Kurse werden dynamisch geladen -->
         </select>
+        <button id="addCourseBtn" class="add-button">+ Neuen Kurs hinzufügen</button>
+        <div id="addCourseForm" class="add-form" style="display: none;">
+          <input type="text" id="newCourseInput" placeholder="Kursname eingeben" class="add-input">
+          <button id="saveCourse" class="save-button">Speichern</button>
+          <button id="cancelCourse" class="cancel-button">Abbrechen</button>
+        </div>
       </div>
       <div class="filter-group">
         <label for="lecturerFilter">Dozent:</label>
@@ -43,6 +56,12 @@
           <option value="">Alle Dozenten</option>
           <!-- Dozenten werden dynamisch geladen -->
         </select>
+        <button id="addLecturerBtn" class="add-button">+ Neuen Dozenten hinzufügen</button>
+        <div id="addLecturerForm" class="add-form" style="display: none;">
+          <input type="text" id="newLecturerInput" placeholder="Dozentennamen eingeben" class="add-input">
+          <button id="saveLecturer" class="save-button">Speichern</button>
+          <button id="cancelLecturer" class="cancel-button">Abbrechen</button>
+        </div>
       </div>
       <div class="filter-group">
         <label for="lectureFilter">Vorlesung:</label>
@@ -50,6 +69,12 @@
           <option value="">Alle Vorlesungen</option>
           <!-- Vorlesungen werden dynamisch geladen -->
         </select>
+        <button id="addLectureBtn" class="add-button">+ Neue Vorlesung hinzufügen</button>
+        <div id="addLectureForm" class="add-form" style="display: none;">
+          <input type="text" id="newLectureInput" placeholder="Vorlesungsname eingeben" class="add-input">
+          <button id="saveLecture" class="save-button">Speichern</button>
+          <button id="cancelLecture" class="cancel-button">Abbrechen</button>
+        </div>
       </div>
       <div class="filter-group">
         <label for="dateFilter">Datum:</label>

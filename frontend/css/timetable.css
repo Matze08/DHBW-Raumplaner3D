@@ -2,7 +2,7 @@
 .timetable-container {
   display: flex;
   width: 95%;
-  margin: 100px auto 50px; /* Added bottom margin for spacing */
+  margin: 20px auto 50px; /* Reduced top margin since body now has padding */
   gap: 20px;
   max-height: none; /* Remove any height restriction */
 }
@@ -15,7 +15,7 @@
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
   height: fit-content; /* Höhe an den Inhalt anpassen */
   position: sticky; /* Sticky, um beim Scrollen oben zu bleiben */
-  top: 100px; /* Abstand zum oberen Rand (nach der Navbar) */
+  top: 20px; /* Reduced from 100px since body now has proper padding */
 }
 
 .filter-section h2 {
@@ -67,6 +67,7 @@
   border-radius: 8px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
   overflow: visible; /* Changed from auto to visible */
+  position: relative; /* Establish positioning context */
 }
 
 .timetable-header {
@@ -76,6 +77,9 @@
   font-weight: 600;
   position: sticky;
   top: 0;
+  z-index: 50; /* Ensure header stays above content */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Add shadow for better visual separation */
+  box-sizing: border-box; /* Ensure consistent box model */
 }
 
 .time-column {
@@ -84,6 +88,7 @@
   text-align: center;
   padding: 10px;
   border-right: 1px solid #f2f2f2;
+  box-sizing: border-box; /* Ensure consistent box model */
 }
 
 .day-columns {
@@ -98,6 +103,7 @@
   border-right: 1px solid #f2f2f2;
   display: flex;
   flex-direction: column;
+  box-sizing: border-box; /* Ensure consistent box model */
 }
 
 .day-name {
@@ -124,6 +130,8 @@
   display: flex;
   border-bottom: 1px solid #f2f2f2;
   height: 30px; /* Exakt 30px für jede halbe Stunde */
+  position: relative; /* Für absolute Positionierung von Buchungen */
+  box-sizing: border-box; /* Ensure consistent box model */
 }
 
 .time-row:last-child {
@@ -134,7 +142,7 @@
   width: 80px;
   min-width: 80px;
   text-align: center;
-  padding: 5px;
+  padding: 10px;
   border-right: 1px solid #f2f2f2;
   font-size: 0.9rem;
   display: flex;
@@ -142,6 +150,7 @@
   justify-content: center;
   background-color: #f9f9f9;
   height: 100%;
+  box-sizing: border-box; /* Ensure consistent box model */
 }
 
 /* Style für volle Stunden */
@@ -164,8 +173,11 @@
 .day-cell {
   flex: 1;
   border-right: 1px solid #f2f2f2;
-  padding: 5px;
-  position: relative;
+  padding: 2px;
+  position: relative; /* Für korrekte Positionierung von Buchungen */
+  min-height: 30px; /* Sicherstellen, dass die Zelle mindestens 30px hoch ist */
+  overflow: visible; /* Erlaubt Buchungen, über cell borders hinauszugehen */
+  box-sizing: border-box; /* Ensure consistent box model */
 }
 
 /* Style für Zellen bei vollen Stunden */
@@ -187,16 +199,21 @@
   background-color: #f0f7ff;
   border-left: 4px solid #0066cc;
   border-radius: 4px;
-  padding: 5px;
-  margin: 1px 0;
-  font-size: 0.85rem;
+  padding: 4px;
+  margin: 1px;
+  font-size: 0.8rem;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
   cursor: pointer;
   position: absolute;
-  width: calc(100% - 10px);
-  left: 0;
+  width: calc(100% - 8px); /* Reduzierte Breite für bessere Passung */
+  left: 2px; /* Justiert für padding der day-cell */
   overflow: hidden;
-  z-index: 10;
+  z-index: 10; /* Keep booking elements below the header */
+  box-sizing: border-box; /* Inkludiert padding und border in width */
+}
+
+.booking.multi-slot {
+  z-index: 15; /* Höhere z-index für mehrstündige Buchungen */
 }
 
 .booking-title {
@@ -205,14 +222,16 @@
   overflow: hidden;
   text-overflow: ellipsis;
   padding-right: 20px; /* Make space for delete button */
+  line-height: 1.2; /* Bessere Lesbarkeit */
 }
 
 .booking-details {
-  font-size: 0.75rem;
+  font-size: 0.7rem; /* Kleinere Schrift für Details */
   color: #555;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  line-height: 1.1;
 }
 
 .booking-lecturer {
