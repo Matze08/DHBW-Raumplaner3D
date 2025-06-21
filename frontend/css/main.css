@@ -26,14 +26,17 @@ nav * {
 }
 
 #info-overlay{
-    margin-left: 60%;
+    position: absolute;
+    top: 50%;
+    right: 1rem;
+    transform: translateY(-50%);
+    padding-bottom: 5rem;
     align-items: center;
     display: flex;
     flex-direction: column;
     background-color: #222222e6;
     border-radius: 2rem;
-    width: 30%;
-    height: 50%;
+    width: 25%;
     z-index: 1;
     font-size: 2rem;
     color: antiquewhite;
@@ -52,4 +55,9 @@ nav * {
 
 .arrow-icon{
     height: 4rem;
+}
+
+#controls{
+    display: flex;
+    flex-direction: column;
 }
