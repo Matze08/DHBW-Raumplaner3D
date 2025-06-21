@@ -7,7 +7,7 @@ import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 let isMousePressed = false;
 let lastMouseX = null;
 
-let autoRotation = false; // Flag to control auto-rotation
+let autoRotation = true; // Flag to control auto-rotation
 let view2d = false; // Flag to control 2D/3D view
 
 //topViewScene class is instantiating a scene
@@ -44,6 +44,31 @@ export class TopViewScene {
             }
         });
 
+        window.addEventListener('wheel', (event) => {
+            const zoomSpeed = 1; // Adjust zoom speed
+            const delta = event.deltaY > 0 ? zoomSpeed : -zoomSpeed; // Determine zoom direction
+            console.log(`Zoom delta: ${delta}`); // Log zoom delta for debugging
+        
+            if (view2d) {
+                // In 2D view, adjust the camera's Y position for zooming
+                this._camera.position.y += delta * 10; // Scale zoom for 2D view
+                this._camera.position.y = Math.max(50, Math.min(200, this._camera.position.y)); // Clamp zoom range
+            } else {
+                // In 3D view, adjust the camera's position based on the zoom delta
+                const direction = new THREE.Vector3();
+                this._camera.getWorldDirection(direction);
+                //get distance from camera to center of scene
+                const distance = this._camera.position.distanceTo(new THREE.Vector3(0, 10, 0));
+                console.log(`Camera distance to center: ${distance}`); // Log distance for debugging
+                // Prevent zooming in too close
+                if (distance < 10 && delta < 0 || distance > 200 && delta > 0) {
+                    return; // Prevent zooming in too close or too far
+                }
+                this._camera.position.addScaledVector(direction, -delta * 10); // Scale zoom for 3D view
+                this._camera.lookAt(new THREE.Vector3(0, 10, 0)); // Ensure camera looks at the center
+            }
+        });
+
         const toggleRotationButton = document.getElementById('toggle-rotation');
         const toggleViewButton = document.getElementById('toggle-3d');
 
@@ -77,24 +102,33 @@ export class TopViewScene {
 
 
         //rotate camera around the building, if mouse is not pressed
-        if (!isMousePressed && !autoRotation) {
-            this._camera.position.applyAxisAngle(new THREE.Vector3(0, 1, 0), delta * this._rotationSpeed);
+        if (!isMousePressed && autoRotation) {
+            if (view2d) {
+                // In 2D view, rotate around the center of the scene
+                this._camera.rotateOnWorldAxis(new THREE.Vector3(0, 1, 0), delta * this._rotationSpeed);
+
+            } else {
+                this._camera.position.applyAxisAngle(new THREE.Vector3(0, 1, 0), delta * this._rotationSpeed);
+                this._camera.lookAt(new THREE.Vector3(0, 10, 0)); //look at the center of the scene
+            }
         }
-        this._camera.lookAt(new THREE.Vector3(0, 10, 0)); //look at the center of the scene
+        
     }
 
-    rotateCamera(angle) {
+    // Rotate the camera based on mouse movement
+    rotateCamera(angle) { 
         if (view2d) {
             const currentRotation = this._camera.rotation.z; // Get current rotation around Z-axis
-            const newRotation = currentRotation + angle; // Calculate new rotation
+            const newRotation = currentRotation - angle; // Calculate new rotation
             // In 2D view, keep the camera above the scene and rotate around the center
-            this._camera.rotation.y += Math.PI / 4;
-            this._camera.position.y = 100; // Maintain height for 2D view
-            this._camera.lookAt(new THREE.Vector3(0, 0, 0)); // Look at the center of the scene
+            this._camera.rotation.z = newRotation;
         } else {
             // In 3D view
             // Rotate the camera based on mouse movement
-            const radius = 80;
+            const radius = Math.sqrt(
+                Math.pow(this._camera.position.x, 2) +
+                Math.pow(this._camera.position.z, 2)
+            );
             const currentAngle = Math.atan2(this._camera.position.z, this._camera.position.x);
             const newAngle = currentAngle + angle;
             this._camera.position.x = radius * Math.cos(newAngle);
