@@ -7,6 +7,8 @@ var activeScene; //stores active scene
 
 var renderer; //stores active renderer
 
+var floorNr = 6; //stores current floor number
+
 //function which is closing old scene and opening new Scene (i --> SceneID of new Scene) 
 //export --> so scene Objects can call this function
 export function loadScene(i){ //function to switch between scenes
@@ -42,7 +44,7 @@ function initRenderer(){
 function initScenes(){
     //init scenes
     const scene1 = new TopViewScene(renderer);
-    const scene2 = new FpvScene();
+    const scene2 = new FpvScene(renderer);
     scenes = [scene1, scene2];
 }
 
@@ -56,27 +58,25 @@ loadScene(0); //load topViewScene
 window.loadScene = loadScene;
 window.getActiveScene = getActiveScene;
 
+//add event listener to buttons
 document.getElementById('submit-form').addEventListener('submit', function(event) {
     event.preventDefault(); // prevents page reload
-    const regex = /^[ABC][0-5]\d{2}$/; // regex to match room numbers like C305, A102, B204, etc.
+    document.getElementById('error-message').textContent = ""; // clear previous error message
+    const regex = /^[ABC][0-5]\.\d{2}$/; // regex to match room numbers like C3.05, A1.02, B2.04, etc.
     const form = event.target;
     const roomNr = form.roomNr.value;
-    const entry = event.selectEntry;
 
     if (!regex.test(roomNr)){
+        document.getElementById('error-message').textContent = "Error: Room Number <" + roomNr + "> is not valid (example: C305)";
         console.log("Error: Room Number <" + roomNr + "> is not valid (example: C305");
         return;
     }
-    const floorNr = roomNr[1];
+    floorNr = roomNr[1];
     activeScene.showFloor(floorNr);
     activeScene.setWaypoint(roomNr);
     activeScene.findNextStaircase();
     activeScene.drawLine();
 
-});
-
-document.getElementById('orbitSlider').addEventListener('input', function(event) {
-    activeScene.updateCameraPos(event.target.value);
 });
 
 document.getElementById('selectEntry').addEventListener('input', function(event) {
@@ -100,3 +100,27 @@ window.addEventListener('resize', () => {
     });
 });
 
+document.getElementById('fpv-preview').addEventListener('click', () => {
+    loadScene(1); //load fpvScene
+    document.getElementById('fpv-preview').style.display = 'none';
+});
+
+document.getElementById('arrow-down').addEventListener('click', () => {
+    if (floorNr > 0) {
+        floorNr--;
+        activeScene.showFloor(floorNr);
+        document.getElementById('floor-number').textContent = `Floor: ${floorNr}`;
+    }
+});
+document.getElementById('arrow-up').addEventListener('click', () => {
+    if (floorNr < 6) {
+        floorNr++;
+        activeScene.showFloor(floorNr);
+
+        if (floorNr === 6) {
+            document.getElementById('floor-number').textContent = 'Floor: Roof';
+        }else{
+            document.getElementById('floor-number').textContent = `Floor: ${floorNr}`;
+        }
+    }
+});

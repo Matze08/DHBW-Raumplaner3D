@@ -22,6 +22,9 @@
     <a href="./timetable.html" class="nav-link" style="color: #333; text-decoration: none; margin-left: 20px; font-weight: 600;">Stundenplan</a>
     <a href="./admin.html" class="nav-link" style="color: #333; text-decoration: none; margin-left: 20px; font-weight: 600;">Verwaltung</a>
   </nav>
+  <div id="fpv-preview">
+    <img src="/media/fpv_preview.png" alt="preview">
+  </div>
   <div id="info-overlay">
     <h1>Wayfinder</h1>
     <form id="submit-form">
@@ -32,14 +35,26 @@
         <option value="EingangCafeteria">Cafeteria</option>
       </select>
       <input required type="text" name="roomNr" placeholder="Enter Room">
-      <div>
-        <input id="useLocationCB" type="checkbox">
-        <label for="useLocationCB">Live Standort nutzen</label>
-      </div>
       <input type="submit" value="Go" class="submit-btn">
     </form>
+    <div>
+      <p id="floor-number">Floor: Roof</p>
+      <img src="/media/arrow.png" alt="arrow-up" class="arrow-icon" id="arrow-up">
+      <img src="/media/arrow.png" alt="arrow-down" style="transform: rotate(180deg);" class="arrow-icon" id="arrow-down">
+    </div>
+    <div id="controls">
+      <p>Controls</p>
+      <label>
+        <input type="checkbox" id="toggle-rotation" checked>Rotation
+      </label>
+      <label>
+        <input type="checkbox" id="toggle-3d">2D View
+      </label>
+    </div>
+    <div id="error-message" style="display: none; color: red;">Room not found</div>
   </div>
-  <div id="control-overlay">
-    <input type="range" min="0" max="6.28" step="0.01" value="0" class="slider" id="orbitSlider">
+  <div id="wasd-instruction" style="display: none">
+    <img src="/media/close.png" alt="x" class="close-icon" id="close-instruction">
+    <img src="/media/wasd-instruction.jpg" alt="wasd-instruction">
   </div>
 </body>

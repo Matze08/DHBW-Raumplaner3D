@@ -1,5 +1,5 @@
-body{
-    position: absolute;
+html, body{
+    position: relative;
     margin: 0;
     height: 100%;
     width: 100%;
@@ -40,15 +40,39 @@ nav * {
     margin-left: 5%;
 }
 
+#fpv-preview
+{
+    position: absolute;
+    bottom: 2rem;
+    left: 2rem;
+    z-index: 1;
+    background-color: #222222e6;
+    border-radius: .5rem;
+    width: 10%;
+    height: auto;
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    padding: .5rem;
+    cursor: pointer;
+}
+
+#fpv-preview img{
+    width: 100%;
+}
+
 #info-overlay{
-    margin-left: 60%;
+    position: absolute;
+    top: 50%;
+    right: 1rem;
+    transform: translateY(-50%);
+    padding-bottom: 5rem;
     align-items: center;
     display: flex;
     flex-direction: column;
     background-color: #222222e6;
     border-radius: 2rem;
-    width: 30%;
-    height: 50%;
+    width: 25%;
     z-index: 1;
     font-size: 2rem;
     color: antiquewhite;
@@ -65,21 +89,39 @@ nav * {
     width: 30%;
 }
 
-#control-overlay{
-    position: absolute;
+.arrow-icon{
+    height: 4rem;
+}
+
+#controls{
     display: flex;
-    justify-content: center;
-    align-items: center; 
-    width: 70%;
-    height: 3%;
-    bottom: 2%;
+    flex-direction: column;
+}
+
+#wasd-instruction{
+    position: absolute; 
+    top: 50%; 
+    left: 50%;
+    transform: translate(-50%, -50%);
     z-index: 1;
     background-color: #222222e6;
-    border-radius: 2rem;
+    border-radius: 1rem;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
-#control-overlay input{
-    width: 95%;
-    accent-color: rgb(0, 123, 255);
+#wasd-instruction img{
+    width: 100%;
 }
 
+#wasd-instruction .close-icon{
+    position: absolute;
+    top: 0;
+    right: 0;
+    transform: translate(30%, -30%);
+    height: 20%;
+    width: auto;
+    cursor: pointer;
+}

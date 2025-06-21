@@ -5,7 +5,7 @@ import { RGBELoader } from 'three/addons/loaders/RGBELoader.js';
 
 const velocity = new THREE.Vector3();
 const direction = new THREE.Vector3();
-const move = { forward: false, backward: false, left: false, right: false };
+const move = { forward: false, backward: false, left: false, right: false , sprint: false };
 
 
 //fpvScene class is instantiating a scene
@@ -15,13 +15,13 @@ export class FpvScene {
         this._clock = new THREE.Clock();
         this._camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
         this._scene = new THREE.Scene();
-
         //init clock
         this._clock.start();
     }
 
     //function called everytime the scene is loaded
     start(){
+        document.getElementById("wasd-instruction").style.display = "flex"; //show instruction
         this.controls = new PointerLockControls(this._camera, document.body);
         this._scene.add(this.controls.getObject());
 
@@ -29,25 +29,27 @@ export class FpvScene {
         this.initEnv();
 
         // Event listener to request pointer lock on click
-        document.body.addEventListener('click', () => {
+        document.getElementById("close-instruction").addEventListener('click', () => {
             // Lock the pointer on first click
             document.body.requestPointerLock();
         });
 
         document.addEventListener('pointerlockchange', () => {
             if (document.pointerLockElement) {
-                document.getElementById("info-overlay").style.display = "none";
+                document.getElementById("wasd-instruction").style.display = "none";
             } else {
-                document.getElementById("info-overlay").style.display = "flex";
+                sceneManager.loadScene(0); // Load topViewScene if pointer lock is lost
             }
           });
 
         document.addEventListener('keydown', (event) => {
+            event.preventDefault(); // Prevent default action (e.g., scrolling)
             switch (event.code) {
               case 'KeyW': move.forward = true; break;
               case 'KeyS': move.backward = true; break;
               case 'KeyA': move.left = true; break;
               case 'KeyD': move.right = true; break;
+              case 'ControlLeft': move.sprint = true; break;
             }
           });
           document.addEventListener('keyup', (event) => {
@@ -56,6 +58,7 @@ export class FpvScene {
               case 'KeyS': move.backward = false; break;
               case 'KeyA': move.left = false; break;
               case 'KeyD': move.right = false; break;
+              case 'ControlLeft': move.sprint = false; break;
             }
           });
     }
@@ -70,7 +73,10 @@ export class FpvScene {
             direction.x = Number(move.right) - Number(move.left);
             direction.normalize();
 
-            const speed = 5;
+            const baseSpeed = 5;
+            const sprintMultiplier = move.sprint ? 2 : 1; // Double speed when sprinting
+            const speed = baseSpeed * sprintMultiplier;
+
             if (move.forward || move.backward) velocity.z -= direction.z * speed * delta;
             if (move.left || move.right) velocity.x -= direction.x * speed * delta;
 
@@ -140,12 +146,12 @@ export class FpvScene {
         this.initLight();
 
         //add building to scene
-        this.initModel('frontend/media/models/dhbw_building.glb', (dhbw_building) => {
+        this.initModel('/frontend/media/models/dhbw_building.glb', (dhbw_building) => {
             dhbw_building.rotation.y = Math.PI; //rotate obj
             this._scene.add(dhbw_building);
         });
-        this._camera.position.set(-36, 2, 4); //set camera position
-        this._camera.rotation.set(0, 5, 0);
+        this._camera.position.set(40, 8, 30); //set camera position
+        this._camera.rotation.set(0, 50*(Math.PI/180), 0);
     }
 
     getScene() {
