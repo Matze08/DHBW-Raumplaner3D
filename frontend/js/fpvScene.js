@@ -17,6 +17,11 @@ export class FpvScene {
         this._scene = new THREE.Scene();
         //init clock
         this._clock.start();
+
+        this.keydownListener = this.handleKeyDown.bind(this);
+        this.keyupListener = this.handleKeyUp.bind(this);
+        this.pointerlockchangeListener = this.handlePointerLockChange.bind(this);
+        this.clickListener = this.handleClick.bind(this);
     }
 
     //function called everytime the scene is loaded
@@ -28,39 +33,11 @@ export class FpvScene {
         //init enviroment
         this.initEnv();
 
-        // Event listener to request pointer lock on click
-        document.getElementById("close-instruction").addEventListener('click', () => {
-            // Lock the pointer on first click
-            document.body.requestPointerLock();
-        });
-
-        document.addEventListener('pointerlockchange', () => {
-            if (document.pointerLockElement) {
-                document.getElementById("wasd-instruction").style.display = "none";
-            } else {
-                sceneManager.loadScene(0); // Load topViewScene if pointer lock is lost
-            }
-          });
-
-        document.addEventListener('keydown', (event) => {
-            event.preventDefault(); // Prevent default action (e.g., scrolling)
-            switch (event.code) {
-              case 'KeyW': move.forward = true; break;
-              case 'KeyS': move.backward = true; break;
-              case 'KeyA': move.left = true; break;
-              case 'KeyD': move.right = true; break;
-              case 'ControlLeft': move.sprint = true; break;
-            }
-          });
-          document.addEventListener('keyup', (event) => {
-            switch (event.code) {
-              case 'KeyW': move.forward = false; break;
-              case 'KeyS': move.backward = false; break;
-              case 'KeyA': move.left = false; break;
-              case 'KeyD': move.right = false; break;
-              case 'ControlLeft': move.sprint = false; break;
-            }
-          });
+        // Add event listeners
+        document.addEventListener('keydown', this.keydownListener);
+        document.addEventListener('keyup', this.keyupListener);
+        document.addEventListener('pointerlockchange', this.pointerlockchangeListener);
+        document.getElementById("close-instruction").addEventListener('click', this.clickListener);
     }
 
     //function called by sceneManager to update renderer (called every frame)
@@ -162,12 +139,45 @@ export class FpvScene {
         return this._camera;
     }
 
+    handleKeyDown(event) {
+        event.preventDefault(); // Prevent default browser behavior
+        switch (event.code) {
+            case 'KeyW': move.forward = true; break;
+            case 'KeyS': move.backward = true; break;
+            case 'KeyA': move.left = true; break;
+            case 'KeyD': move.right = true; break;
+            case 'ShiftLeft': move.sprint = true; break;
+        }
+    }
+
+    handleKeyUp(event) {
+        switch (event.code) {
+            case 'KeyW': move.forward = false; break;
+            case 'KeyS': move.backward = false; break;
+            case 'KeyA': move.left = false; break;
+            case 'KeyD': move.right = false; break;
+            case 'ShiftLeft': move.sprint = false; break;
+        }
+    }
+
+    handlePointerLockChange() {
+        if (document.pointerLockElement) {
+            document.getElementById("wasd-instruction").style.display = "none";
+        } else {
+            loadScene(0); // Load topViewScene if pointer lock is lost
+        }
+    }
+
+    handleClick() {
+        document.body.requestPointerLock(); // Lock the pointer on first click
+    }
+
     //remove EventListeners
     removeListeners(){
-        document.removeEventListener('keydown');
-        document.removeEventListener('keyup');
-        document.removeEventListener('pointerlockchange');
-        document.removeEventListener('click');
+        document.removeEventListener('keydown', this.keydownListener);
+        document.removeEventListener('keyup', this.keyupListener);
+        document.removeEventListener('pointerlockchange', this.pointerlockchangeListener);
+        document.getElementById("close-instruction").removeEventListener('click', this.clickListener);
         
     }
 
