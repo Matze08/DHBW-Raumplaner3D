@@ -4,7 +4,7 @@ This digital 3D room planner lets you create bookings for your university to you
 This is a university project for the module "Einsatz von Web-Technologien" by Matthias F. and Michael B.   
 
 **The architecture specification can be found in `docs.md`.**   
-Other than this readme, there are some other markdown-files (and a mockup presentation) in the root folder of this project (e.g. `model.md`) which contain additional information about the project.    
+Other than this readme, there are some other markdown-files (and a mockup presentation) in the root folder of this project (e.g. `DatenbankArchithektur.md`) which contain additional information about the project.    
 
 Link to our GitHub repository: https://github.com/Matze08/DHBW-Raumplaner3D/    
 
