@@ -2,6 +2,14 @@ import * as THREE from 'three';
 import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 
+// Global variables
+//Add variables to track mouse events for rotation
+let isMousePressed = false;
+let lastMouseX = null;
+
+let autoRotation = false; // Flag to control auto-rotation
+let view2d = false; // Flag to control 2D/3D view
+
 //topViewScene class is instantiating a scene
 export class TopViewScene {
     constructor(renderer) {//called once at the beginning
@@ -11,8 +19,50 @@ export class TopViewScene {
         this._scene = new THREE.Scene();
         this._renderer = renderer;
 
+        this._rotationSpeed = 0.2; // Auto-rotation speed
+        this._mouseSensitivity = 0.005; // Sensitivity for mouse rotation
+
         //init clock
         this._clock.start();
+
+        // Add event listeners
+        window.addEventListener('mousedown', (event) => {
+            isMousePressed = true;
+            lastMouseX = event.clientX;
+        });
+
+        window.addEventListener('mouseup', () => {
+            isMousePressed = false;
+            lastMouseX = null;
+        });
+
+        window.addEventListener('mousemove', (event) => {
+            if (isMousePressed && lastMouseX !== null) {
+                const deltaX = event.clientX - lastMouseX;
+                this.rotateCamera(deltaX * this._mouseSensitivity);
+                lastMouseX = event.clientX;
+            }
+        });
+
+        const toggleRotationButton = document.getElementById('toggle-rotation');
+        const toggleViewButton = document.getElementById('toggle-3d');
+
+        // Toggle Rotation Button
+        toggleRotationButton.addEventListener('click', () => {
+            autoRotation = !autoRotation; // Toggle auto-rotation
+        });
+
+        // Toggle 2D/3D View Button
+        toggleViewButton.addEventListener('click', () => {
+            view2d = !view2d; // Toggle 2D/3D view
+            if (view2d) {
+                this._camera.position.set(0, 100, 0); // Set camera for 2D view
+                this._camera.lookAt(new THREE.Vector3(0, 0, 0));
+            } else {
+                this._camera.position.set(0, 60, 80); // Reset camera for 3D view
+                this._camera.lookAt(new THREE.Vector3(0, 10, 0));
+            }
+        });
     }
 
     //function called everytime the scene is loaded
@@ -26,9 +76,31 @@ export class TopViewScene {
         const delta = this._clock.getDelta();
 
 
-        //rotate camera around the building
-        this._camera.position.applyAxisAngle(new THREE.Vector3(0, 1, 0), delta * 0.2);
+        //rotate camera around the building, if mouse is not pressed
+        if (!isMousePressed && !autoRotation) {
+            this._camera.position.applyAxisAngle(new THREE.Vector3(0, 1, 0), delta * this._rotationSpeed);
+        }
         this._camera.lookAt(new THREE.Vector3(0, 10, 0)); //look at the center of the scene
+    }
+
+    rotateCamera(angle) {
+        if (view2d) {
+            const currentRotation = this._camera.rotation.z; // Get current rotation around Z-axis
+            const newRotation = currentRotation + angle; // Calculate new rotation
+            // In 2D view, keep the camera above the scene and rotate around the center
+            this._camera.rotation.y += Math.PI / 4;
+            this._camera.position.y = 100; // Maintain height for 2D view
+            this._camera.lookAt(new THREE.Vector3(0, 0, 0)); // Look at the center of the scene
+        } else {
+            // In 3D view
+            // Rotate the camera based on mouse movement
+            const radius = 80;
+            const currentAngle = Math.atan2(this._camera.position.z, this._camera.position.x);
+            const newAngle = currentAngle + angle;
+            this._camera.position.x = radius * Math.cos(newAngle);
+            this._camera.position.z = radius * Math.sin(newAngle);
+            this._camera.lookAt(new THREE.Vector3(0, 10, 0)); // Look at the center of the scene
+        }
     }
 
     //function to init light in scene
