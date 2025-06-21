@@ -151,11 +151,12 @@ gulp.task('dev-backend', shell.task([
   verbose: true
 }));
 
-gulp.task('dev-frontend', shell.task([
-  'cd frontend && npm run dev'
-], {
-  verbose: true
-}));
+gulp.task(
+  "dev-frontend",
+  shell.task(["cd frontend && npm run dev -- --host"], {
+    verbose: true,
+  })
+);
 
 // Run both in development mode (parallel)
 gulp.task('dev', gulp.parallel('dev-backend', 'dev-frontend'));
